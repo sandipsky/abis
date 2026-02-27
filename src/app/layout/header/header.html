@@ -1,1 +1,3 @@
-<p>header works!</p>
+{{ breadcrumbs.label }}
+
+HOME / @if(breadcrumbs.prefix) { {{breadcrumbs.prefix}} / }  <a [href]="breadcrumbs.link"> {{breadcrumbs.label}} </a>

@@ -3,6 +3,8 @@ import { Layout } from './layout/layout';
 import { authGuard } from './auth/auth.guard';
 import { loginGuard } from './auth/login.guard';
 import { Dashboard } from './modules/dashboard/dashboard';
+import { Product } from './modules/product/product';
+import { PurchaseEntry } from './modules/purchase/purchase-entry/purchase-entry';
 
 export const routes: Routes = [
     {
@@ -18,6 +20,14 @@ export const routes: Routes = [
             {
                 path: 'dashboard',
                 component: Dashboard,
+            },
+            {
+                path: 'product',
+                component: Product,
+            },
+            {
+                path: 'purchase-entry',
+                component: PurchaseEntry,
             },
         ]
     },
