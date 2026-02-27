@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import sidebarData from './sidebar-data';
@@ -10,28 +10,29 @@ import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
   imports: [CommonModule, MatTooltipModule, RouterModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Sidebar {
   sidebarData = sidebarData;
-  activeSubMenu: any = null;
+  activeSubMenu = signal<any>(null);
 
-  router = inject(Router);
-  breadcrumbService = inject(BreadcrumbService);
+  private _router = inject(Router);
+  private _breadcrumbService = inject(BreadcrumbService);
 
   ngOnInit() {
     this.setActiveMenuFromUrl();
   }
 
   toggleSubMenu(item: any) {
-    this.activeSubMenu = item;
+    this.activeSubMenu.set(item);
   }
 
   clearSubMenu() {
-    this.activeSubMenu = null;
+    this.activeSubMenu.set(null);
   }
 
   setActiveMenuFromUrl() {
-    const currentUrl = this.router.url;
+    const currentUrl = this._router.url;
 
     for (const group of this.sidebarData) {
       for (const item of group.items) {
@@ -41,30 +42,30 @@ export class Sidebar {
           );
 
           if (activeChild) {
-            this.activeSubMenu = item; 
-            this.breadcrumbService.updateBreadcrumbs({
+            this.activeSubMenu.set(item);
+            this._breadcrumbService.updateBreadcrumbs({
               label: activeChild.label,
               link: activeChild.link,
               prefix: item.label
             });
-            return; 
+            return;
           }
         }
 
         else if (currentUrl.includes(item.link)) {
-          this.activeSubMenu = null; 
-          this.breadcrumbService.updateBreadcrumbs({
+          this.activeSubMenu.set(null);
+          this._breadcrumbService.updateBreadcrumbs({
             label: item.label,
             link: item.link
           });
-          return; 
+          return;
         }
       }
     }
   }
 
   updateBreadCrumb(label: string, link: string, prefix?: string) {
-    this.breadcrumbService.updateBreadcrumbs(
+    this._breadcrumbService.updateBreadcrumbs(
       {
         label: label,
         link: link,

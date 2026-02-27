@@ -9,7 +9,7 @@
 
     <div class="links-container">
         <div class="main-links">
-            @if (!activeSubMenu) {
+            @if (!activeSubMenu()) {
             <div class="btn btn-outlined-primary">
                 + Quick Add Item
             </div>
@@ -44,11 +44,11 @@
             <div class="link-group cursor-pointer">
                 <div (click)="clearSubMenu()" class="group-title">
                     <img class="caret rotate-180" src="../../../svg/caret.svg" alt="">
-                    {{activeSubMenu.label | uppercase }}
+                    {{activeSubMenu().label | uppercase }}
                 </div>
 
-                @for(item of activeSubMenu.children; track $index) {
-                <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu.label)" [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
+                @for(item of activeSubMenu().children; track $index) {
+                <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                 </a>

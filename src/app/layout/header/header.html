@@ -1,18 +1,21 @@
 <header class="header">
     <div class="breadcrumb-group">
-        <h1 class="breadcrumb-title">{{ breadcrumbs.label }}</h1>
+        <h1 class="breadcrumb-title">{{ breadcrumbs()?.label }}</h1>
+        
         <div class="d-flex align-items-center gap-sm">
-            <span class="breadcrumb-sub-title">
-                HOME
-            </span>
+            <span class="breadcrumb-sub-title">HOME</span>
             <img class="caret" src="../../../svg/caret.svg" alt="">
-            @if(breadcrumbs.prefix) {
-            <span class="breadcrumb-sub-title">{{breadcrumbs.prefix}}</span>
-            <img class="caret" src="../../../svg/caret.svg" alt="">
+
+            @if(breadcrumbs()?.prefix) {
+                <span class="breadcrumb-sub-title">{{ breadcrumbs()?.prefix }}</span>
+                <img class="caret" src="../../../svg/caret.svg" alt="">
             }
-            <a class="breadcrumb-sub-title active" [routerLink]="breadcrumbs.link"> {{breadcrumbs.label}}</a>
+
+            @if(breadcrumbs(); as crumbs) {
+                <a class="breadcrumb-sub-title active" [routerLink]="crumbs.link"> 
+                    {{ crumbs.label }}
+                </a>
+            }
         </div>
     </div>
-
-
 </header>
