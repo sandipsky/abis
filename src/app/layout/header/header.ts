@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Breadcrumb, BreadcrumbService } from '../../shared/services/breadcrumb.service';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

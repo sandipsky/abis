@@ -1,0 +1,31 @@
+.header {
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+
+    .breadcrumb-group {
+        flex: 1;
+
+        .breadcrumb-title {
+            color: var(--text-primary-color);
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 28px;
+        }
+
+        .breadcrumb-sub-title {
+            color: var(--text-quaternary-color);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            text-decoration: none;
+
+            &.active {
+                cursor: pointer;
+                color: var(--primary-color);
+            }
+        }
+    }
+}
