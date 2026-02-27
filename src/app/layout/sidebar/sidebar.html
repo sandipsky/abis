@@ -1,1 +1,53 @@
-<p>sidebar works!</p>
+<div class="sidebar">
+    <div class="logo-container">
+        <h1 class="logo">ABIS</h1>
+
+        <div style="padding: 4px;" class="btn btn-outlined">
+            <img style="cursor: pointer;" src="../../../svg/sidebar.svg" alt="">
+        </div>
+    </div>
+
+    <div class="links-container">
+        <div class="main-links">
+
+            <div class="btn btn-outlined-primary">
+                + Quick Add Item
+            </div>
+
+            @for(group of sidebarData; track $index) {
+            <div class="link-group">
+                <div class="group-title">
+                    {{group.title}}
+                </div>
+
+                @for(item of group.items; track $index) {
+
+                @if (item.children) {
+                <a href="javascript:void(0)" class="link-item">
+                    <img [src]="'../../../svg/' + item.icon + '.svg'" alt="">
+                    <span>{{ item.label }}</span>
+                    <img class="caret" src="../../../svg/caret.svg" alt="">
+                </a>
+                }
+                @else {
+                <a [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
+                    <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    <span>{{ item.label }}</span>
+                </a>
+                }
+
+                }
+            </div>
+            }
+
+        </div>
+
+        <div class="bottom-links">
+            <a [matTooltip]="'User Manual'" [matTooltipDisabled]="true" [routerLink]="'help'" routerLinkActive="active"
+                #rla="routerLinkActive" class="link-item">
+                <img [src]="'../../../svg/user-plus.svg'" alt="">
+                <span>User Manual</span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,268 @@
+.sort-by {
+  position: relative;
+  padding-right: 18px;
+  cursor: pointer;
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid;
+    position: absolute;
+    right: 5px;
+    color: #bcbdbe;
+    right: 4px;
+  }
+
+  &:after {
+    transform: rotate(180deg);
+    margin-top: -8px;
+  }
+
+  &:before {
+    margin-top: 2px;
+  }
+
+  &.asc:before,
+  &.desc:after {
+    color: black;
+  }
+
+  &.asc:after,
+  &.desc:before {
+    color: #bcbdbe;
+  }
+
+  &.none:before,
+  &.none:after {
+    color: #bcbdbe;
+  }
+}
+
+.table-responsive {
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh - 280px);
+  // padding: 0;
+
+  &.auto {
+    height: auto;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    position: sticky;
+    top: -1px;
+    z-index: 2;
+  }
+
+  th {
+    background: #f3f4f5;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    border-top: 1px solid var(--disabled-color);
+    border-bottom: 1px solid var(--disabled-color);
+    text-align: left;
+    white-space: nowrap;
+    color: var(--text-primary-color);
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  td {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+
+  tr:nth-child(even) td {
+    background-color: var(--text-white-color);
+  }
+}
+
+.text-end {
+  text-align: right !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.status {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  line-height: 16px;
+
+  .circle {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background-color: var(--text-primary-color);
+  }
+
+  &.success {
+    background-color: var(--success-bg-color) !important;
+    color: var(--success-text-color) !important;
+
+    .circle {
+      background-color: var(--success-text-color) !important;
+    }
+  }
+
+  .success-circle {
+    background-color: var(--success-text-color);
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+  }
+
+  .orange-circle {
+    background-color: var(--orange-color);
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+  }
+
+  &.error {
+    background-color: var(--error-bg-color);
+    color: var(--error-text-color);
+
+    .circle {
+      background-color: var(--error-text-color);
+    }
+  }
+
+  &.warn {
+    background-color: var(--warn-bg-color) !important;
+    color: var(--warn-text-color) !important;
+
+    .circle {
+      background-color: var(--warn-text-color) !important;
+    }
+  }
+
+  &.info {
+    background-color: var(--info-bg-color);
+    color: var(--info-text-color);
+
+    .circle {
+      background-color: var(--warn-text-color);
+    }
+  }
+
+  &.primary {
+    background-color: var(--primary-alt-color);
+    color: var(--primary-color);
+
+    .circle {
+      background-color: var(--primary-color);
+    }
+  }
+
+  &.disabled {
+    background-color: var(--disabled-color);
+    color: var(--text-primary-color);
+
+    .circle {
+      background-color: var(--text-primary-color);
+    }
+  }
+
+  &.cancel {
+    background-color: var(--cancel-bg-color) !important;
+    color: var(--cancel-text-color) !important;
+
+    .circle {
+      background-color: var(--cancel-text-color) !important;
+    }
+  }
+}
+
+.no-data {
+  padding: 48px 0px !important;
+  text-align: center !important;
+  width: 100%;
+  height: 100%;
+
+  p {
+    color: rgba(51, 51, 51, 0.5);
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+
+.ellipsis {
+  display: inline-block;
+  max-width: 240px;
+  /* adjust based on column width */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.option-header,
+.option-body {
+  display: flex;
+}
+
+// .option-header {
+//   .option-cell {
+//     background-color: #cdcdcd4f;
+//   }
+// }
+
+.option-cell {
+  width: 150px;
+}
+
+.option-cell {
+  padding: 6px;
+  color: var(--text-primary-color);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 15px;
+  // border: 1px solid var(--disabled-color);
+}
+.product-table {
+  td,
+  th {
+    padding: 8px;
+  }
+
+  .form-control {
+    padding: 8px;
+  }
+
+  .ng-select .ng-select-container {
+    padding: 8px !important;
+  }
+}
