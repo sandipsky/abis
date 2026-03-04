@@ -26,33 +26,68 @@
                 stroke="#AB20A9" stroke-width="1.5" stroke-linecap="round" />
         </svg>
 
-        Fiscal Year: 2082-83
+        Fiscal Year: {{fiscalYear()}}
     </div>
 
     <img src="../../../svg/calculator.svg" alt="">
-    <img src="../../../svg/notification.svg" alt="">
-    <img src="../../../svg/printer.svg" alt="">
 
-    <div class="profile">
-        <img class="profile-image" src="../../../img/profile.png" alt="">
+    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+        <div class="d-flex align-items-center" dropdown-display>
+            <img src="../../../svg/notification.svg" alt="">
+        </div>
 
-        <div class="profile-dropdown">
+        <div dropdown-content class="profile-dropdown">
             <div class="profile-container">
                 <img class="profile-image" src="../../../img/profile.png" alt="">
 
                 <div class="profile-desc">
-                    <h1 class="profile-name">Sandip Shakya</h1>
-                    <h3 class="profile-role">Admin</h3>
+                    <h1 class="profile-name">{{userName()}}</h1>
+                    <h3 class="profile-role">{{role()}}</h3>
                 </div>
             </div>
 
             <div class="profile-content">
                 <div class="profile-item">
                     <img src="../../../svg/logout.svg" alt="">
+                    <span>Change Password</span>
+                </div>
 
+                <div class="profile-item">
+                    <img src="../../../svg/logout.svg" alt="">
                     <span>Logout</span>
                 </div>
             </div>
         </div>
-    </div>
+    </app-menu>
+
+    <img src="../../../svg/printer.svg" alt="">
+
+    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+        <div dropdown-display class="profile">
+            <img class="profile-image" src="../../../img/profile.png" alt="">
+        </div>
+
+        <div dropdown-content class="profile-dropdown">
+            <div class="profile-container">
+                <img class="profile-image" src="../../../img/profile.png" alt="">
+
+                <div class="profile-desc">
+                    <h1 class="profile-name">{{userName()}}</h1>
+                    <h3 class="profile-role">{{role()}}</h3>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-item">
+                    <img src="../../../svg/logout.svg" alt="">
+                    <span>Change Password</span>
+                </div>
+
+                <div class="profile-item">
+                    <img src="../../../svg/logout.svg" alt="">
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+    </app-menu>
 </header>

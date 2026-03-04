@@ -1,52 +1,56 @@
+import { Component, ElementRef, HostListener, signal, input, viewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-menu',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuComponent {
+  mode = input<'left' | 'right'>('left');
+  closeOnItemClick = input(true);
+  contentMode = input(false);
+  showActiveState = input(true);
 
-  @Input() mode: 'left' | 'right' = 'left';
-  @Input() closeOnItemClick = true;
-  @Input() contentMode = false;
-  @ViewChild('content') content!: ElementRef<HTMLElement>;
+  content = viewChild<ElementRef<HTMLElement>>('content');
 
-  isOpen = false;
-  openTop = false;
+  isOpen = signal(false);
+  openTop = signal(false);
 
-  constructor(private host: ElementRef) { }
+  private host = inject(ElementRef);
 
   toggle(): void {
-    this.isOpen = !this.isOpen;
+    this.isOpen.update(open => !open);
 
-    if (this.isOpen) {
-      setTimeout(() => this.calculatePosition());
+    if (this.isOpen()) {
+      requestAnimationFrame(() => this.calculatePosition());
     }
   }
 
   private calculatePosition(): void {
-    if (!this.content) return;
+    const contentEl = this.content()?.nativeElement;
+    if (!contentEl) return;
 
-    const rect = this.content.nativeElement.getBoundingClientRect();
+    const rect = contentEl.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
-
-    this.openTop = spaceBelow < 120;
+    this.openTop.set(spaceBelow < 120);
   }
 
   close(): void {
-    this.isOpen = false;
-    this.openTop = false;
+    this.isOpen.set(false);
+    this.openTop.set(false);
   }
 
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!this.host.nativeElement.contains(event.target) &&
-      !target.closest('.ng-dropdown-panel')) {
+    const isInside = this.host.nativeElement.contains(target);
+    const isDropdownPanel = target.closest('.ng-dropdown-panel');
+
+    if (!isInside && !isDropdownPanel) {
       this.close();
     }
   }
