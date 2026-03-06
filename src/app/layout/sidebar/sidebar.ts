@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import sidebarData from './sidebar-data';
 import { CommonModule } from '@angular/common';
 import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,8 +20,12 @@ export class Sidebar {
   private _router = inject(Router);
   private _breadcrumbService = inject(BreadcrumbService);
 
-  ngOnInit() {
-    this.setActiveMenuFromUrl();
+  constructor() {
+    this._router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncMenuWithUrl();
+    });
   }
 
   toggleSubMenu(item: any) {
@@ -31,10 +36,10 @@ export class Sidebar {
     this.activeSubMenu.set(null);
   }
 
-  setActiveMenuFromUrl() {
+  syncMenuWithUrl() {
     const currentUrl = this._router.url;
 
-    for (const group of this.sidebarData) {
+    for (const group of sidebarData) {
       for (const item of group.items) {
         if (item.children) {
           const activeChild = item.children.find((child: any) =>
@@ -50,9 +55,7 @@ export class Sidebar {
             });
             return;
           }
-        }
-
-        else if (currentUrl.includes(item.link)) {
+        } else if (currentUrl.includes(item.link)) {
           this.activeSubMenu.set(null);
           this._breadcrumbService.updateBreadcrumbs({
             label: item.label,

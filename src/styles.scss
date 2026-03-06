@@ -1,10 +1,10 @@
+@forward "scss/_colors";
+@forward "scss/_button";
+@forward "scss/_chip";
+@forward "scss/_modal";
+@forward "scss/_utils";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap');
-@import "scss/_colors";
-@import "scss/_button";
-@import "scss/_chip";
-@import "scss/_modal";
-@import "scss/_utils";
 
 * {
   margin: 0;
@@ -14,7 +14,7 @@
 
 body {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 14px;  
   line-height: 1.25;
   font-weight: 400;
   overflow: hidden;

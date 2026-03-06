@@ -9,8 +9,6 @@
     width: 540px;
     max-height: 85vh;
     gap: 12px;
-
-
 }
 
 .modal-header {
@@ -64,10 +62,6 @@
 .modal-body {
     padding: 20px;
     overflow: auto;
-
-    .form-group {
-        padding-right: 12px;
-    }
 }
 
 .modal-footer {
@@ -81,11 +75,6 @@
     gap: 12px;
 
     .footer-info {
-
-        img {
-            margin-right: 6px;
-        }
-
         display: flex;
         color: #6B7280;
         font-size: 14px;
