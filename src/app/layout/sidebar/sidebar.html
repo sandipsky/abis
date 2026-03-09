@@ -10,9 +10,53 @@
     <div class="links-container">
         <div class="main-links">
             @if (!activeSubMenu()) {
-            <div class="btn btn-outlined-primary">
-                + Quick Add Item
-            </div>
+            <app-menu #q [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+                <div dropdown-display [class.active]="q.isOpen()" class="btn btn-outlined-primary">
+                    + Quick Add Item
+                </div>
+
+                <div dropdown-content class="quickadd-dropdown">
+                    <div class="quickadd-header">
+
+                        <div style="padding: 4px;" class="btn btn-outlined no-hover">
+                            <img style="cursor: pointer;" src="../../../svg/add.svg" alt="">
+                        </div>
+
+                        <div class="title-group">
+                            <h1 class="modal-title">
+                                Quick Add Items
+                            </h1>
+                            <h3 class="modal-sub-title">
+                                Create items faster using a simplified and efficient entry process.
+                            </h3>
+                        </div>
+
+                        <img (click)="q.close()" style="cursor: pointer;" src="../../../svg/close.svg"
+                            alt="">
+
+                    </div>
+
+                    <div class="quickadd-container">
+                        @for (quickItem of quickAddItems; track $index) {
+                        <div class="quickadd-content">
+                            <div [style.color]="quickItem.color" class="content-title">
+                                <img [src]="'../../../svg/quickadd/' + quickItem.icon + '.svg'" alt="">
+                                {{quickItem.name | uppercase}}
+                            </div>
+
+                            @for (subQuickItem of quickItem.items; track $index) {
+                            <div (click)="openQuickAdd(subQuickItem)" class="content-item">
+                                <img src="../../../svg/quickadd/plus.svg" alt="">
+                                <span>
+                                    {{subQuickItem.name}}
+                                </span>
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </app-menu>
 
             @for(group of sidebarData; track $index) {
             <div class="link-group">
@@ -30,7 +74,8 @@
                 </a>
                 }
                 @else {
-                <a (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
+                <a (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
+                    #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                 </a>
@@ -48,7 +93,8 @@
                 </div>
 
                 @for(item of activeSubMenu().children; track $index) {
-                <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
+                <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
+                    routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                 </a>

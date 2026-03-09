@@ -31,7 +31,7 @@
 
     <img src="../../../svg/calculator.svg" alt="">
 
-    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
         <div dropdown-display class="notification">
             <img (click)="null" src="../../../svg/notification.svg" alt="">
 
@@ -45,7 +45,7 @@
         <div dropdown-content class="notification-dropdown">
             <div class="notification-header">
 
-                <div style="padding: 4px;" class="btn btn-outlined">
+                <div style="padding: 4px;" class="btn btn-outlined no-hover">
                     <img style="cursor: pointer;" src="../../../svg/notify.svg" alt="">
                 </div>
 
@@ -104,7 +104,7 @@
 
     <img src="../../../svg/printer.svg" alt="">
 
-    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
         <div dropdown-display class="profile">
             <img class="profile-image" src="../../../img/profile.png" alt="">
         </div>
