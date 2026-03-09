@@ -3,6 +3,7 @@
 @forward "scss/_chip";
 @forward "scss/_modal";
 @forward "scss/_utils";
+@forward "scss/_bootstrap";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -18,4 +19,11 @@ body {
   line-height: 1.25;
   font-weight: 400;
   overflow: hidden;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible;
 }

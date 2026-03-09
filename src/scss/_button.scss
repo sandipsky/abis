@@ -11,6 +11,14 @@
   font-weight: 600;
   line-height: 20px;
   cursor: pointer;
+
+  &.rounded {
+    border-radius: 50% !important;
+  }
+
+  &.small {
+    padding: 4px !important;
+  }
 }
 
 .btn-primary {
@@ -32,7 +40,8 @@
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
 
-  &:hover, &.active {
+  &:hover,
+  &.active {
     background-color: var(--primary-color);
     color: var(--bg-lightest-color);
   }
@@ -49,7 +58,7 @@
   border: 1px solid var(--separator-color);
 
   &:hover {
-    background-color: var(--primary-color);
+    background-color: var(--bg-semi-light-color);
     color: var(--bg-lightest-color);
   }
 

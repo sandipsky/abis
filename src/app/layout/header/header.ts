@@ -4,6 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MenuComponent } from '../../shared/components/menu/menu';
 import { NotificationService } from '../../shared/services/websocket.service';
+import { CalculatorComponent } from '../../shared/components/calculator/calculator';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +18,7 @@ export class Header {
   private _breadcrumbService = inject(BreadcrumbService);
   private _router = inject(Router);
   private _notificationService = inject(NotificationService);
+  private _dialog = inject(MatDialog);
 
   breadcrumbs = toSignal(this._breadcrumbService.breadcrumbs$);
 
@@ -24,15 +27,15 @@ export class Header {
   fiscalYear = signal<string>(localStorage.getItem('fiscalYear') ?? '2082-83');
   notifications = signal<any[]>([]);
 
-  private _newNotification = toSignal(this._notificationService.getNotifications());
+  // private _newNotification = toSignal(this._notificationService.getNotifications());
 
   constructor() {
-    effect(() => {
-      const latest = this._newNotification();
-      if (latest) {
-        this.notifications.update(current => [latest, ...current]);
-      }
-    });
+    // effect(() => {
+    //   const latest = this._newNotification();
+    //   if (latest) {
+    //     this.notifications.update(current => [latest, ...current]);
+    //   }
+    // });
   }
 
   returnHome() {
@@ -45,5 +48,12 @@ export class Header {
 
   clearNotification(id: number) {
     this.notifications.update(n => n.filter(notif => notif.id !== id));
+  }
+
+  openCalculator() {
+    this._dialog.open(CalculatorComponent, {
+      disableClose: true,
+      width: '328px',
+    })
   }
 }

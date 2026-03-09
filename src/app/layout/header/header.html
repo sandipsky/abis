@@ -29,7 +29,7 @@
         Fiscal Year: {{fiscalYear()}}
     </div>
 
-    <img src="../../../svg/calculator.svg" alt="">
+    <img (click)="openCalculator()" src="../../../svg/calculator.svg" alt="">
 
     <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
         <div dropdown-display class="notification">
