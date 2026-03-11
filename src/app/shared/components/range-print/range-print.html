@@ -1,4 +1,4 @@
-<div class="modal">
+<div class="modal full">
     <div class="modal-header">
         <div class="btn btn-outlined no-hover small">
             <img style="cursor: pointer;" src="../../../svg/printer.svg" alt="">
@@ -27,8 +27,8 @@
                             <div class="form-group">
                                 <label>Print of</label>
                                 <div>
-                                    <!-- <ng-select [clearable]="false" [items]="printTypes" formControlName="type"
-                                        (change)="onChangeType($event)"></ng-select> -->
+                                    <ng-select [clearable]="false" [items]="printTypes" formControlName="type"
+                                        (change)="onChangeType($event)"></ng-select>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                                     <label>{{f['partyType'].value == 'Vendor'
                                         ? 'Vendor' : 'Customer'}} Name </label>
                                     <div>
-                                        <!-- <ng-select appFormError [items]="partyList" bindLabel="name" bindValue="id"
+                                        <ng-select appFormError [items]="partyList" bindLabel="name" bindValue="id"
                                             [placeholder]="f['partyType'].value == 'Vendor'
                                     ? 'Select Vendor' : 'Select Customer'" formControlName="partyId"
                                             (change)="getCustomerDivisions($event)" [loading]="isSearching"
@@ -52,18 +52,18 @@
                                             [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'"
                                             (focus)="searchTerm=''"
                                             [class.is-invalid]="f['partyId'].invalid && (f['partyId'].dirty ||f['partyId'].touched)">
-                                        </ng-select> -->
+                                        </ng-select>
                                     </div>
                                 </div>
 
                                 <div *ngIf="accounting?.includes(f['type'].value)" class="form-group">
                                     <label>Party Name </label>
                                     <div>
-                                        <!-- <ng-select appFormError [items]="accountPartyList" bindLabel="name"
+                                        <ng-select appFormError [items]="accountPartyList" bindLabel="name"
                                             bindValue="id" [placeholder]="'Select Party'" formControlName="partyId"
                                             (change)="getAccountDivisions($event)"
                                             [class.is-invalid]="f['partyId'].invalid && (f['partyId'].dirty ||f['partyId'].touched)">
-                                        </ng-select> -->
+                                        </ng-select>
                                     </div>
                                 </div>
                             </div>
@@ -77,11 +77,11 @@
                                     <label>Headquarter</label>
 
                                     <div>
-                                        <!-- <ng-select [readonly]="true" appFormError [items]="hqDropdownList"
+                                        <ng-select [readonly]="true" appFormError [items]="hqDropdownList"
                                             bindLabel="name" bindValue="id" placeholder="Select Headquarter"
                                             formControlName="hqId"
                                             [class.is-invalid]="f['hqId'].invalid && (f['hqId'].dirty ||f['hqId'].touched)">
-                                        </ng-select> -->
+                                        </ng-select>
                                     </div>
 
                                 </div>
@@ -94,12 +94,12 @@
                                     <label>Division</label>
 
                                     <div>
-                                        <!-- <ng-select appFormError
+                                        <ng-select appFormError
                                             [items]="f['partyType'].value == 'Customer' ? divisionDropdownList: divisionList"
                                             bindLabel="name" bindValue="id" placeholder="Select Division"
                                             formControlName="divisionId" (change)="onChangeDivision($event)"
                                             [class.is-invalid]="f['divisionId'].invalid && (f['divisionId'].dirty ||f['divisionId'].touched)">
-                                        </ng-select> -->
+                                        </ng-select>
                                     </div>
 
                                 </div>
@@ -119,13 +119,13 @@
                                 <label>Number Range</label>
 
                                 <div>
-                                    <!-- <ng-select appFormError [items]="invoiceList" bindLabel="name" bindValue="id"
+                                    <ng-select appFormError [items]="invoiceList" bindLabel="name" bindValue="id"
                                         placeholder="From" formControlName="fromId" [loading]="isSearching"
                                         (input)="onSearchInvoice($event)"
                                         [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'"
                                         (focus)="searchTerm=''"
                                         [class.is-invalid]="f['fromId'].invalid && (f['fromId'].dirty ||f['fromId'].touched)">
-                                    </ng-select> -->
+                                    </ng-select>
                                 </div>
 
                             </div>
@@ -136,13 +136,13 @@
                         <div class="form-section">
                             <div class="form-group">
                                 <div>
-                                    <!-- <ng-select appFormError [items]="invoiceList" bindLabel="name" bindValue="id"
+                                    <ng-select appFormError [items]="invoiceList" bindLabel="name" bindValue="id"
                                         placeholder="To" formControlName="toId" [loading]="isSearching"
                                         (input)="onSearchInvoice($event)"
                                         [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'"
                                         (focus)="searchTerm=''"
                                         [class.is-invalid]="f['toId'].invalid && (f['toId'].dirty ||f['toId'].touched)">
-                                    </ng-select> -->
+                                    </ng-select>
                                 </div>
 
                             </div>

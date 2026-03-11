@@ -3,6 +3,7 @@ import { Comment } from '@angular/compiler';
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { NgSelectModule } from '@ng-select/ng-select';
 // import { ToastrService } from 'ngx-toastr';
 // import { NepaliDatepickerService } from 'np-datepicker-angular';
 // import { ConfigServiceService } from 'src/app/configuration/config-service/config-service.service';
@@ -15,7 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
   templateUrl: './range-print.html',
   styleUrls: ['./range-print.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule]
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgSelectModule]
 })
 export class RangePrintComponent {
 
