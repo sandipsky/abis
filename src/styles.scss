@@ -16,9 +16,46 @@
 
 body {
   font-family: "Inter", sans-serif;
-  font-size: 14px;  
+  font-size: 14px;
   line-height: 1.25;
   font-weight: 400;
   overflow: hidden;
 }
 
+
+//NG SELECT
+.ng-select {
+  align-self: stretch;
+  outline: none;
+  box-shadow: none;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.ng-select .ng-select-container {
+  padding: 8px !important;
+  height: auto !important;
+  border: 1px solid var(--separator-color);
+  background-color: var(--bg-lightest-color);
+  border-radius: 8px;
+
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary-bg-color);
+    border-color: var(--primary-color);
+  }
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input {
+  padding-left: 8px;
+  position: relative;
+}
+
+.ng-select .ng-clear-wrapper {
+  height: 10px;
+}
+
+.ng-select .ng-spinner-loader {
+  display: none;
+}
