@@ -1,39 +1,41 @@
 <div class="modal">
     <div class="modal-header">
-        <div class="btn btn-outlined no-hover modal-btn">
-            <img style="cursor: pointer;" src="../../../svg/calculator.svg" alt="">
+        <div class="btn btn-outlined no-hover small">
+            <img src="../../../svg/calculator.svg" alt="calc-icon">
         </div>
-
         <div class="modal-title-group">
-
-            <h1 class="modal-title" id="modal-title">
-                Calculator
-            </h1>
+            <h1 class="modal-title">Calculator</h1>
         </div>
-
-        <div class="btn btn-outlined rounded modal-btn">
-            <img style="cursor: pointer;" src="../../../svg/close.svg" alt="">
+        <div class="btn btn-outlined rounded small" (click)="dialogRef.close()">
+            <img src="../../../svg/close.svg" alt="close">
         </div>
     </div>
 
     <div class="modal-body">
-        <input (keydown)="onKeyUp($event)" [(ngModel)]="input" type="text" class="calc-input">
+        <input 
+            (keydown)="onKeyUp($event)" 
+            [ngModel]="input()" 
+            (ngModelChange)="input.set($event)"
+            type="text" 
+            class="calc-input">
 
         <h2 class="result">
-            {{result}}
+            {{ result() }}
         </h2>
 
-        <div class="row gy-2">
-            <div *ngFor="let button of buttonsArray" class="col-md-3">
-                <button (click)="addKey(button.label)" style="width: 100%;"
-                [class.operator]="button.type == 'operator' || button.type == 'action'"    
-                [class.equal]="button.type == 'equal'"    
-                class="calc-btn">
-                    {{button.label}}
-                </button>
-            </div>
+        <div class="row gy-1 gx-3">
+            @for (button of buttonsArray; track button.label) {
+                <div class="col-md-3">
+                    <button 
+                        (click)="addKey(button.label)" 
+                        style="width: 100%;"
+                        [class.operator]="button.type === 'operator' || button.type === 'action'"    
+                        [class.equal]="button.type === 'equal'"    
+                        class="calc-btn">
+                        {{ button.label }}
+                    </button>
+                </div>
+            }
         </div>
-
-
     </div>
 </div>

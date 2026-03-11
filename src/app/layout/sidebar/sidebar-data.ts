@@ -24,15 +24,7 @@ const sidebarData = [
                         tooltip: 'Purchase Order',
                         icon: 'purchase-order',
                         activeIcon: 'purchase-order-active',
-                        permission: true
-                    },
-                    {
-                        link: 'billing-term',
-                        label: 'Billing Term',
-                        tooltip: 'Billing Term',
-                        icon: 'billing-term',
-                        activeIcon: 'billing-term-active',
-                        permission: true
+                        permission: 'ViewPurchaseOrder'
                     },
                     {
                         link: 'purchase-entry',
@@ -40,7 +32,7 @@ const sidebarData = [
                         tooltip: 'Purchase Entry',
                         icon: 'purchase-entry',
                         activeIcon: 'purchase-entry-active',
-                        permission: true
+                        permission: 'ViewPurchaseEntries'
                     },
                     {
                         link: 'purchase-return',
@@ -48,17 +40,16 @@ const sidebarData = [
                         tooltip: 'Purchase Return',
                         icon: 'purchase-return',
                         activeIcon: 'purchase-return-active',
-                        permission: true
+                        permission: 'ViewPurchaseReturns'
                     },
                     {
-                        link: 'vendor',
+                        link: 'vendors',
                         label: 'Vendor',
                         tooltip: 'Vendor',
                         icon: 'vendor',
                         activeIcon: 'vendor-active',
-                        permission: true
+                        permission: 'ViewVendor'
                     },
-
                 ]
             },
             {
@@ -74,7 +65,7 @@ const sidebarData = [
                         tooltip: 'Sales Order',
                         icon: 'sales-order',
                         activeIcon: 'sales-order-active',
-                        permission: true
+                        permission: 'ViewSalesOrder'
                     },
                     {
                         link: 'bulk-order',
@@ -82,15 +73,15 @@ const sidebarData = [
                         tooltip: 'Bulk Order',
                         icon: 'bulk-order',
                         activeIcon: 'bulk-order-active',
-                        permission: true
+                        permission: 'ViewBulkSalesOrder'
                     },
                     {
-                        link: 'dispatch',
+                        link: 'sales-dispatch',
                         label: 'Dispatch',
                         tooltip: 'Dispatch',
                         icon: 'dispatch',
                         activeIcon: 'dispatch-active',
-                        permission: true
+                        permission: 'ViewDispatch'
                     },
                     {
                         link: 'sales-entry',
@@ -98,7 +89,7 @@ const sidebarData = [
                         tooltip: 'Sales Entry',
                         icon: 'sales-entry',
                         activeIcon: 'sales-entry-active',
-                        permission: true
+                        permission: 'ViewSalesEntries'
                     },
                     {
                         link: 'sales-return',
@@ -106,7 +97,7 @@ const sidebarData = [
                         tooltip: 'Sales Return',
                         icon: 'sales-return',
                         activeIcon: 'sales-return-active',
-                        permission: true
+                        permission: 'ViewSalesReturns'
                     },
                     {
                         link: 'bde',
@@ -114,15 +105,15 @@ const sidebarData = [
                         tooltip: 'BDE',
                         icon: 'bde',
                         activeIcon: 'bde-active',
-                        permission: true
+                        permission: 'ViewB/D/E'
                     },
                     {
-                        link: 'customer',
+                        link: 'customers',
                         label: 'Customer',
                         tooltip: 'Customer',
                         icon: 'customer',
                         activeIcon: 'customer-active',
-                        permission: true
+                        permission: 'ViewCustomer'
                     },
 
                 ]
@@ -140,7 +131,7 @@ const sidebarData = [
                         tooltip: 'Stock Adjustment',
                         icon: 'stock-adjustment',
                         activeIcon: 'stock-adjustment-active',
-                        permission: true
+                        permission: 'ViewStockAdjustment'
                     },
                     {
                         link: 'stock-edit',
@@ -148,7 +139,7 @@ const sidebarData = [
                         tooltip: 'Stock Edit',
                         icon: 'stock-edit',
                         activeIcon: 'stock-edit-active',
-                        permission: true
+                        permission: 'ViewStockEdit'
                     },
                     {
                         link: 'opening-stock',
@@ -156,7 +147,15 @@ const sidebarData = [
                         tooltip: 'Opening Stock',
                         icon: 'opening-stock',
                         activeIcon: 'opening-stock-active',
-                        permission: true
+                        permission: 'ViewOpeningStock'
+                    },
+                    {
+                        link: 'physical-stock-master',
+                        label: 'Physical Stock Master',
+                        tooltip: 'Physical Stock Master',
+                        icon: 'physical-stock-master',
+                        activeIcon: 'physical-stock-master-active',
+                        permission: 'ViewPhysicalStocks'
                     },
                 ]
             },
@@ -173,7 +172,7 @@ const sidebarData = [
                         tooltip: 'Finish Goods Receipt',
                         icon: 'finish-goods-receipt',
                         activeIcon: 'finish-goods-receipt-active',
-                        permission: true
+                        permission: 'ViewFinishGoodReceipts'
                     },
                     {
                         link: 'material-issue',
@@ -181,7 +180,7 @@ const sidebarData = [
                         tooltip: 'Material Issue',
                         icon: 'material-issue',
                         activeIcon: 'material-issue-active',
-                        permission: true
+                        permission: 'ViewMaterialIssues'
                     },
                     {
                         link: 'material-issue-return',
@@ -189,16 +188,8 @@ const sidebarData = [
                         tooltip: 'Material Issue Return',
                         icon: 'material-issue-return',
                         activeIcon: 'material-issue-return-active',
-                        permission: true
-                    },
-                    {
-                        link: 'physical-stock-master',
-                        label: 'Physical Stock Master',
-                        tooltip: 'Physical Stock Master',
-                        icon: 'physical-stock-master',
-                        activeIcon: 'physical-stock-master-active',
-                        permission: true
-                    },
+                        permission: 'ViewMaterialIssuesReturn'
+                    }
                 ]
             },
             {
@@ -214,7 +205,7 @@ const sidebarData = [
                         tooltip: 'Journal Entry',
                         icon: 'journal-entry',
                         activeIcon: 'journal-entry-active',
-                        permission: true
+                        permission: 'ViewJournalEntries'
                     },
                     {
                         link: 'payment',
@@ -222,7 +213,7 @@ const sidebarData = [
                         tooltip: 'Payment',
                         icon: 'payment',
                         activeIcon: 'payment-active',
-                        permission: true
+                        permission: ['ViewCustomerPayment', 'ViewVendorPayment']
                     },
                     {
                         link: 'payment-adjustment',
@@ -230,7 +221,7 @@ const sidebarData = [
                         tooltip: 'Payment Adjustment',
                         icon: 'payment-adjustment',
                         activeIcon: 'payment-adjustment-active',
-                        permission: true
+                        permission: 'ViewPaymentAdjustment'
                     },
                     {
                         link: 'cash-bank-voucher',
@@ -238,7 +229,7 @@ const sidebarData = [
                         tooltip: 'Cash/Bank Voucher',
                         icon: 'cash-bank-voucher',
                         activeIcon: 'cash-bank-voucher-active',
-                        permission: true
+                        permission: 'ViewVouchers'
                     },
                     {
                         link: 'credit-note',
@@ -246,7 +237,7 @@ const sidebarData = [
                         tooltip: 'Credit Note',
                         icon: 'credit-note',
                         activeIcon: 'credit-note-active',
-                        permission: true
+                        permission: ['ViewVendorCreditNotes', 'ViewCustomerCreditNotes']
                     },
                     {
                         link: 'debit-note',
@@ -254,7 +245,7 @@ const sidebarData = [
                         tooltip: 'Debit Note',
                         icon: 'debit-note',
                         activeIcon: 'debit-note-active',
-                        permission: true
+                        permission: ['ViewCustomerDebitNotes', 'ViewVendorDebitNotes']
                     },
                     {
                         link: 'opening-balance',
@@ -262,7 +253,7 @@ const sidebarData = [
                         tooltip: 'Opening Balance',
                         icon: 'opening-balance',
                         activeIcon: 'opening-balance-active',
-                        permission: true
+                        permission: 'ViewOpeningBalance'
                     },
                     {
                         link: 'account',
@@ -270,7 +261,7 @@ const sidebarData = [
                         tooltip: 'Account',
                         icon: 'account',
                         activeIcon: 'account-active',
-                        permission: true
+                        permission: 'ViewAccount'
                     },
                 ]
             },
@@ -280,34 +271,34 @@ const sidebarData = [
         title: 'SETUP',
         items: [
             {
-                link: 'product',
+                link: 'products',
                 tooltip: 'Products',
                 label: 'Products',
                 icon: 'products',
                 activeIcon: 'products-active',
-                permission: true,
+                permission: 'ViewProduct',
             },
             {
                 link: '',
                 label: 'Masters',
                 tooltip: 'Masters',
-                icon: 'products',
-                activeIcon: 'products-active',
+                icon: 'master',
+                activeIcon: 'master-active',
                 children: [
-                    { link: 'unit', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: true },
-                    { link: 'packing', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: true },
-                    { link: 'tax-type', label: 'Tax Type', tooltip: 'Tax Type', icon: 'tax-type', activeIcon: 'tax-type-active', permission: true },
-                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: 'product-category', activeIcon: 'product-category-active', permission: true },
-                    { link: 'product-group', label: 'Product Group', tooltip: 'Product Group', icon: 'product-group', activeIcon: 'product-group-active', permission: true },
-                    { link: 'company', label: 'Company', tooltip: 'Company', icon: 'company', activeIcon: 'company-active', permission: true },
-                    { link: 'division', label: 'Division', tooltip: 'Division', icon: 'division', activeIcon: 'division-active', permission: true },
-                    { link: 'generic', label: 'Generic', tooltip: 'Generic', icon: 'generic', activeIcon: 'generic-active', permission: true },
-                    { link: 'narration', label: 'Narration', tooltip: 'Narration', icon: 'narration', activeIcon: 'narration-active', permission: true },
-                    { link: 'sub-account', label: 'Sub Account', tooltip: 'Sub Account', icon: 'sub-account', activeIcon: 'sub-account-active', permission: true },
-                    { link: 'cost-center', label: 'Cost Center', tooltip: 'Cost Center', icon: 'cost-center', activeIcon: 'cost-center-active', permission: true },
-                    { link: 'discount-category', label: 'Discount Category', tooltip: 'Discount Category', icon: 'discount-category', activeIcon: 'discount-category-active', permission: true },
-                    { link: 'transport', label: 'Transport', tooltip: 'Transport', icon: 'transport', activeIcon: 'transport-active', permission: true },
-                    { link: 'headquarter', label: 'Headquarter', tooltip: 'Headquarter', icon: 'headquarter', activeIcon: 'headquarter-active', permission: true },
+                    { link: 'unit', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: 'ViewUnits' },
+                    { link: 'packing', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: 'ViewPackings' },
+                    { link: 'tax-type', label: 'Tax Type', tooltip: 'Tax Type', icon: 'tax-type', activeIcon: 'tax-type-active', permission: 'ViewTaxType' },
+                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: 'product-category', activeIcon: 'product-category-active', permission: 'ViewProductCategories' },
+                    { link: 'product-group', label: 'Product Group', tooltip: 'Product Group', icon: 'product-group', activeIcon: 'product-group-active', permission: 'ViewProductGroups' },
+                    { link: 'company', label: 'Company', tooltip: 'Company', icon: 'company', activeIcon: 'company-active', permission: 'ViewCompanyName' },
+                    { link: 'division', label: 'Division', tooltip: 'Division', icon: 'division', activeIcon: 'division-active', permission: 'ViewDivision' },
+                    { link: 'generic', label: 'Generic', tooltip: 'Generic', icon: 'generic', activeIcon: 'generic-active', permission: 'ViewGenericName' },
+                    { link: 'narration', label: 'Narration', tooltip: 'Narration', icon: 'narration', activeIcon: 'narration-active', permission: 'ViewNarrations' },
+                    { link: 'sub-account', label: 'Sub Account', tooltip: 'Sub Account', icon: 'sub-account', activeIcon: 'sub-account-active', permission: 'ViewSubAccount' },
+                    { link: 'cost-center', label: 'Cost Center', tooltip: 'Cost Center', icon: 'cost-center', activeIcon: 'cost-center-active', permission: 'ViewCostCenters' },
+                    { link: 'discount-category', label: 'Discount Category', tooltip: 'Discount Category', icon: 'discount-category', activeIcon: 'discount-category-active', permission: 'ViewDiscountCategory' },
+                    { link: 'transport', label: 'Transport', tooltip: 'Transport', icon: 'transport', activeIcon: 'transport-active', permission: 'ViewTransport' },
+                    { link: 'headquarter', label: 'Headquarter', tooltip: 'Headquarter', icon: 'headquarter', activeIcon: 'headquarter-active', permission: 'ViewHeadquarter' },
                 ]
             },
             {
@@ -323,23 +314,23 @@ const sidebarData = [
                         tooltip: 'User',
                         icon: 'user',
                         activeIcon: 'user-active',
-                        permission: true
+                        permission: 'ViewUser'
                     },
                     {
-                        link: 'designation',
+                        link: 'designations',
                         label: 'Designation',
                         tooltip: 'Designation',
                         icon: 'designation',
                         activeIcon: 'designation-active',
-                        permission: true
+                        permission: 'ViewDesignation'
                     },
                     {
-                        link: 'roles-permission',
+                        link: 'roles-permissions',
                         label: 'Roles and Permission',
                         tooltip: 'Roles and Permission',
                         icon: 'roles-permission',
                         activeIcon: 'roles-permission-active',
-                        permission: true
+                        permission: 'ViewRoles'
                     },
                 ]
             },
@@ -359,28 +350,44 @@ const sidebarData = [
                 activeIcon: 'settings-active',
                 children: [
                     {
-                        link: 'user',
-                        label: 'User',
-                        tooltip: 'User',
-                        icon: 'user',
-                        activeIcon: 'user-active',
-                        permission: true
+                        link: 'configuration',
+                        label: 'Configuration',
+                        tooltip: 'Configuration',
+                        icon: 'configuration',
+                        activeIcon: 'configuration-active',
+                        permission: 'ViewConfig'
                     },
                     {
-                        link: 'designation',
-                        label: 'Designation',
-                        tooltip: 'Designation',
-                        icon: 'designation',
-                        activeIcon: 'designation-active',
-                        permission: true
+                        link: 'auto-code-generator',
+                        label: 'Auto Code Generator',
+                        tooltip: 'Auto Code Generator',
+                        icon: 'auto-code-generator',
+                        activeIcon: 'auto-code-generator-active',
+                        permission: 'ViewAutoCodeGenerator'
                     },
                     {
-                        link: 'roles-permission',
-                        label: 'Roles and Permission',
-                        tooltip: 'Roles and Permission',
-                        icon: 'roles-permission',
-                        activeIcon: 'roles-permission-active',
-                        permission: true
+                        link: 'document-number-scheme',
+                        label: 'Document Numbering',
+                        tooltip: 'Document Numbering',
+                        icon: 'document-numbering-scheme',
+                        activeIcon: 'document-numbering-scheme-active',
+                        permission: 'ViewDocumentNumberingScheme'
+                    },
+                    {
+                        link: 'backup-restore',
+                        label: 'Backup and Restore',
+                        tooltip: 'Backup and Restore',
+                        icon: 'backup-restore',
+                        activeIcon: 'backup-restore-active',
+                        permission: 'CreateDatabaseBackup'
+                    },
+                    {
+                        link: 'closing',
+                        label: 'Closing',
+                        tooltip: 'Closing',
+                        icon: 'closing',
+                        activeIcon: 'closing-active',
+                        permission: 'CloseCurrentFicalYear'
                     },
                 ]
             },

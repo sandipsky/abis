@@ -23,6 +23,8 @@ export class Sidebar {
   private _breadcrumbService = inject(BreadcrumbService);
   private _dialog = inject(MatDialog);
 
+  operationList: any[] = [];
+
   quickAddItems = [
     {
       name: 'Purchase',
@@ -105,6 +107,23 @@ export class Sidebar {
 
   openQuickAdd(item: any) {
     this._dialog.open(item.type)
+  }
+
+  hasPermission(permission: string | string[] | boolean | undefined): boolean {
+
+    if (permission === true) {
+      return true;
+    }
+
+    if (Array.isArray(permission)) {
+      return permission.some(p => this.operationList.includes(p)) || true;
+    }
+
+    return this.operationList.includes(permission) || true;
+  }
+
+  hasChildPermission(children: any[]): boolean {
+    return children?.some(child => this.hasPermission(child.permission));
   }
 
   syncMenuWithUrl() {

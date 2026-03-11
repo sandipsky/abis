@@ -31,8 +31,7 @@
                             </h3>
                         </div>
 
-                        <img (click)="q.close()" style="cursor: pointer;" src="../../../svg/close.svg"
-                            alt="">
+                        <img (click)="q.close()" style="cursor: pointer;" src="../../../svg/close.svg" alt="">
 
                     </div>
 
@@ -66,14 +65,14 @@
 
                 @for(item of group.items; track $index) {
 
-                @if (item.children) {
+                @if (item.children && hasChildPermission(item.children)) {
                 <a href="javascript:void(0)" (click)="toggleSubMenu(item)" class="link-item">
                     <img [src]="'../../../svg/' + item.icon + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                     <img class="caret" src="../../../svg/caret.svg" alt="">
                 </a>
                 }
-                @else {
+                @else if (hasPermission(item.permission)) {
                 <a (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
                     #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
@@ -93,11 +92,13 @@
                 </div>
 
                 @for(item of activeSubMenu().children; track $index) {
+                @if (hasPermission(item.permission)) {
                 <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                 </a>
+                }
                 }
             </div>
             }

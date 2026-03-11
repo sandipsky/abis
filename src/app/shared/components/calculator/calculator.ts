@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
@@ -8,134 +8,96 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
   selector: 'app-calculator',
   templateUrl: './calculator.html',
   styleUrls: ['./calculator.scss'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalculatorComponent {
-  input = '';
-  result = '0';
-  nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  readonly input = signal<string>('');
+  readonly result = signal<string>('0');
 
-  buttonsArray = [
-    { label: 'CE', type: 'action' },
-    { label: 'C', type: 'action' },
-    { label: '%', type: 'operator' },
-    { label: '/', type: 'operator' },
+  public dialogRef = inject(MatDialogRef<CalculatorComponent>);
+  public dialog = inject(MatDialog);
+  public data = inject(MAT_DIALOG_DATA);
 
-    { label: '7', type: 'number' },
-    { label: '8', type: 'number' },
-    { label: '9', type: 'number' },
-    { label: '*', type: 'operator' },
-
-    { label: '4', type: 'number' },
-    { label: '5', type: 'number' },
-    { label: '6', type: 'number' },
-    { label: '-', type: 'operator' },
-
-    { label: '1', type: 'number' },
-    { label: '2', type: 'number' },
-    { label: '3', type: 'number' },
-    { label: '+', type: 'operator' },
-
-    { label: '', type: 'empty' },
-    { label: '0', type: 'number' },
-    { label: '.', type: 'decimal' },
-    { label: '=', type: 'equal' }
+  readonly buttonsArray = [
+    { label: 'CE', type: 'action' }, { label: 'C', type: 'action' }, { label: '%', type: 'operator' }, { label: '/', type: 'operator' },
+    { label: '7', type: 'number' }, { label: '8', type: 'number' }, { label: '9', type: 'number' }, { label: '*', type: 'operator' },
+    { label: '4', type: 'number' }, { label: '5', type: 'number' }, { label: '6', type: 'number' }, { label: '-', type: 'operator' },
+    { label: '1', type: 'number' }, { label: '2', type: 'number' }, { label: '3', type: 'number' }, { label: '+', type: 'operator' },
+    { label: '', type: 'empty' }, { label: '0', type: 'number' }, { label: '.', type: 'decimal' }, { label: '=', type: 'equal' }
   ];
-
-  constructor(
-    public dialogRef: MatDialogRef<CalculatorComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
 
   addKey(button: string): void {
     const operators = ['+', '-', '*', '/', '.'];
+    const currentInput = this.input();
 
-    if (button === 'C' || button == 'CE') {
-      this.input = '';
-      this.result = '0';
+    // 1. Clear Logic
+    if (button === 'C' || button === 'CE') {
+      this.input.set('');
+      this.result.set('0');
       return;
     }
 
+    // 2. Calculation Logic
     if (button === '=') {
       try {
-        this.result = eval(this.input).toString();
+        // Caution: eval() is used per your original logic; 
+        // in a production app, consider a math parser library.
+        const calculated = eval(currentInput);
+        this.result.set(calculated.toString());
       } catch (e) {
-        this.result = 'Error';
+        this.result.set('Error');
       }
       return;
     }
 
+    // 3. Percentage Logic
     if (button === '%') {
-      const match = this.input.match(/(.+?)([+\-*/])(\d+(\.\d+)?)$/);
+      const match = currentInput.match(/(.+?)([+\-*/])(\d+(\.\d+)?)$/);
       if (match) {
         const fullExpr = match[1];
         const operator = match[2];
         const percentValue = parseFloat(match[3]);
-
-        try {
-          const base = eval(fullExpr);
-          // const replacement = (base * percentValue) / 100;
-          const replacement = (percentValue) / 100;
-          this.input = fullExpr + operator + replacement;
-        } catch (e) {
-          this.result = 'Error';
-        }
+        const replacement = percentValue / 100;
+        this.input.set(fullExpr + operator + replacement);
       }
       return;
     }
 
-    const lastChar = this.input[this.input.length - 1];
+    // 4. Input Validation & Formatting
+    const lastChar = currentInput[currentInput.length - 1];
 
-    // Prevent starting with an operator
-    if (this.input.length === 0 && operators.includes(button)) {
+    if (currentInput.length === 0 && (operators.includes(button) || button === '0')) {
       return;
     }
 
-    // Prevent operator after another operator
     if (operators.includes(button) && operators.includes(lastChar)) {
       return;
     }
 
-    // Prevent starting with 0
-    if (this.input.length === 0 && button === '0') {
+    // Prevent leading zeros like "09"
+    if (currentInput === '0' && !operators.includes(button)) {
       return;
     }
 
-    // Prevent number starting with 0 like "09", "04"
-    if (
-      this.input.length >= 1 &&
-      this.input.length <= 2 &&
-      this.input[0] === '0' &&
-      !operators.includes(button)
-    ) {
-      return;
-    }
-
-    this.input += button;
+    // Update the signal
+    this.input.update(val => val + button);
   }
 
   onKeyUp(event: KeyboardEvent): void {
-    event.preventDefault();
     const key = event.key;
-
-    // Allow digits, operators, Enter, Backspace, and %
     const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '=', 'Enter', 'Backspace', '%', 'C', 'c', '.'];
 
-    if (!validKeys.includes(key)) {
-      event.preventDefault();
-      return;
-    }
+    if (!validKeys.includes(key)) return;
 
     if (key === 'Enter' || key === '=') {
       this.addKey('=');
     } else if (key === 'Backspace') {
-      this.input = this.input.slice(0, -1);
+      this.input.update(val => val.slice(0, -1));
     } else if (key.toUpperCase() === 'C') {
       this.addKey('C');
     } else {
       this.addKey(key);
     }
   }
-
 }
