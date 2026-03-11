@@ -45,9 +45,9 @@ input {
     }
 
     &.operator {
-        background: var(--primary-alt-color, #EEF9EC);
+        background: var(--primary-bg-color, #EEF9EC);
         color: var(--primary-color, #4CB139);
-        border: var(--primary-alt-color, #EEF9EC);
+        border: var(--primary-bg-color, #EEF9EC);
     }
 
     &.equal {

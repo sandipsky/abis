@@ -6,6 +6,7 @@ import { MenuComponent } from '../../shared/components/menu/menu';
 import { NotificationService } from '../../shared/services/websocket.service';
 import { CalculatorComponent } from '../../shared/components/calculator/calculator';
 import { MatDialog } from '@angular/material/dialog';
+import { RangePrintComponent } from '../../shared/components/range-print/range-print';
 
 @Component({
   selector: 'app-header',
@@ -55,5 +56,23 @@ export class Header {
       disableClose: true,
       width: '328px',
     })
+  }
+
+  openRangePrint() {
+    const dialogRef = this._dialog.open(RangePrintComponent, {
+      disableClose: true,
+      panelClass: ['slide-left', 'drawer-right'],
+      enterAnimationDuration: '0ms',
+      exitAnimationDuration: '0ms',
+    })
+
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.removePanelClass('slide-left');
+      dialogRef.addPanelClass('slide-left-close');
+
+      setTimeout(() => {
+        dialogRef.close();
+      }, 400);
+    });
   }
 }

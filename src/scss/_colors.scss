@@ -1,8 +1,8 @@
 :root {
   /* ================= Primary ================= */
   --primary-color: #4CB139;
-  --primary-alt-color: #EEF9EC;
-  --primary-hover-color: #3B8A2D;
+  --primary-bg-color: #EEF9EC;
+  --primary-alt-color: #3B8A2D;
 
   /* ================= Text Colors ================= */
   --text-primary-color: #07090f;
@@ -14,14 +14,15 @@
 
   /* ================= Separators ================= */
   --separator-color: #e5e7eb;
-  --separator-alt-color: #d1d5db;
+  --separator-alt-color: #ebedeb;
 
   /* ================= Backgrounds ================= */
   --bg-lightest-color: #fefefe;
-  --bg-light-color: #f9fafb;
+  --bg-light-color: #f7f7f7;
   --bg-semi-light-color: #f3f4f6;
   --bg-semi-dark-color: #f3f4f5;
-  --bg-dark-color: #e5e7eb;
+  --bg-dark-color: #ebedeb;
+  --bg-darkest-color: #c1c5c0; 
 
   /* ================= Status ================= */
   --success-color: #36b37e;
