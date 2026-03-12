@@ -10,8 +10,15 @@
 }
 
 .section-title {
-    color: var(--Text-Primary, #232423);
+    color: var(--text-primary-color, #232423);
     font-size: 15px;
     font-weight: 500;
     line-height: 24px;
+}
+
+.section-sub-title {
+    color: var(--text-secondary-color, #555755);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
 }

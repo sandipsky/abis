@@ -1,1 +1,100 @@
-<p>filter works!</p>
+<div class="filter-section">
+    <div class="input-wrapper">
+        <img class="left-icon" src="../../../svg/search.svg" alt="">
+        <input placeholder="Search" type="text" class="form-control" [(ngModel)]="searchText"
+            (keyup.enter)="onSearch()" />
+    </div>
+
+    <app-menu #filterDropdown [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
+        <button [class.active]="filterDropdown.isOpen() == true" dropdown-display class="filter-btn" type="button">
+            <img *ngIf="filterDropdown.isOpen() != true" class="icon" src="../../../svg/filter.svg" alt="">
+            <img *ngIf="filterDropdown.isOpen() == true" class="icon" src="../../../svg/filter-active.svg" alt="">
+            Filters
+            <button class="btn btn-outlined no-hover">{{filterColumns.length}}</button>
+            <img *ngIf="filterDropdown.isOpen() != true" src="../../../svg/caret-down.svg" alt="">
+            <img *ngIf="filterDropdown.isOpen() == true" src="../../../svg/caret-down-active.svg" alt="">
+        </button>
+
+        <div dropdown-content class="filter-dropdown">
+            <div class="filter-header">
+                <h1 class="filter-header-title">
+                    Filter
+                </h1>
+
+                <div (click)="closeDropdown()" type="button" class="btn btn-outlined small rounded">
+                    <img src="../../../svg/close.svg" alt="">
+                </div>
+            </div>
+
+            <div class="filter-body">
+                <ng-container *ngFor="let filter of filterColumns; index as i;">
+                    <div *ngIf="filter.type == 'text'" class="form-group">
+                        <label>{{filter.name}}</label>
+                        <input (keyup.enter)="applyFilter()" class="form-control" [placeholder]="filter.name"
+                            type="text" [(ngModel)]="filter.value">
+                    </div>
+
+                    <div *ngIf="filter.type == 'select'" class="form-group">
+                        <label>{{filter.name}}</label>
+                        <ng-select [appendTo]="'body'" bindLabel="name" bindValue="id" [(ngModel)]="filter.value"
+                            [items]="filter.data" [placeholder]="'Select'">
+                        </ng-select>
+
+                    </div>
+
+                    <div *ngIf="filter.type == 'search-select'" class="form-group">
+                        <label>{{filter.name}}</label>
+                        <ng-select (input)="getUsers($event)" [loading]="isSearching"
+                            [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'"
+                            [appendTo]="'body'" bindLabel="name" bindValue="id" [(ngModel)]="filter.value"
+                            [items]="userList" [placeholder]="'Select'">
+                        </ng-select>
+
+                    </div>
+                </ng-container>
+            </div>
+
+
+
+            <div class="filter-footer">
+                <button class="btn btn-secondary" (click)="closeDropdown()">Cancel</button>
+                <button class="btn btn-primary" (click)="applyFilter()">Apply</button>
+            </div>
+        </div>
+    </app-menu>
+
+
+
+    <div class="filter-btn date">
+        <span [class.active]="dateType == 'AD'" (click)="dateType = 'AD'" class="datelabel">AD</span>
+        <span class="sep">|</span>
+        <span [class.active]="dateType == 'BS'" (click)="dateType = 'BS'" class="datelabel">BS</span>
+    </div>
+
+    <div style="width: 130px;" *ngIf="showFromDate == true" class="d-flex align-items-center gap-md">
+        <ne-datepicker [calendarView]="dateType" [date]="fromDate" [hasMultipleCalendarView]="false"
+            primaryColor="black" language="en" (dateInBS)="setFromDate($event)" placeholder="From Date"
+            style="max-width: 150px;" dateFormat="yyyy-mm-dd">
+        </ne-datepicker>
+    </div>
+
+    <div style="width: 130px;" *ngIf="showToDate == true" class="d-flex align-items-center gap-md">
+        <ne-datepicker [calendarView]="dateType" [date]="toDate" [hasMultipleCalendarView]="false" primaryColor="black"
+            language="en" (dateInBS)="setToDate($event)" placeholder="To Date" style="max-width: 150px;"
+            dateFormat="yyyy-mm-dd">
+        </ne-datepicker>
+    </div>
+</div>
+
+<div class="filter-options">
+    <ng-container *ngFor="let item of filterList">
+        <div *ngIf="item.type != 'search'" class="filter-item">
+            <span>
+                {{item.filterName}}: {{item.displayValue}}
+            </span>
+            <img (click)="removeFilter(item)" src="../../../svg/cross.svg" alt="">
+        </div>
+    </ng-container>
+
+    <span *ngIf="filterList.length > 0" class="reset-text" (click)="removeAllFilter()">Reset Filters</span>
+</div>

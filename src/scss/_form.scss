@@ -84,15 +84,16 @@
 }
 
 .form-control {
-  padding: 10px;
-  border: 1px solid var(--disabled-color);
-  background-color: var(--white-color);
-  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid var(--separator-color);
+  background-color: var(--bg-lightest-color);
+  border-radius: 8px;
   outline: none;
   display: flex;
   align-self: stretch;
   align-items: flex-start;
   gap: 12px;
+  box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
   color: var(--text-primary-color);
   font-size: var(--font-size-small);
@@ -133,11 +134,11 @@
   }
 
   .left-icon {
-    left: 14px;
+    left: 8px;
   }
 
   .right-icon {
-    right: 14px;
+    right: 8px;
   }
 
   .right-icon.clickable {
@@ -147,8 +148,8 @@
 
 .input-wrapper .form-control {
   width: 100%;
-  padding-left: 44px; // space for left icon
-  padding-right: 44px; // space for right icon
+  padding-left: 32px; // space for left icon
+  padding-right: 32px; // space for right icon
 }
 
 .switch {
