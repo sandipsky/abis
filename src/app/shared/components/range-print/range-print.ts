@@ -1,11 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Comment } from '@angular/compiler';
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+  inject,
+  signal
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NepaliDatepickerModule } from 'np-datepicker-angular';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 // import { NepaliDatepickerService } from 'np-datepicker-angular';
 // import { ConfigServiceService } from 'src/app/configuration/config-service/config-service.service';
 // import { DateService } from 'src/app/services/date.service';
@@ -15,69 +27,85 @@ import { NepaliDatepickerModule } from 'np-datepicker-angular';
 @Component({
   selector: 'app-range-print',
   templateUrl: './range-print.html',
-  styleUrls: ['./range-print.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule]
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    NepaliDatepickerModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RangePrintComponent {
 
-  partyList: any[] = [];
-  accountPartyList: any[] = [];
-  hqList: any[] = [];
-  hqDropdownList: any[] = [];
-  divisionList: any[] = [];
-  divisionDropdownList: any[] = [];
-  invoiceList: any[] = [];
-  invoiceIds: any[] = [];
+  private _toastr = inject(ToastrService);
+  private _fb = inject(FormBuilder);
+  public dialog = inject(MatDialog);
+  public dialogRef = inject(MatDialogRef<RangePrintComponent>);
+  public data = inject(MAT_DIALOG_DATA);
 
-  printTypes: any[] = ["BDE", "Packing Slip", "Purchase", "Purchase Return", "Payment", "Debit Note", "Credit Note", "Material Issue", "Material Issue Return", "Finish Good"];
-  // printTypes: any[] = ["Sales", "Sales Return", "BDE", "Packing Slip"];
-  partyTypes: any[] = ["Customer", "Vendor"];
-  accounting: any[] = ["Payment", "Debit Note", "Credit Note"];
+  // private dropDownService = inject(DropdownsService);
+  // private printService = inject(PrintService);
+  // public dateService = inject(DateService);
+  // public nepaliDateService = inject(NepaliDatepickerService);
+  // private configService = inject(ConfigServiceService);
 
-  isSearching: boolean = false;
-  isLoading: boolean = false;
+  /* ---------------- SIGNAL STATE ---------------- */
+
+  partyList = signal<any[]>([]);
+  accountPartyList = signal<any[]>([]);
+  hqList = signal<any[]>([]);
+  hqDropdownList = signal<any[]>([]);
+  divisionList = signal<any[]>([]);
+  divisionDropdownList = signal<any[]>([]);
+  invoiceList = signal<any[]>([]);
+  invoiceIds = signal<any[]>([]);
+
+  isSearching = signal(false);
+  isLoading = signal(false);
+
+  searchTerm = signal('');
   searchTimer: any;
-  searchTerm: string = '';
 
-  printForm: FormGroup;
-  companyDetails: any;
+  companyDetails = signal<any>(null);
 
-  constructor(
-    // private toastr: ToastrService,
-    private fb: FormBuilder,
-    // private dropDownService: DropdownsService,
-    // private printService: PrintService,
-    // public dateService: DateService,
-    // public nepaliDateService: NepaliDatepickerService,
-    public dialogRef: MatDialogRef<RangePrintComponent>,
-    public dialog: MatDialog,
-    // private configService: ConfigServiceService,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.printForm = this.fb.group({
-      type: [],
-      partyId: [],
-      partyType: ['Customer'],
-      hqId: [],
-      divisionId: [],
-      fromDate: [],
-      toDate: [],
-      fromId: [],
-      toId: [],
-      noOfPrint: [1]
-    })
+  /* ---------------- STATIC DATA ---------------- */
 
+  printTypes = [
+    "Sales",
+    "Sales Return",
+    "BDE",
+    "Packing Slip",
+    "Purchase",
+    "Purchase Return",
+    "Payment",
+    "Debit Note",
+    "Credit Note",
+    "Material Issue",
+    "Material Issue Return",
+    "Finish Good"
+  ];
+
+  partyTypes = ["Customer", "Vendor"];
+  accounting = ["Payment", "Debit Note", "Credit Note"];
+
+  printForm: FormGroup = this._fb.group({
+    type: [],
+    partyId: [],
+    partyType: ['Customer'],
+    hqId: [],
+    divisionId: [],
+    fromDate: [],
+    toDate: [],
+    fromId: [],
+    toId: [],
+    noOfPrint: [1]
+  });
+
+  constructor() {
     this.getDivisionList();
     this.getPartyList();
-
-    // this.configService.companyDetails$.subscribe((c) => {
-    //   this.companyDetails = c;
-    //   if (this.companyDetails.is_IRD_certified == '1') {
-    //     this.printTypes.unshift(...["Sales", "Sales Return"]);
-    //   }
-    //   this.printForm.get('type')?.setValue(this.companyDetails.is_IRD_certified == '1' ? 'Sales' : 'Purchase')
-    // });
   }
 
   get f() {
@@ -94,54 +122,63 @@ export class RangePrintComponent {
 
   onSearch(event: any) {
     clearTimeout(this.searchTimer);
-    this.searchTerm = event.target.value.trim();
+    this.searchTerm.set(event.target.value.trim());
+    this.isSearching.set(true);
 
-    this.isSearching = true;
     this.searchTimer = setTimeout(() => {
-      if (this.searchTerm !== '') {
+      if (this.searchTerm() !== '') {
         if (this.f['type'].value == 'Purchase' || this.f['type'].value == 'Purchase Return') {
-          // this.dropDownService.getVendorDropdown(this.searchTerm).subscribe((result: any) => {
-          //   this.partyList = result;
-          //   this.isSearching = false;
+          // this.dropDownService.getVendorDropdown(this.searchTerm()).subscribe((result: any) => {
+          //   this.partyList.set(result);
+          //   this.isSearching.set(false);
           // });
         }
         else {
-          // this.dropDownService.getCustomerDropdown(this.searchTerm).subscribe((result: any) => {
-          //   this.partyList = result;
-          //   this.isSearching = false;
+          // this.dropDownService.getCustomerDropdown(this.searchTerm()).subscribe((result: any) => {
+          //   this.partyList.set(result);
+          //   this.isSearching.set(false);
           // });
         }
       }
       else {
-        this.isSearching = false;
+        this.isSearching.set(false);
       }
     }, 1000);
+
   }
 
   onSearchInvoice(event: any) {
     clearTimeout(this.searchTimer);
-    this.searchTerm = event.target.value.trim();
-
-    this.isSearching = true;
+    this.searchTerm.set(event.target.value.trim());
+    this.isSearching.set(true);
     this.searchTimer = setTimeout(() => {
-      if (this.searchTerm !== '') {
+
+      if (this.searchTerm() !== '') {
+
         let type = this.f['type'].value;
+
         if (type == 'Packing Slip') {
           type = 'Sales';
         }
-        // this.dropDownService.getInvoicesList(this.f['partyId'].value, this.f['hqId'].value, this.f['divisionId'].value, type, this.searchTerm).subscribe({
+        // this.dropDownService.getInvoicesList(
+        //   this.f['partyId'].value,
+        //   this.f['hqId'].value,
+        //   this.f['divisionId'].value,
+        //   type,
+        //   this.searchTerm()
+        // ).subscribe({
         //   next: (res: any) => {
-        //     this.invoiceList = res;
-        //     this.isSearching = false;
+        //     this.invoiceList.set(res);
+        //     this.isSearching.set(false);
         //   },
         //   error: (err) => {
-        //     this.toastr.error(err);
-        //     this.isSearching = false;
+        //     this._toastr.error(err);
+        //     this.isSearching.set(false);
         //   },
         // });
       }
       else {
-        this.isSearching = false;
+        this.isSearching.set(false);
       }
     }, 1000);
   }
@@ -149,27 +186,27 @@ export class RangePrintComponent {
   getPartyList() {
     // this.dropDownService.getPartyAccounts().subscribe({
     //   next: (res: any) => {
-    //     this.accountPartyList = res;
+    //     this.accountPartyList.set(res);
     //   },
-    //   error: (err) => { this.toastr.error(err) },
+    //   error: (err) => { this._toastr.error(err) },
     // })
   }
 
   getDivisionList() {
     // this.dropDownService.getDivisionDropdown().subscribe({
     //   next: (res: any) => {
-    //     this.divisionList = res;
+    //     this.divisionList.set(res);
     //   },
     //   error: (err) => {
-    //     this.toastr.error(err)
+    //     this._toastr.error(err)
     //   },
     // })
   }
 
   getCustomerDivisions(event: any) {
-    if (event == undefined) {
-      this.hqDropdownList = [];
-      this.divisionDropdownList = [];
+    if (!event) {
+      this.hqDropdownList.set([]);
+      this.divisionDropdownList.set([]);
       this.f['hqId'].setValue(null);
       this.f['divisionId'].setValue(null);
       return;
@@ -181,20 +218,22 @@ export class RangePrintComponent {
 
     // this.dropDownService.getDivisionDropdownCustomer(event?.id).subscribe({
     //   next: (res: any) => {
-    //     this.divisionDropdownList = res;
+    //     this.divisionDropdownList.set(res);
     //   },
     //   error: (err) => {
-    //     this.toastr.error(err)
+    //     this._toastr.error(err)
     //   },
     // });
   }
 
   getAccountDivisions(event: any) {
-    if (event == undefined) {
-      this.hqDropdownList = [];
-      this.divisionDropdownList = [];
+    if (!event) {
+      this.hqDropdownList.set([]);
+      this.divisionDropdownList.set([]);
+
       this.f['hqId'].setValue(null);
       this.f['divisionId'].setValue(null);
+
       return;
     }
 
@@ -204,22 +243,22 @@ export class RangePrintComponent {
 
     // this.dropDownService.getDivisionDropdownAccount(event?.id).subscribe({
     //   next: (res: any) => {
-    //     this.divisionDropdownList = res;
+    //     this.divisionDropdownList.set(res);
     //   },
     //   error: (err) => {
-    //     this.toastr.error(err)
+    //     this._toastr.error(err)
     //   },
     // });
   }
 
   onChangeDivision(event: any) {
-    if (event == undefined) {
+    if (!event) {
       this.f['hqId']?.setValue(null);
-      this.hqDropdownList = [];
+      this.hqDropdownList.set([]);
     }
     else {
-      let hq = [{ id: event.hq_id, name: event.hq_name }]
-      this.hqDropdownList = [...hq];
+      const hq = [{ id: event.hq_id, name: event.hq_name }];
+      this.hqDropdownList.set(hq);
       this.f['hqId']?.setValue(event.hq_id);
       // this.getSalesInvoices();
     }
@@ -236,8 +275,9 @@ export class RangePrintComponent {
       toId: null,
       partyType: (e == 'Purchase' || e == 'Purchase Return') ? 'Vendor' : 'Customer'
     });
-    this.partyList = [];
-    this.invoiceList = [];
+
+    this.partyList.set([]);
+    this.invoiceList.set([]);
   }
 
   onChangePartyType(e: any) {
@@ -250,35 +290,27 @@ export class RangePrintComponent {
       fromId: null,
       toId: null,
     });
-    this.partyList = [];
-    this.invoiceList = [];
+    this.partyList.set([]);
+    this.invoiceList.set([]);
   }
 
   onSubmit() {
     this.printForm.markAllAsTouched();
-    if (this.printForm.invalid) {
+    if (this.printForm.invalid) return;
+    
+    if (this.printForm.value.fromDate > this.printForm.value.toDate) {
+      this._toastr.error('From Date Cannot be Greater than To Date');
       return;
     }
 
-    if (this.printForm.value.fromDate > this.printForm.value.toDate) {
-      // this.toastr.error('From Date Cannot be Greater than To Date', 'Error', {
-      //   closeButton: true,
-      // });
-      // return;
-    }
-
     if (this.printForm.value.fromId > this.printForm.value.toId) {
-      // this.toastr.error('From Invoice Cannot be Greater than To Invoice', 'Error', {
-      //   closeButton: true,
-      // });
-      // return;
+      this._toastr.error('From Invoice Cannot be Greater than To Invoice');
+      return;
     }
 
     if (this.printForm.value.noOfPrint < 1) {
-      // this.toastr.error('No of copies should be greater than 0', 'Error', {
-      //   closeButton: true,
-      // });
-      // return;
+      this._toastr.error('No of copies should be greater than 0');
+      return;
     }
 
     switch (this.printForm.value.type) {
@@ -340,7 +372,7 @@ export class RangePrintComponent {
   }
 
   printSales(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.rangePrintSales(data).subscribe({
     //   next: (res: any) => {
     //     var file = new Blob([res], { type: 'application/pdf' })
@@ -370,7 +402,7 @@ export class RangePrintComponent {
   }
 
   printSalesReturn(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.rangePrintSalesReturn(data).subscribe({
     //   next: (res: any) => {
     //     var file = new Blob([res], { type: 'application/pdf' })
@@ -399,7 +431,7 @@ export class RangePrintComponent {
   }
 
   printPackingSlip(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getPackingSlipDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -421,7 +453,7 @@ export class RangePrintComponent {
   }
 
   printSalesOrder(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getSalesOrderDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -443,7 +475,7 @@ export class RangePrintComponent {
   }
 
   printPurchase(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getPurchaseDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -465,7 +497,7 @@ export class RangePrintComponent {
   }
 
   printPurchaseReturn(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getPurchaseReturnDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -487,7 +519,7 @@ export class RangePrintComponent {
   }
 
   printBDE(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getBDEDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -509,7 +541,7 @@ export class RangePrintComponent {
   }
 
   printPayment(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getPaymentDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -531,7 +563,7 @@ export class RangePrintComponent {
   }
 
   printDebitNote(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getDebitNoteDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -553,7 +585,7 @@ export class RangePrintComponent {
   }
 
   printCreditNote(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getCreditNoteDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -575,7 +607,7 @@ export class RangePrintComponent {
   }
 
   printMaterialIssue(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getMaterialIssueDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -597,7 +629,7 @@ export class RangePrintComponent {
   }
 
   printMaterialIssueReturn(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getMaterialIssueReturnDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -619,7 +651,7 @@ export class RangePrintComponent {
   }
 
   printFinishGood(data: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     // this.printService.getFinishGoodDetailList(data).subscribe({
     //   next: (res: any) => {
     //     if (res?.success == false) {
@@ -648,4 +680,5 @@ export class RangePrintComponent {
       this.dialogRef.close();
     }, 400);
   }
+
 }

@@ -25,6 +25,9 @@ body {
   overflow: hidden;
 }
 
+.cdk-global-scrollblock {
+  overflow-y:  auto !important;
+}
 
 //datepicker
 ne-datepicker {
@@ -53,10 +56,6 @@ ne-datepicker {
     ::placeholder {
       color: var(--disabled-color) !important;
     }
-  }
-
-  .form-icon {
-    display: none;
   }
 }
 
