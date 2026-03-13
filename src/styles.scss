@@ -57,6 +57,10 @@ ne-datepicker {
       color: var(--disabled-color) !important;
     }
   }
+
+  .form-icon {
+    display: none;
+  }
 }
 
 .nepali-date-picker .datepicker__container {

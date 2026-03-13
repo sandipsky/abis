@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ViewEncapsulation,
   inject,
   signal
 } from '@angular/core';
@@ -27,7 +26,6 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-range-print',
   templateUrl: './range-print.html',
-  encapsulation: ViewEncapsulation.None,
   imports: [
     FormsModule,
     CommonModule,
