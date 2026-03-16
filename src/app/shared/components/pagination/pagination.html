@@ -1,1 +1,76 @@
-<p>pagination works!</p>
+<div class="paginator">
+  <span class="page-text">
+    <span class="page-text light">Showing </span>
+    <span class="page-text bold">{{ getRangeLabel() }} </span>
+    <span class="page-text light">Entries out of </span>{{ length }}</span>
+
+  <div class="arrow-buttons">
+    <button [class.disabled]="pageIndex == 0" (click)="pageIndex == 0 ? null : goFirstPage()" class="paginator-btn">
+
+      <svg style="transform: rotate(180deg)" fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8.46,8.29A1,1,0,1,0,7,9.71L9.34,12,7,14.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3a1,1,0,0,0,0-1.42Zm8.5,3-3-3a1,1,0,0,0-1.42,1.42L14.84,12l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3A1,1,0,0,0,17,11.29Z" />
+      </svg>
+      First
+    </button>
+
+    <button [class.disabled]="pageIndex == 0" (click)="pageIndex == 0 ? null : onPrevAndNext('prev')"
+      class="paginator-btn">
+
+      <svg style="transform: rotate(180deg)" fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M14.83,11.29,10.59,7.05a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41L12.71,12,9.17,15.54a1,1,0,0,0,0,1.41,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29l4.24-4.24A1,1,0,0,0,14.83,11.29Z" />
+      </svg>
+
+      Prev
+    </button>
+
+    <button *ngFor="let page of visiblePages" [class.active]="page === pageIndex + 1" (click)="goToPage(page - 1)"
+      class="paginator-btn page-num">
+      {{ page }}
+    </button>
+
+    <button [class.disabled]="pageIndex + 1 == calculateTotalPages()" (click)="
+        pageIndex + 1 == calculateTotalPages() ? null : onPrevAndNext('next')
+      " class="paginator-btn">
+      Next
+      <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M14.83,11.29,10.59,7.05a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41L12.71,12,9.17,15.54a1,1,0,0,0,0,1.41,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29l4.24-4.24A1,1,0,0,0,14.83,11.29Z" />
+      </svg>
+    </button>
+
+    <button [class.disabled]="pageIndex + 1 == calculateTotalPages()"
+      (click)="pageIndex + 1 == calculateTotalPages() ? null : goLastpage()" class="paginator-btn">
+      Last
+      <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8.46,8.29A1,1,0,1,0,7,9.71L9.34,12,7,14.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3a1,1,0,0,0,0-1.42Zm8.5,3-3-3a1,1,0,0,0-1.42,1.42L14.84,12l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3A1,1,0,0,0,17,11.29Z" />
+      </svg>
+    </button>
+  </div>
+
+
+
+  <div class="page-items">
+    <span class="page-text">Row per page: </span>
+    <app-menu>
+      <!-- Trigger -->
+      <button dropdown-display class="paginator-btn paginator-dropdown-btn">
+        {{ pageSize }}
+        <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M14.83,11.29,10.59,7.05a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41L12.71,12,9.17,15.54a1,1,0,0,0,0,1.41,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29l4.24-4.24A1,1,0,0,0,14.83,11.29Z" />
+        </svg>
+      </button>
+
+      <!-- Dropdown Items -->
+      <div dropdown-item *ngFor="let item of pageSizeOptions" [class.active]="item === pageSize"
+        (click)="onchangePageOption(item)">
+        {{ item }}
+      </div>
+    </app-menu>
+  </div>
+</div>
