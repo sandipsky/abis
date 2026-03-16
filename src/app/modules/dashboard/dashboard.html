@@ -1,5 +1,5 @@
 <p>dashboard works!</p>
 <filter-section></filter-section>
 
-<app-paginator [pageSizeOptions]="[25, 50, 100]" [pageSize]="25" [length]="10"
-        ></app-paginator>
+<app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="products"></app-table>
+<app-paginator [pageSizeOptions]="[25, 50, 100]" [pageSize]="25" [length]="10"></app-paginator>
