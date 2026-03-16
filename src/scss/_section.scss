@@ -7,6 +7,32 @@
     &.dark {
         background: var(--bg-light-color, #F7F7F7);
     }
+
+    &.main {
+        margin: 20px;
+        padding: 0;
+
+        .table-responsive {
+            max-height: calc(100vh - 240px);
+        }
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 12px;
+        border-bottom: 1px solid var(--separator-color);
+
+        .section-header-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+    }
+
+    .section-content {
+        padding: 12px;
+    }
 }
 
 .section-title {

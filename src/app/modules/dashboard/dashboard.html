@@ -1,5 +1,26 @@
-<p>dashboard works!</p>
-<filter-section></filter-section>
+<div class="section main">
 
-<app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="products"></app-table>
-<app-paginator [pageSizeOptions]="[25, 50, 100]" [pageSize]="25" [length]="10"></app-paginator>
+    <div class="section-header">
+        <filter-section></filter-section>
+
+        <div class="section-header-btn-group">
+            <button class="btn btn-secondary">
+                <img src="assets/img/print.svg" alt="">
+                Print
+            </button>
+            <button class="btn btn-secondary">
+                <img src="assets/img/excel.svg" alt="">
+                Export
+            </button>
+
+            <button class="btn btn-primary">+ Add
+                Product</button>
+        </div>
+    </div>
+
+ <div class="section-content">
+
+     <app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="products"></app-table>
+     <app-paginator [pageSizeOptions]="[25, 50, 100]" [pageSize]="25" [length]="10"></app-paginator>
+    </div>
+</div>
