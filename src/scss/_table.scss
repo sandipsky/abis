@@ -5,4 +5,33 @@
 
 .table {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 0; 
+
+  thead {
+    position: sticky;
+    top: 2px;
+
+  }
+
+  th {
+    border: 1px solid red;
+    border-right: none;
+
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

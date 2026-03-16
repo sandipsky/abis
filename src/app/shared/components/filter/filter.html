@@ -80,17 +80,19 @@
     }
 </div>
 
-<div class="filter-options">
-    @for (item of filterList(); track item.formcontrolName) {
-    @if (item.type !== 'search') {
-    <div class="filter-item">
-        <span>{{item.filterName}}: {{item.displayValue}}</span>
-        <img (click)="removeFilter(item)" src="../../../svg/cross.svg" alt="">
+@if (filterList().length > 0) {
+    <div class="filter-options">
+        @for (item of filterList(); track item.formcontrolName) {
+        @if (item.type !== 'search') {
+        <div class="filter-item">
+            <span>{{item.filterName}}: {{item.displayValue}}</span>
+            <img (click)="removeFilter(item)" src="../../../svg/cross.svg" alt="">
+        </div>
+        }
+        }
+    
+        @if (filterList().length > 0) {
+        <span class="reset-text" (click)="removeAllFilter()">Reset Filters</span>
+        }
     </div>
-    }
-    }
-
-    @if (filterList().length > 0) {
-    <span class="reset-text" (click)="removeAllFilter()">Reset Filters</span>
-    }
-</div>
+}

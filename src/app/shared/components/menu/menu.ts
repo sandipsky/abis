@@ -26,17 +26,21 @@ export class MenuComponent {
     this.isOpen.update(open => !open);
 
     if (this.isOpen()) {
-      requestAnimationFrame(() => this.calculatePosition());
+      setTimeout(() => this.calculatePosition());
     }
   }
 
-  private calculatePosition(): void {
+  calculatePosition(): void {
+    const hostRect = this.host.nativeElement.getBoundingClientRect();
     const contentEl = this.content()?.nativeElement;
+
     if (!contentEl) return;
 
-    const rect = contentEl.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    this.openTop.set(spaceBelow < 120);
+    const dropdownHeight = contentEl.offsetHeight;
+    const spaceBelow = window.innerHeight - hostRect.bottom;
+    const spaceAbove = hostRect.top;
+
+    this.openTop.set(spaceBelow < dropdownHeight && spaceAbove > dropdownHeight);
   }
 
   close(): void {

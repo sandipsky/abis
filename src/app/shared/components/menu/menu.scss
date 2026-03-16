@@ -4,6 +4,7 @@
     &.active {
         ::ng-deep [dropdown-display] {
             background-color: var(--separator-color, #e5e7eb);
+            border-radius: 8px;
         }
     }
 
@@ -30,18 +31,10 @@
     background: var(--bg-lightest-color, #fefefe);
     box-shadow: 3px 9px 32px rgba(0, 0, 0, 0.1);
 
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, visibility 0.15s ease;
-
-    &.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
     &.open-top {
         top: auto;
-        bottom: 125%;
+        bottom: 100%; // Changed from 125% to be closer to trigger
+        margin-bottom: 8px;
     }
 
     &.nopadding {

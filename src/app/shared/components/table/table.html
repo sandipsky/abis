@@ -76,22 +76,20 @@
           </span>
           }
           @else if(header.expiryDate == true) {
-          <!-- <span>
+          <span>
             {{ data[header.property] ?
-            (data[header.property] | dateFormat: companyDetails.allow_day_in_expiry == "1") : '-'
+            (data[header.property]) : '-'
             }}
-          </span> -->
+          </span>
           }
 
-          <!-- @else { {{ header.amount ? (data[header.property] | amount) :
-          (data[header.property] || 'N/A') }} } -->
+          @else { {{ header.amount ? (data[header.property]) :
+          (data[header.property] || 'N/A') }} }
         </td>
         }
 
-        <td class="print-hidden">
-
-          <div class="actions">
-            <app-menu >
+        <td class="print-hidden actions">
+            <app-menu [mode]="'right'">
               <div class="p-sm" dropdown-display>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path
@@ -146,8 +144,6 @@
                 <img src="../../../assets/svg/pending.svg" alt="" /> Pending
               </div>
             </app-menu>
-          </div>
-
         </td>
       </tr>
       }
