@@ -4,7 +4,6 @@
   align-items: flex-start;
   align-self: stretch;
   gap: 6px;
-  margin-bottom: 20px;
 
   label {
     color: var(--text-primary-color);
@@ -15,10 +14,6 @@
     span {
       color: var(--error-text-color);
     }
-  }
-
-  .form-check-label {
-    font-weight: 400;
   }
 
   &.view {
@@ -38,47 +33,6 @@
       &.email {
         color: var(--cancel-text-color);
       }
-    }
-  }
-
-  .form-control-group {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    align-self: stretch;
-  }
-
-
-
-  .alert {
-    display: flex;
-    padding: 4px 8px;
-    align-items: center;
-    gap: 8px;
-    align-self: stretch;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: var(--font-weight-regular);
-    line-height: 16px;
-
-    &.success {
-      background-color: var(--success-bg-color);
-      color: var(--success-text-color);
-    }
-
-    &.error {
-      background-color: var(--error-bg-color);
-      color: var(--error-text-color);
-    }
-
-    &.warn {
-      background-color: var(--warn-bg-color);
-      color: var(--warn-text-color);
-    }
-
-    &.info {
-      background-color: var(--info-bg-color);
-      color: var(--info-text-color);
     }
   }
 }
@@ -105,7 +59,9 @@
   }
 
   &:focus {
+    outline: none;
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-bg-color);
   }
 
   &.readonly {
@@ -122,6 +78,12 @@
 .input-wrapper {
   position: relative;
   width: 100%;
+
+  .form-control {
+    width: 100%;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 
   .left-icon,
   .right-icon {
@@ -146,10 +108,36 @@
   }
 }
 
-.input-wrapper .form-control {
-  width: 100%;
-  padding-left: 32px; // space for left icon
-  padding-right: 32px; // space for right icon
+.alert {
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  line-height: 16px;
+
+  &.success {
+    background-color: var(--success-bg-color);
+    color: var(--success-text-color);
+  }
+
+  &.error {
+    background-color: var(--error-bg-color);
+    color: var(--error-text-color);
+  }
+
+  &.warn {
+    background-color: var(--warn-bg-color);
+    color: var(--warn-text-color);
+  }
+
+  &.info {
+    background-color: var(--info-bg-color);
+    color: var(--info-text-color);
+  }
 }
 
 .switch {
@@ -226,10 +214,4 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   font-weight: 400;
-}
-
-.form-control:focus,
-.form-select:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--primary-bg-color);
 }

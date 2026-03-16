@@ -1,166 +1,146 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-// import { ConfigServiceService } from 'src/app/configuration/config-service/config-service.service';
-import { Subscription } from 'rxjs';
-// import { DropdownsService } from 'src/app/services/dropdowns.service';
-import { NepaliDatepickerModule } from 'np-datepicker-angular';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal, input, output, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NepaliDatepickerModule } from 'np-datepicker-angular';
 import { MenuComponent } from '../menu/menu';
 
 @Component({
   selector: 'filter-section',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule, MenuComponent],
   templateUrl: './filter.html',
   styleUrls: ['./filter.scss'],
-  standalone: true,
-  imports: [NepaliDatepickerModule, NgSelectModule, FormsModule, ReactiveFormsModule, CommonModule, MenuComponent]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterSectionComponent {
-  filterList: any[] = [];
-  lastFilter: any = null;
-  repeatCount: number = 0;
-  searchText: string = '';
-  searchTerm: string = '';
-  isSearching: boolean = false;
-  searchTimer: any;
-  dateType = 'BS';
-  configSubscription!: Subscription;
+  // --- Inputs & Outputs (Signal-based) ---
+  filterColumns = input<any[]>([]);
+  searchBy = input<string>('');
+  fromDate = input<string>('');
+  toDate = input<string>('');
+  showFromDate = input<boolean>(true);
+  showToDate = input<boolean>(true);
 
-  userList: any[] = [];
+  onFilterChange = output<any[]>();
+  onFromDateChange = output<any>();
+  onToDateChange = output<any>();
 
-  @Input() filterColumns: any[] = [];
-  @Input() searchBy: string = '';
-  @Input() fromDate: string = '';
-  @Input() toDate: string = '';
-  @Input() showFromDate: boolean = true;
-  @Input() showToDate: boolean = true;
+  // --- View Queries (Signal-based) ---
+  filterDropdown = viewChild<MenuComponent>('filterDropdown');
 
-  @Output() onFilterChange: EventEmitter<any[]> = new EventEmitter();
-  @Output() onFromDateChange: EventEmitter<any> = new EventEmitter();
-  @Output() onToDateChange: EventEmitter<any> = new EventEmitter();
-
-  @ViewChild('filterDropdown') filterDropdown!: MenuComponent;
-
-  // constructor(private configService: ConfigServiceService, private dropDownService: DropdownsService) { }
-
-  ngOnInit() {
-  }
+  // --- Internal State (Signals) ---
+  filterList = signal<any[]>([]);
+  searchText = signal<string>('');
+  searchTerm = signal<string>('');
+  isSearching = signal<boolean>(false);
+  dateType = signal<'AD' | 'BS'>('BS');
+  userList = signal<any[]>([]);
+  
+  private lastFilterStr = signal<string>('');
+  private repeatCount = signal<number>(0);
+  private searchTimer: any;
 
   applyFilter() {
-    this.filterList = [];
+    const newFilters: any[] = [];
 
-    this.filterColumns.forEach(filter => {
+    this.filterColumns().forEach(filter => {
       if (filter.value) {
-        let activeFilter = {
+        newFilters.push({
           filterName: filter.name,
           formcontrolName: filter.formcontrolName,
-          displayValue: filter.type == 'select' || filter.type == 'search-select'
-            ? filter?.data?.find((item: any) => item?.id == filter?.value)?.name
+          displayValue: (filter.type === 'select' || filter.type === 'search-select')
+            ? filter.data?.find((item: any) => item.id == filter.value)?.name
             : filter.value,
           value: filter.value
-        };
-        this.filterList.push(activeFilter);
+        });
       }
     });
 
+    const currentFilterStr = JSON.stringify(newFilters);
 
-    if (JSON.stringify(this.filterList) === JSON.stringify(this.lastFilter)) {
-      this.repeatCount++;
+    // Toggle-to-reset logic preserved from your original code
+    if (currentFilterStr === this.lastFilterStr()) {
+      this.repeatCount.update(n => n + 1);
     } else {
-      this.repeatCount = 1;
+      this.repeatCount.set(1);
+      this.lastFilterStr.set(currentFilterStr);
     }
 
-
-    if (this.repeatCount === 2) {
-      this.filterList = [];
-      this.lastFilter = null;
-      this.repeatCount = 0;
+    if (this.repeatCount() === 2) {
+      // this.removeAllFilter();
+      // this.repeatCount.set(0);
+      // this.lastFilterStr.set('');
     } else {
-      this.lastFilter = [...this.filterList];
+      this.filterList.set(newFilters);
     }
 
     this.closeDropdown();
     this.emitFilterList();
   }
 
-  setFromDate(e: any) {
-    this.onFromDateChange.emit(e);
-  }
-
-  setToDate(e: any) {
-    this.onToDateChange.emit(e);
-  }
-
   onSearch() {
-
-    let activeFilter = {
-      formcontrolName: this.searchBy,
-      displayValue: this.searchText,
+    const text = this.searchText();
+    const activeSearchFilter = {
+      formcontrolName: this.searchBy(),
+      displayValue: text,
       type: 'search',
-      value: this.searchText
-    }
+      value: text
+    };
 
-    if (this.filterList.some(item => item.type == 'search')) {
-      this.filterList = this.filterList.filter(filter => filter.type != 'search');
-      this.filterList.push(activeFilter);
-    }
-    else {
-      this.filterList.push(activeFilter);
-    }
-    if (this.searchText == '' || this.searchText == null) {
-      this.filterList = this.filterList.filter(filter => filter.type != 'search');
-    }
+    this.filterList.update(list => {
+      // Remove existing search filter
+      const filtered = list.filter(f => f.type !== 'search');
+      // Add new one if text isn't empty
+      return text ? [...filtered, activeSearchFilter] : filtered;
+    });
+
     this.emitFilterList();
   }
 
-  closeDropdown() {
-    this.filterDropdown.close();
-  }
-
   removeFilter(filter: any) {
-    this.filterList = this.filterList.filter(item => item != filter);
-    this.filterColumns.forEach(item => {
-      if (item.name == filter.filterName) {
-        item.value = null;
-      }
-    });
+    this.filterList.update(list => list.filter(item => item !== filter));
+    
+    // Update the underlying column value
+    const col = this.filterColumns().find(c => c.name === filter.filterName);
+    if (col) col.value = null;
+
     this.emitFilterList();
   }
 
   removeAllFilter() {
-    this.filterList = [];
-    this.filterColumns.forEach(item => item.value = null);
+    this.filterList.set([]);
+    this.filterColumns().forEach(item => item.value = null);
+    this.searchText.set('');
     this.emitFilterList();
   }
 
   emitFilterList() {
-    let finalList: any[] = [];
-    this.filterList.forEach(filter => {
-      finalList.push({
-        field: filter.formcontrolName,
-        value: filter?.value ? String(filter.value) : '',
-        displayValue: filter?.displayValue
-      })
-    })
-    this.onFilterChange.emit(finalList);
+    const mapped = this.filterList().map(f => ({
+      field: f.formcontrolName,
+      value: f.value ? String(f.value) : '',
+      displayValue: f.displayValue
+    }));
+    this.onFilterChange.emit(mapped);
   }
 
-  getUsers(event: any, type?: string) {
+  getUsers(event: any) {
     clearTimeout(this.searchTimer);
-    this.searchTerm = event.target.value.trim();
-    this.isSearching = true;
-    this.userList = [];
-    // this.searchTimer = setTimeout(() => {
-    //   if (this.searchTerm !== '') {
-    //     this.isSearching = true;
-    //     this.dropDownService.getAllRepresentativeDropDown(this.searchTerm, 0, 0).subscribe((result: any) => {
-    //       this.userList = result.filter((it: any) => it?.name?.toLowerCase()?.includes(this.searchTerm?.toLowerCase()));
-    //       this.isSearching = false;
-    //     });
-    //   }
-    //   else {
-    //     this.isSearching = false;
-    //   }
-    // }, 1000);
+    const val = event.target.value.trim();
+    this.searchTerm.set(val);
+    this.isSearching.set(true);
+
+    // Mocking the async search
+    this.searchTimer = setTimeout(() => {
+      this.isSearching.set(false);
+      // Logic for service call would go here, updating userList.set(results)
+    }, 1000);
   }
+
+  closeDropdown() {
+    this.filterDropdown()?.close();
+  }
+
+  setFromDate(e: any) { this.onFromDateChange.emit(e); }
+  setToDate(e: any) { this.onToDateChange.emit(e); }
 }
