@@ -1,0 +1,30 @@
+<div class="section main">
+  <div class="section-header">
+    <filter-section (onFilterChange)="applyFilter($event)" [filterColumns]="filterColumns"
+      searchBy="name"></filter-section>
+
+    <div class="section-header-btn-group">
+      <button onclick="window.print()"
+        class="btn btn-secondary">
+        <img src="../../../svg/print.svg" alt="">
+        Print
+      </button>
+      <button (click)=" getMasterList(true)"
+        class="btn btn-secondary">
+        <img src="../../../svg/download.svg" alt="excel icon">
+        Export
+      </button>
+
+      <button *ngIf="operationList.includes(createMasterPermissionName) || true" (click)="openAddModal()"
+        class="btn btn-primary">+ Add {{masterName}}</button>
+    </div>
+  </div>
+
+  <div class="section-content">
+    <app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="masterList"></app-table>
+
+    <app-paginator (pageChange)="onChangedPage($event)" [pageSize]="filterForm.pageSize" [length]="length"
+      [pageIndex]="filterForm.pageIndex"></app-paginator>
+  </div>
+
+</div>

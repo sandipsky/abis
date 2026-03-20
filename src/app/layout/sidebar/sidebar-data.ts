@@ -68,22 +68,6 @@ const sidebarData = [
                         permission: 'ViewSalesOrder'
                     },
                     {
-                        link: 'bulk-order',
-                        label: 'Bulk Order',
-                        tooltip: 'Bulk Order',
-                        icon: 'bulk-order',
-                        activeIcon: 'bulk-order-active',
-                        permission: 'ViewBulkSalesOrder'
-                    },
-                    {
-                        link: 'sales-dispatch',
-                        label: 'Dispatch',
-                        tooltip: 'Dispatch',
-                        icon: 'dispatch',
-                        activeIcon: 'dispatch-active',
-                        permission: 'ViewDispatch'
-                    },
-                    {
                         link: 'sales-entry',
                         label: 'Sales Entry',
                         tooltip: 'Sales Entry',
@@ -115,7 +99,6 @@ const sidebarData = [
                         activeIcon: 'customer-active',
                         permission: 'ViewCustomer'
                     },
-
                 ]
             },
             {
@@ -161,39 +144,6 @@ const sidebarData = [
             },
             {
                 link: '',
-                label: 'Manufacturing',
-                tooltip: 'Manufacturing',
-                icon: 'manufacturing',
-                activeIcon: 'manufacturing-active',
-                children: [
-                    {
-                        link: 'finish-goods-receipt',
-                        label: 'Finish Goods Receipt',
-                        tooltip: 'Finish Goods Receipt',
-                        icon: 'finish-goods-receipt',
-                        activeIcon: 'finish-goods-receipt-active',
-                        permission: 'ViewFinishGoodReceipts'
-                    },
-                    {
-                        link: 'material-issue',
-                        label: 'Material Issue',
-                        tooltip: 'Material Issue',
-                        icon: 'material-issue',
-                        activeIcon: 'material-issue-active',
-                        permission: 'ViewMaterialIssues'
-                    },
-                    {
-                        link: 'material-issue-return',
-                        label: 'Material Issue Return',
-                        tooltip: 'Material Issue Return',
-                        icon: 'material-issue-return',
-                        activeIcon: 'material-issue-return-active',
-                        permission: 'ViewMaterialIssuesReturn'
-                    }
-                ]
-            },
-            {
-                link: '',
                 label: 'Accounting',
                 tooltip: 'Accounting',
                 icon: 'accounting',
@@ -222,14 +172,6 @@ const sidebarData = [
                         icon: 'payment-adjustment',
                         activeIcon: 'payment-adjustment-active',
                         permission: 'ViewPaymentAdjustment'
-                    },
-                    {
-                        link: 'cash-bank-voucher',
-                        label: 'Cash/Bank Voucher',
-                        tooltip: 'Cash/Bank Voucher',
-                        icon: 'cash-bank-voucher',
-                        activeIcon: 'cash-bank-voucher-active',
-                        permission: 'ViewVouchers'
                     },
                     {
                         link: 'credit-note',
@@ -279,6 +221,27 @@ const sidebarData = [
                 permission: 'ViewProduct',
             },
             {
+                link: 'master',
+                label: 'Masters',
+                tooltip: 'Masters',
+                icon: 'master',
+                activeIcon: 'master-active',
+                children: [
+                    { link: 'units', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: 'ViewUnit' },
+                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: 'ViewPackings' },
+                    { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: 'tax-type', activeIcon: 'tax-type-active', permission: 'ViewTaxType' },
+                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: 'product-category', activeIcon: 'product-category-active', permission: 'ViewProductCategories' },
+                ]
+            },
+            {
+                link: 'reports',
+                tooltip: 'Reports',
+                label: 'Reports',
+                icon: 'reports',
+                activeIcon: 'reports-active',
+                permission: true,
+            },
+            {
                 link: '',
                 label: 'User & Roles',
                 tooltip: 'User & Roles',
@@ -294,14 +257,6 @@ const sidebarData = [
                         permission: 'ViewUser'
                     },
                     {
-                        link: 'designations',
-                        label: 'Designation',
-                        tooltip: 'Designation',
-                        icon: 'designation',
-                        activeIcon: 'designation-active',
-                        permission: 'ViewDesignation'
-                    },
-                    {
                         link: 'roles-permissions',
                         label: 'Roles and Permission',
                         tooltip: 'Roles and Permission',
@@ -310,14 +265,6 @@ const sidebarData = [
                         permission: 'ViewRoles'
                     },
                 ]
-            },
-            {
-                link: 'reports',
-                tooltip: 'Reports',
-                label: 'Reports',
-                icon: 'reports',
-                activeIcon: 'reports-active',
-                permission: true,
             },
             {
                 link: '',
@@ -334,29 +281,7 @@ const sidebarData = [
                         activeIcon: 'configuration-active',
                         permission: 'ViewConfig'
                     },
-                    {
-                        link: 'master',
-                        label: 'Masters',
-                        tooltip: 'Masters',
-                        icon: 'products',
-                        activeIcon: 'products-active',
-                        permission: [
-                            'ViewUnits',
-                            'ViewPackings',
-                            'ViewTaxType',
-                            'ViewProductCategories',
-                            'ViewProductGroups',
-                            'ViewCompanyName',
-                            'ViewDivision',
-                            'ViewGenericName',
-                            'ViewNarrations',
-                            'ViewSubAccount',
-                            'ViewCostCenters',
-                            'ViewDiscountCategory',
-                            'ViewTransport',
-                            'ViewHeadquarter'
-                        ],
-                    },
+
                     {
                         link: 'auto-code-generator',
                         label: 'Auto Code Generator',

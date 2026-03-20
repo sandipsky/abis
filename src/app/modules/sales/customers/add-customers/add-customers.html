@@ -1,0 +1,522 @@
+<!-- <div class="modal full">
+    <div class="modal-header">
+        <div class="modal-titles">
+            <h1 class="modal-title">
+                {{ data?.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} Customer
+            </h1>
+            <h2 class="modal-sub-title">
+                Provide required information to add Customer.
+            </h2>
+        </div>
+        <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
+            <img src="../../../../../assets/svg/close.svg" alt="">
+        </button>
+    </div>
+    <div class="modal-body">
+
+        @if (data.isView != true) {
+        <form [formGroup]="modalForm">
+
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" class="form-control" placeholder="Enter Customer Name"
+                            formControlName="name" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="d-flex align-items-center gap-md">
+                            <label>Registration No.</label>
+
+                            <div class="card-toggle">
+                                <div [class.active]="modalForm.value.reg_type == 'PAN'" (click)="setRegType('PAN')"
+                                    class="toggle-item">PAN
+                                </div>
+                                <div [class.active]="modalForm.value.reg_type == 'VAT'" (click)="setRegType('VAT')"
+                                    class="toggle-item">VAT
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" formControlName="reg_no" placeholder="Enter No." />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Contact Person </label>
+                        <input type="text" class="form-control" formControlName="contact_person"
+                            placeholder="Enter Contact Person" />
+
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Phone No.</label>
+
+                        <input type="text" class="form-control" formControlName="contact_no"
+                            placeholder="Enter Phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Telephone No.</label>
+
+                        <input type="text" class="form-control" formControlName="mobile_no"
+                            placeholder="Enter Mobile" />
+
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="text" class="form-control" formControlName="email_address"
+                            placeholder="Enter Email Address" />
+
+                        <div *ngIf="isRequiredEmailInvalid('email_address')" class="alert error">
+                            Invalid Email.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" class="form-control" formControlName="address" placeholder="Enter Address" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea rows="1" class="form-control" formControlName="remarks"
+                            placeholder="Enter Text"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Active Status </label>
+                        <label class="switch">
+                            <input formControlName="status" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+
+                    </div>
+                </div>
+
+                <div *ngIf="companyDetails?.division_wise_sales== '1'" class="col-md-12">
+                    <div class="section">
+                        <div class="d-flex justify-content-between">
+                            <h1 class="section-title">Headquarter-Division Information</h1>
+                            <button class="btn btn-secondary btn-transparent text-uppercase"
+                                (click)="addHqDivision()"><i class="fa-solid fa-circle-plus"></i>
+                                Add Entry</button>
+                        </div>
+
+                        <br>
+
+                        <table class="table table-border-all border-fix">
+                            <thead class="sticky-top">
+                                <tr>
+                                    <th>Headquarter</th>
+                                    <th>Division</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody formArrayName="hq_divisions">
+                                <tr *ngFor="let entry of hq_divisions.controls; index as i">
+                                    <ng-container [formGroupName]="i">
+                                        <td>
+                                            <div style="margin-bottom: 0;" class="form-group">
+                                                <ng-select [items]="headquarterList" bindLabel="name" bindValue="id"
+                                                    formControlName="hq_id" placeholder="Select Headquarter"
+                                                    [class.is-invalid]="hq_divisions.controls[i].get('hq_id')?.invalid && (hq_divisions.controls[i].get('hq_id')?.dirty || hq_divisions.controls[i].get('hq_id')?.touched)">
+                                                </ng-select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div style="margin-bottom: 0;" class="form-group">
+                                                <ng-select [multiple]="true" appFormError [items]="divisionList"
+                                                    bindLabel="name" bindValue="id" formControlName="division_ids"
+                                                    placeholder="Select Divisions"
+                                                    [class.is-invalid]="hq_divisions.controls[i].get('division_ids')?.invalid && (hq_divisions.controls[i].get('division_ids')?.dirty || hq_divisions.controls[i].get('division_ids')?.touched)">
+                                                </ng-select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="text-danger">
+                                                <button class="btn btn-outline-danger text-danger border-0"
+                                                    (click)="removeHqDivision(i)"><i
+                                                        class="fa-solid fa-circle-minus"></i></button>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="section">
+                        <div class="d-flex justify-content-between">
+                            <h1 class="section-title">Division-Discount Information</h1>
+                            <button class="btn btn-secondary btn-transparent text-uppercase"
+                                (click)="addDiscountCondition()"><i class="fa-solid fa-circle-plus"></i>
+                                Add Entry</button>
+                        </div>
+
+                        <br>
+
+                        <table class="table">
+                            <thead class="sticky-top">
+                                <tr>
+                                    <th style="width: 160px;">Division</th>
+                                    <th style="width: 140px;">Discount Category</th>
+                                    <th style="width: 110px;">Credit Days</th>
+                                    <th style="width: 110px;">Grace Days</th>
+                                    <th>Credit Limit</th>
+                                    <th style="width: 50px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody formArrayName="discount_details">
+                                <tr *ngFor="let entry of discount_details.controls; index as i">
+                                    <ng-container [formGroupName]="i">
+                                        <td>
+                                            <div style="margin-bottom: 0; width: 160px;" class="form-group">
+                                                <ng-select [items]="divisionList" bindLabel="name" bindValue="id"
+                                                    formControlName="division_id" placeholder="Select Division"
+                                                    [class.is-invalid]="discount_details.controls[i].get('division_id')?.invalid && (discount_details.controls[i].get('division_id')?.dirty || discount_details.controls[i].get('division_id')?.touched)">
+                                                </ng-select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div style="margin-bottom: 0; width: 140px;" class="form-group">
+                                                <ng-select [items]="categoryList" bindLabel="name" bindValue="id"
+                                                    formControlName="discount_category_id"
+                                                    placeholder="Select Discount Category"
+                                                    [class.is-invalid]="discount_details.controls[i].get('discount_category_id')?.invalid && (discount_details.controls[i].get('discount_category_id')?.dirty || discount_details.controls[i].get('discount_category_id')?.touched)">
+                                                </ng-select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div style="margin-bottom: 0; width: 110px;" class="form-group">
+                                                <input type="number" class="form-control" formControlName="credit_days"
+                                                    placeholder="Enter Credit Days">
+                                            </div>
+                                        </td>
+
+
+                                        <td>
+                                            <div style="margin-bottom: 0; width: 110px" class="form-group">
+                                                <input type="number" class="form-control" formControlName="grace_days"
+                                                    placeholder="Enter Grace Days">
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div style="margin-bottom: 0;" class="form-group">
+                                                <input type="number" class="form-control" formControlName="credit_limit"
+                                                    placeholder="Enter Credit Limit">
+                                            </div>
+                                        </td>
+
+                                        <td style="width: 50px;">
+                                            <div class="text-danger">
+                                                <button class="btn btn-outline-danger text-danger border-0"
+                                                    (click)="removeDiscountCondition(i)"><i
+                                                        class="fa-solid fa-circle-minus"></i></button>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="section">
+                        <h1 class="section-title">Attachments</h1>
+                        <br>
+                        <div class="form-group">
+                            <label>Upload File</label>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input [(ngModel)]="selectedFile" [ngModelOptions]="{standalone: true}" #fileInput
+                                        type="file" [multiple]="false" (change)="onSelectFile($event)" hidden />
+
+                                    <div (click)="fileInput.click()" class="upload-image-box noimage cursor-pointer">
+                                        <div class="profile-container">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M14.4534 11.3064L12.3668 6.43309C11.6601 4.77976 10.3601 4.71309 9.48678 6.28643L8.22678 8.55976C7.58678 9.71309 6.39345 9.81309 5.56678 8.77976L5.42011 8.59309C4.56011 7.51309 3.34678 7.64643 2.72678 8.87976L1.58011 11.1798C0.773447 12.7798 1.94011 14.6664 3.72678 14.6664H12.2334C13.9668 14.6664 15.1334 12.8998 14.4534 11.3064Z"
+                                                    stroke="#07090F" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M4.64648 5.3335C5.75105 5.3335 6.64648 4.43807 6.64648 3.3335C6.64648 2.22893 5.75105 1.3335 4.64648 1.3335C3.54191 1.3335 2.64648 2.22893 2.64648 3.3335C2.64648 4.43807 3.54191 5.3335 4.64648 5.3335Z"
+                                                    stroke="#07090F" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+
+                                        <div class="image-detail-container">
+                                            <h1 class="image-title">Choose a file</h1>
+
+                                            <h3 class="image-size">JPEG, PNG , PDF Up-to 6 MB.</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div style="margin-top: 12px;" class="col-md-12">
+                                <div class="form-group">
+                                    <label>Uploaded files</label>
+                                </div>
+
+                                <br>
+
+                                <div *ngFor="let file of attachments; let i=index;" class="upload-item">
+                                    <div>
+                                        <h1 class="title">{{file?.name}}</h1>
+                                        <h4 class="sub-title">
+                                            {{file?.name.split('.').pop()?.toUpperCase()}} {{
+                                            formatFileSize(file.size)}}
+                                        </h4>
+                                    </div>
+
+                                    <div class="d-flex gap-md">
+                                        <img (click)="viewFile(i)" src="../../../../assets/svg/eye.svg" alt="" />
+                                        <img (click)="downloadFile(i)" src="../../../../assets/svg/download.svg"
+                                            alt="" />
+                                        <img (click)="removeFile(i)" src="../../../../assets/svg/trash.svg" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+        }
+        @else {
+        <div class="row g-2">
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Customer Name</label>
+                    <span class="form-value">{{ selectedCustomer?.name || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Registration No.</label>
+                    <span class="form-value">{{ selectedCustomer?.reg_no || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Contact Person</label>
+                    <span class="form-value">{{ selectedCustomer?.contact_person || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Phone No.</label>
+                    <span class="form-value">{{ selectedCustomer?.contact_no || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Telephone No.</label>
+                    <span class="form-value">{{ selectedCustomer?.mobile_no || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Email Address</label>
+                    <span class="form-value">{{ selectedCustomer?.email_address || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Address</label>
+                    <span class="form-value">{{ selectedCustomer?.address || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Remarks</label>
+                    <span class="form-value">{{ selectedCustomer?.remarks || '-' }}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group view">
+                    <label>Status</label>
+                    <span class="form-value">
+                        {{ selectedCustomer?.status ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+
+            <div *ngIf="companyDetails?.division_wise_sales== '1'" class="col-md-12">
+
+                <div class="section">
+                    <h1 class="section-title">Headquarter-Division</h1>
+
+                    <br>
+
+                    <table class="table table-border-all border-fix">
+                        <thead>
+                            <tr>
+                                <th>Headquarter</th>
+                                <th>Division</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="selectedCustomer?.hq_divisions?.length > 0; else noData">
+                            <tr *ngFor="let entry of selectedCustomer.hq_divisions">
+                                <td>{{ entry?.hq_name || '-' }}</td>
+                                <td>
+                                    <span *ngFor="let div of entry.divisions; let i = index">
+                                        {{div?.name || '-'}}<ng-container *ngIf="i < entry.divisions.length - 1">,
+                                        </ng-container>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <ng-template #noData>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted">
+                                        NO DATA
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-template>
+                    </table>
+
+                </div>
+            </div>
+
+            <div *ngIf="companyDetails?.division_wise_sales== '1' && companyDetails?.category_wise_discount == '1'"
+                class="col-md-12">
+
+                <div class="section">
+                    <h1 class="section-title">Division Wise Discount</h1>
+
+                    <br>
+
+                    <table class="table table-border-all border-fix">
+                        <thead>
+                            <tr>
+                                <th>Division</th>
+                                <th>Discount Category</th>
+                                <th>Credit Days</th>
+                                <th>Grace Days</th>
+                                <th>Credit Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="selectedCustomer?.discount_details?.length > 0; else noDataDisc">
+                            <tr *ngFor="let entry of selectedCustomer.discount_details">
+                                <td>{{ entry?.division_name || '-' }}</td>
+                                <td>{{ entry?.discount_category?.name || '-' }}</td>
+                                <td>{{ entry?.credit_days || '-' }}</td>
+                                <td>{{ entry?.grace_days || '-' }}</td>
+                                <td>{{ entry?.credit_limit || '-' }}</td>
+                            </tr>
+                        </tbody>
+
+                        <ng-template #noDataDisc>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        NO DATA
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-template>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="col-md-12">
+
+                <div class="section">
+                    <h1 class="section-title">Attachments</h1>
+
+                    <br>
+                    <div class="form-group">
+                        <label>Uploaded files</label>
+                    </div>
+
+                    <div *ngFor="let file of attachments; let i=index;" class="upload-item">
+                        <div>
+                            <h1 class="title">{{file?.name}}</h1>
+                            <h4 class="sub-title">
+                                {{file?.name.split('.').pop()?.toUpperCase()}} {{
+                                formatFileSize(file.size)}}
+                            </h4>
+                        </div>
+
+                        <div class="d-flex gap-md">
+                            <img (click)="viewFile(i)" src="../../../assets/img/eye.svg" alt="" />
+                            <img (click)="downloadFile(i)" src="../../../assets/img/download.svg" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        }
+
+
+    </div>
+
+    <div *ngIf="data.isView != true" class="modal-footer">
+        <div class="button-group">
+            <button (click)="closeDialog()" type="button" class="btn btn-secondary">
+                Cancel
+            </button>
+
+            <button (click)="saveForm()" type="button" class="btn btn-primary">
+                {{ modalForm.value.id ? 'Update': 'Add'}} Customer
+            </button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading == true">
+    <app-loading-spinner></app-loading-spinner>
+</div> -->

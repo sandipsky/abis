@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-// import { SharedModule } from "../../shared/shared/shared.module";
 // import { SortEvent } from '../sortable-directive/sortable-header.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
-// import { ConfigServiceService } from 'src/app/configuration/config-service/config-service.service';
 import { Subscription } from 'rxjs';
 import { Menu } from '../menu/menu';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +11,6 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-table',
   imports: [CommonModule,
     FormsModule,
-    //  SharedModule,
     Menu, MatTooltipModule],
   templateUrl: './table.html',
   standalone: true
@@ -70,67 +67,6 @@ export class Table {
 
   onSort(event: any) {
     // this.sortChange.emit(event);
-
-  }
-
-  getRemainingNames(items: any[]): string {
-    return items
-      .slice(2)
-      .map(i => i.name)
-      .join(', ');
-  }
-
-  isCheckboxDisabled(row: any, property: string): boolean {
-    const isActive = row[property];
-    if (isActive && !this.hasDeactivatePermission) {
-      return true;
-    }
-    if (!isActive && !this.hasReactivatePermission) {
-      return true;
-    }
-    return false;
-  }
-
-  onToggle(event: Event, row: any, property: string) {
-    const checked = (event.target as HTMLInputElement).checked;
-
-    if (checked && !this.hasReactivatePermission) {
-      event.preventDefault();
-      return;
-    }
-
-    if (!checked && !this.hasDeactivatePermission) {
-      event.preventDefault();
-      return;
-    }
-
-    row[property] = checked;
-    this.onStatusChange.emit(row);
-  }
-
-  transform(value: string): string {
-    if (value == null || value == '') {
-      return '';
-    }
-    let date = value?.split(' ')[0] || '';
-    let time = value?.split(' ')[1]?.split('.')[0];
-    let formattedTime = this.formateTime(time);
-    return `${date}, ${formattedTime}`;
-  }
-
-  formateTime(time: any) {
-    if (time == null || time == '') {
-      return '';
-    }
-    const [hours, minutes] = time.split(':');
-    let period = 'AM';
-    let formattedHours = +hours;
-    if (formattedHours >= 12) {
-      period = 'PM';
-      formattedHours = formattedHours === 12 ? formattedHours : formattedHours - 12;
-    }
-    formattedHours = formattedHours === 0 ? 12 : formattedHours; // Convert 0 to 12 for 12-hour format
-    return `${formattedHours}:${minutes} ${period}`;
   }
 
   ngOnDestory() {
