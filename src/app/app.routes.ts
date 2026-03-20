@@ -5,6 +5,7 @@ import { loginGuard } from './auth/login.guard';
 import { Dashboard } from './modules/dashboard/dashboard';
 import { Product } from './modules/product/product';
 import { PurchaseEntry } from './modules/purchase/purchase-entry/purchase-entry';
+import { Master } from './modules/master/master';
 
 export const routes: Routes = [
     {
@@ -22,13 +23,17 @@ export const routes: Routes = [
                 component: Dashboard,
             },
             {
-                path: 'product',
-                component: Product,
+                path: 'master',
+                component: Master,
             },
-            {
-                path: 'purchase-entry',
-                component: PurchaseEntry,
-            },
+            // {
+            //     path: 'product',
+            //     component: Product,
+            // },
+            // {
+            //     path: 'purchase-entry',
+            //     component: PurchaseEntry,
+            // },
         ]
     },
     {

@@ -256,7 +256,7 @@ const sidebarData = [
                         permission: 'ViewOpeningBalance'
                     },
                     {
-                        link: 'account',
+                        link: 'master-account',
                         label: 'Account',
                         tooltip: 'Account',
                         icon: 'account',
@@ -277,29 +277,6 @@ const sidebarData = [
                 icon: 'products',
                 activeIcon: 'products-active',
                 permission: 'ViewProduct',
-            },
-            {
-                link: '',
-                label: 'Masters',
-                tooltip: 'Masters',
-                icon: 'master',
-                activeIcon: 'master-active',
-                children: [
-                    { link: 'unit', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: 'ViewUnits' },
-                    { link: 'packing', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: 'ViewPackings' },
-                    { link: 'tax-type', label: 'Tax Type', tooltip: 'Tax Type', icon: 'tax-type', activeIcon: 'tax-type-active', permission: 'ViewTaxType' },
-                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: 'product-category', activeIcon: 'product-category-active', permission: 'ViewProductCategories' },
-                    { link: 'product-group', label: 'Product Group', tooltip: 'Product Group', icon: 'product-group', activeIcon: 'product-group-active', permission: 'ViewProductGroups' },
-                    { link: 'company', label: 'Company', tooltip: 'Company', icon: 'company', activeIcon: 'company-active', permission: 'ViewCompanyName' },
-                    { link: 'division', label: 'Division', tooltip: 'Division', icon: 'division', activeIcon: 'division-active', permission: 'ViewDivision' },
-                    { link: 'generic', label: 'Generic', tooltip: 'Generic', icon: 'generic', activeIcon: 'generic-active', permission: 'ViewGenericName' },
-                    { link: 'narration', label: 'Narration', tooltip: 'Narration', icon: 'narration', activeIcon: 'narration-active', permission: 'ViewNarrations' },
-                    { link: 'sub-account', label: 'Sub Account', tooltip: 'Sub Account', icon: 'sub-account', activeIcon: 'sub-account-active', permission: 'ViewSubAccount' },
-                    { link: 'cost-center', label: 'Cost Center', tooltip: 'Cost Center', icon: 'cost-center', activeIcon: 'cost-center-active', permission: 'ViewCostCenters' },
-                    { link: 'discount-category', label: 'Discount Category', tooltip: 'Discount Category', icon: 'discount-category', activeIcon: 'discount-category-active', permission: 'ViewDiscountCategory' },
-                    { link: 'transport', label: 'Transport', tooltip: 'Transport', icon: 'transport', activeIcon: 'transport-active', permission: 'ViewTransport' },
-                    { link: 'headquarter', label: 'Headquarter', tooltip: 'Headquarter', icon: 'headquarter', activeIcon: 'headquarter-active', permission: 'ViewHeadquarter' },
-                ]
             },
             {
                 link: '',
@@ -356,6 +333,29 @@ const sidebarData = [
                         icon: 'configuration',
                         activeIcon: 'configuration-active',
                         permission: 'ViewConfig'
+                    },
+                    {
+                        link: 'master',
+                        label: 'Masters',
+                        tooltip: 'Masters',
+                        icon: 'products',
+                        activeIcon: 'products-active',
+                        permission: [
+                            'ViewUnits',
+                            'ViewPackings',
+                            'ViewTaxType',
+                            'ViewProductCategories',
+                            'ViewProductGroups',
+                            'ViewCompanyName',
+                            'ViewDivision',
+                            'ViewGenericName',
+                            'ViewNarrations',
+                            'ViewSubAccount',
+                            'ViewCostCenters',
+                            'ViewDiscountCategory',
+                            'ViewTransport',
+                            'ViewHeadquarter'
+                        ],
                     },
                     {
                         link: 'auto-code-generator',

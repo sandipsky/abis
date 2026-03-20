@@ -1,0 +1,16 @@
+<div class="master-nav">
+    <div class="nav-item" *ngFor="let item of filteredData; let i = index" [class.active]="activeParentIndex === i"
+        (click)="selectParent(i)">
+        {{ item.name }}
+    </div>
+</div>
+
+<div class="section main">
+    <div class="master-nav sub" *ngIf="selectedParent">
+        <div class="nav-item" *ngFor="let child of selectedParent.children; let j = index"
+            [class.active]="activeChildIndex === j" (click)="selectChild(j, child.link)">
+            {{ child.label }}
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>
