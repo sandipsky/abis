@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { FilterSectionComponent } from '../../shared/components/filter/filter';
-import { PaginatorComponent } from '../../shared/components/pagination/pagination';
-import { Table } from '../../shared/components/table/table';
+import { SharedModule } from '../../shared/shared-module';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [FilterSectionComponent, PaginatorComponent, Table],
+  imports: [SharedModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

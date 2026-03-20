@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { masterModel, taxTypes } from './master.model';
+// import { masterModel, taxTypes } from './master.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -45,7 +45,7 @@ export class MasterService {
     return this._http.get(fileUrl, { responseType: 'blob' as 'json' })
   }
 
-  public addProductUnitMaster(file: any, endPoint: string, unitMaster: masterModel) {
+  public addProductUnitMaster(file: any, endPoint: string, unitMaster: any) {
     let formData = new FormData();
     let jsonPayload = JSON.stringify(unitMaster);
 
@@ -63,7 +63,7 @@ export class MasterService {
   }
 
   public getAllUnitMaster(endPoint: string) {
-    return this._http.get<masterModel>(this.apiUnitMasterAdd + endPoint);
+    return this._http.get<any>(this.apiUnitMasterAdd + endPoint);
   }
 
   // public getMasterList(endPoint: string, data: any) {
@@ -79,7 +79,7 @@ export class MasterService {
   }
 
   public getMasterList(data: any, endPoint: string,) {
-    return this._http.post<masterModel>(this.apiUnitMasterAdd + endPoint + '/view', data);
+    return this._http.post<any>(this.apiUnitMasterAdd + endPoint + '/view', data);
   }
 
   public deleteUnit(endPoint: string, id: Array<number>) {
@@ -113,13 +113,13 @@ export class MasterService {
 
 
   public masterDetail(endPoint: string, id: number) {
-    return this._http.get<masterModel>(this.apiUnitMasterAdd + endPoint + '/' + id);
+    return this._http.get<any>(this.apiUnitMasterAdd + endPoint + '/' + id);
   }
 
 
 
   public getDivision(id: number) {
-    return this._http.get<masterModel>(this.apiURLDivisionList + '/' + id)
+    return this._http.get<any>(this.apiURLDivisionList + '/' + id)
   }
 
   public getPDF(name?: string): Observable<Blob> {

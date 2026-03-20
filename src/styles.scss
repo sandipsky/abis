@@ -7,10 +7,10 @@
 @forward "scss/_section";
 @forward "scss/_form";
 @forward "scss/_table";
+@forward 'ngx-toastr/toastr';
+@forward "@ng-select/ng-select/themes/default.theme.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap');
-@import 'ngx-toastr/toastr';
-@import "@ng-select/ng-select/themes/default.theme.css";
 
 * {
   margin: 0;

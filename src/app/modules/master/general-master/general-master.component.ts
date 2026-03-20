@@ -1,11 +1,11 @@
 import { Component, Input, Optional, TemplateRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { masterModel } from '../master.model';
+// import { masterModel } from '../master.model';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { SharedModule } from '../../../shared/shared-module';
-import { DeleteModalComponent } from '../../../shared/components/delete-modal/delete-modal.component';
+// import { DeleteModalComponent } from '../../../shared/components/delete-modal/delete-modal.component';
 import { MastersInlineModalComponent } from './add-master-modal/add-master-modal';
 import { MasterService } from '../master.service';
 import { DropdownsService } from '../../../shared/services/dropdown.service';
@@ -28,7 +28,7 @@ export class GeneralMasterComponent {
   @Input() exportMasterPermissionName: string = '';
   @Input() printMasterPermissionName: string = '';
 
-  masterList: Array<masterModel> = [];
+  masterList: Array<any> = [];
   masterSelected: boolean = false;
   isSelected: boolean = false;
   checklist: any;
@@ -38,7 +38,7 @@ export class GeneralMasterComponent {
   listLength: number = 0;
   length: number = 0;
 
-  sortedData: Array<masterModel> = [];
+  sortedData: Array<any> = [];
   searchText: string = '';
   operationList: Array<string> = [];
   isLoading: boolean = false;
@@ -244,35 +244,35 @@ export class GeneralMasterComponent {
   }
 
   openDelete(master?: any): void {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
-      panelClass: 'slide-up',
-      enterAnimationDuration: '0ms',
-      exitAnimationDuration: '0ms',
-      disableClose: true,
-      data: { id: (master?.id || this.checkedList), name: master?.name, items: this.checkedItems, endPoint: this.endPoint, mutiple: (master == undefined ? true : false) }
-    });
+    // const dialogRef = this.dialog.open(DeleteModalComponent, {
+    //   panelClass: 'slide-up',
+    //   enterAnimationDuration: '0ms',
+    //   exitAnimationDuration: '0ms',
+    //   disableClose: true,
+    //   data: { id: (master?.id || this.checkedList), name: master?.name, items: this.checkedItems, endPoint: this.endPoint, mutiple: (master == undefined ? true : false) }
+    // });
 
-    dialogRef.backdropClick().subscribe(() => {
-      dialogRef.removePanelClass('slide-up');
-      dialogRef.addPanelClass('slide-up-close');
+    // dialogRef.backdropClick().subscribe(() => {
+    //   dialogRef.removePanelClass('slide-up');
+    //   dialogRef.addPanelClass('slide-up-close');
 
-      setTimeout(() => {
-        dialogRef.close();
-      }, 400);
-    });
+    //   setTimeout(() => {
+    //     dialogRef.close();
+    //   }, 400);
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getMasterList();
-        this.checkedItems = [];
-        this.checkedList = [];
-        this.checklist = [];
-        this.listLength = 0;
-      }
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.getMasterList();
+    //     this.checkedItems = [];
+    //     this.checkedList = [];
+    //     this.checklist = [];
+    //     this.listLength = 0;
+    //   }
+    // });
   }
 
-  exportExcel(masterList: masterModel[]) {
+  exportExcel(masterList: any[]) {
     let headers: string[] = ['SN', this.masterName];
     if (this.masterName === 'Tax Type') {
       headers.push('Tax Rate(%)');

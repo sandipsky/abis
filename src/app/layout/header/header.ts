@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@ang
 import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
 import { Router, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MenuComponent } from '../../shared/components/menu/menu';
+import { Menu } from '../../shared/components/menu/menu';
 import { NotificationService } from '../../shared/services/websocket.service';
-import { CalculatorComponent } from '../../shared/components/calculator/calculator';
+import { Calculator } from '../../shared/components/calculator/calculator';
 import { MatDialog } from '@angular/material/dialog';
 import { RangePrintComponent } from '../../shared/components/range-print/range-print';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MenuComponent],
+  imports: [RouterModule, Menu],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,7 +52,7 @@ export class Header {
   }
 
   openCalculator() {
-    this._dialog.open(CalculatorComponent, {
+    this._dialog.open(Calculator, {
       disableClose: true,
       width: '328px',
     })

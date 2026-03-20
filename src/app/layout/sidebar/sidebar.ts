@@ -6,11 +6,11 @@ import { CommonModule } from '@angular/common';
 import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MenuComponent } from '../../shared/components/menu/menu';
+import { Menu } from '../../shared/components/menu/menu';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, MatTooltipModule, RouterModule, MenuComponent],
+  imports: [CommonModule, MatTooltipModule, RouterModule, Menu],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

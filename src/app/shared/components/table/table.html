@@ -99,49 +99,49 @@
               </div>
 
               <div *ngIf="actions.includes('view')" (click)="onView.emit(data)" class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/eye.svg" alt="" /> View Details
+                <img src="../../../svg/eye.svg" alt="" /> View Details
               </div>
 
               <div *ngIf="actions.includes('edit') && hasEditPermission" (click)="onEdit.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/edit.svg" alt="" /> Edit Details
+                <img src="../../../svg/edit.svg" alt="" /> Edit Details
               </div>
 
               <div *ngIf="actions.includes('delete') && hasDeletePermission" (click)="onDelete.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/trash.svg" alt="" /> Delete
+                <img src="../../../svg/trash.svg" alt="" /> Delete
                 Details
               </div>
 
               <div *ngIf="actions.includes('copy') && hasEditPermission" (click)="onCopy.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/document.svg" alt="" /> Copy
+                <img src="../../../svg/document.svg" alt="" /> Copy
               </div>
 
               <div *ngIf="actions.includes('cancel') && hasCancelPermission" (click)="onCancel.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/cancel.svg" alt="" /> Cancel
+                <img src="../../../svg/cancel.svg" alt="" /> Cancel
               </div>
 
               <div *ngIf="actions.includes('purchase') && hasPurchasePermission" (click)="onPurchase.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/purchase.svg" alt="" /> Purchase
+                <img src="../../../svg/purchase.svg" alt="" /> Purchase
               </div>
 
 
               <div *ngIf="actions.includes('sales') && hasSalesPermission" (click)="onSales.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/purchase.svg" alt="" /> Sales
+                <img src="../../../svg/purchase.svg" alt="" /> Sales
               </div>
 
               <div *ngIf="actions.includes('hold') && hasCancelPermission" (click)="onHold.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/hold.svg" alt="" /> Hold
+                <img src="../../../svg/hold.svg" alt="" /> Hold
               </div>
 
               <div *ngIf="actions.includes('pending') && hasCancelPermission" (click)="onPending.emit(data)"
                 class="dropdown-item" dropdown-item>
-                <img src="../../../assets/svg/pending.svg" alt="" /> Pending
+                <img src="../../../svg/pending.svg" alt="" /> Pending
               </div>
             </app-menu>
         </td>

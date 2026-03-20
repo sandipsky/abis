@@ -20,7 +20,7 @@
 
  <div class="section-content">
 
-     <app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="products"></app-table>
+     <app-table [actions]="['view', 'edit', 'delete']" [tableHeaders]="tableHeaders" [tableData]="products.slice(18)"></app-table>
      <app-paginator [pageSizeOptions]="[25, 50, 100]" [pageSize]="25" [length]="10"></app-paginator>
     </div>
 </div>

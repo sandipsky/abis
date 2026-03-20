@@ -9,24 +9,28 @@ import { CommonModule } from '@angular/common';
   styleUrl: './menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MenuComponent {
+export class Menu {
   mode = input<'left' | 'right'>('left');
   closeOnItemClick = input(true);
   contentMode = input(false);
   showActiveState = input(true);
+  menuStyle = signal<{ top: string; left: string }>({ top: '0px', left: '0px' });
+  isReady = signal(false);
+  isOpen = signal(false);
 
   content = viewChild<ElementRef<HTMLElement>>('content');
-
-  isOpen = signal(false);
-  openTop = signal(false);
 
   private host = inject(ElementRef);
 
   toggle(): void {
-    this.isOpen.update(open => !open);
-
     if (this.isOpen()) {
-      setTimeout(() => this.calculatePosition());
+      this.close();
+    } else {
+      this.isOpen.set(true);
+      requestAnimationFrame(() => {
+        this.calculatePosition();
+        this.isReady.set(true);
+      });
     }
   }
 
@@ -37,15 +41,30 @@ export class MenuComponent {
     if (!contentEl) return;
 
     const dropdownHeight = contentEl.offsetHeight;
+    const dropdownWidth = contentEl.offsetWidth;
     const spaceBelow = window.innerHeight - hostRect.bottom;
     const spaceAbove = hostRect.top;
 
-    this.openTop.set(spaceBelow < dropdownHeight && spaceAbove > dropdownHeight);
+    let top = hostRect.bottom + 6;
+    if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
+      top = hostRect.top - dropdownHeight - 6;
+    }
+
+    let left = hostRect.left;
+
+    if (this.mode() === 'right') {
+      left = hostRect.right - dropdownWidth;
+    }
+
+    this.menuStyle.set({
+      top: `${top}px`,
+      left: `${left}px`
+    });
   }
 
   close(): void {
     this.isOpen.set(false);
-    this.openTop.set(false);
+    this.isReady.set(false);
   }
 
   @HostListener('document:click', ['$event'])

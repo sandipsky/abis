@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NepaliDatepickerModule } from 'np-datepicker-angular';
-import { MenuComponent } from '../menu/menu';
+import { Menu } from '../menu/menu';
 
 @Component({
   selector: 'filter-section',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule, MenuComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule, Menu],
   templateUrl: './filter.html',
   styleUrls: ['./filter.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FilterSectionComponent {
-  // --- Inputs & Outputs (Signal-based) ---
+export class Filter {
   filterColumns = input<any[]>([]);
   searchBy = input<string>('');
   fromDate = input<string>('');
@@ -27,7 +26,7 @@ export class FilterSectionComponent {
   onToDateChange = output<any>();
 
   // --- View Queries (Signal-based) ---
-  filterDropdown = viewChild<MenuComponent>('filterDropdown');
+  filterDropdown = viewChild<Menu>('filterDropdown');
 
   // --- Internal State (Signals) ---
   filterList = signal<any[]>([]);

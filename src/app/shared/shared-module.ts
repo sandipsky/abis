@@ -1,18 +1,22 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FilterSectionComponent } from './components/filter/filter';
-import { PaginatorComponent } from './components/pagination/pagination';
+import { Filter } from './components/filter/filter';
+import { Paginator } from './components/pagination/pagination';
 import { Table } from './components/table/table';
-import { MenuComponent } from './components/menu/menu';
+import { Menu } from './components/menu/menu';
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
-    FilterSectionComponent,
-    PaginatorComponent,
+    Filter,
+    Paginator,
     Table,
-    MenuComponent
+    Menu
+  ],
+  exports: [
+    Filter,
+    Paginator,
+    Table,
+    Menu
   ]
 })
 export class SharedModule { }

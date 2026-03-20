@@ -11,11 +11,11 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
   imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalculatorComponent {
+export class Calculator {
   readonly input = signal<string>('');
   readonly result = signal<string>('0');
 
-  public dialogRef = inject(MatDialogRef<CalculatorComponent>);
+  public dialogRef = inject(MatDialogRef<Calculator>);
   public dialog = inject(MatDialog);
   public data = inject(MAT_DIALOG_DATA);
 
@@ -41,9 +41,8 @@ export class CalculatorComponent {
     // 2. Calculation Logic
     if (button === '=') {
       try {
-        // Caution: eval() is used per your original logic; 
-        // in a production app, consider a math parser library.
-        const calculated = eval(currentInput);
+        const calculate = new Function(`return ${currentInput}`);
+        const calculated = calculate();
         this.result.set(calculated.toString());
       } catch (e) {
         this.result.set('Error');
@@ -80,7 +79,6 @@ export class CalculatorComponent {
       return;
     }
 
-    // Update the signal
     this.input.update(val => val + button);
   }
 

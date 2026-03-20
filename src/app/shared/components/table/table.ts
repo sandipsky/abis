@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 // import { ConfigServiceService } from 'src/app/configuration/config-service/config-service.service';
 import { Subscription } from 'rxjs';
-import { MenuComponent } from '../menu/menu';
+import { Menu } from '../menu/menu';
 import { FormsModule } from '@angular/forms';
 // import { DateService } from 'src/app/services/date.service';
 
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule,
     FormsModule,
     //  SharedModule,
-    MenuComponent, MatTooltipModule],
+    Menu, MatTooltipModule],
   templateUrl: './table.html',
   standalone: true
 })

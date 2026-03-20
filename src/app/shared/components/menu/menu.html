@@ -1,19 +1,13 @@
-<div class="dropdown-menu" 
-     [class.active]="isOpen() && showActiveState()" 
-     [class.right]="mode() === 'right'" 
-     (click)="toggle()">
-    
+<div class="dropdown-menu" [class.active]="isOpen() && showActiveState()" (click)="toggle()">
+
     <ng-content select="[dropdown-display]"></ng-content>
 
     @if (isOpen()) {
-        <div #content 
-             class="dropdown-content" 
-             [class.open-top]="openTop()" 
-             [class.nopadding]="contentMode()" 
-             (click)="!closeOnItemClick() && $event.stopPropagation()">
-            
-            <ng-content select="[dropdown-item]"></ng-content>
-            <ng-content select="[dropdown-content]"></ng-content>
-        </div>
+    <div #content class="dropdown-content" [class.visible]="isReady()" [style.top]="menuStyle().top" [style.left]="menuStyle().left"
+        [class.nopadding]="contentMode()" (click)="!closeOnItemClick() && $event.stopPropagation()">
+
+        <ng-content select="[dropdown-item]"></ng-content>
+        <ng-content select="[dropdown-content]"></ng-content>
+    </div>
     }
 </div>

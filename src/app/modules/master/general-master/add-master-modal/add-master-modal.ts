@@ -6,12 +6,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
 import { DropdownsService } from '../../../../shared/services/dropdown.service';
+import { SharedModule } from '../../../../shared/shared-module';
 
 @Component({
   selector: 'app-add-master-modal',
   templateUrl: './add-master-modal.html',
-  styleUrls: ['./add-master-modal.scss'],
   encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgSelectModule]
 })
 export class MastersInlineModalComponent {
   modalForm: FormGroup;

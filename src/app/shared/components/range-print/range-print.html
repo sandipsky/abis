@@ -51,7 +51,7 @@
                         <!-- PARTY -->
                         <div class="col-md-12">
 
-                            <div *ngIf="!accounting?.includes(f['type'].value)" class="form-group">
+                            <div *ngIf="!accounting.includes(f['type'].value)" class="form-group">
 
                                 <label>
                                     {{f['partyType'].value == 'Vendor' ? 'Vendor' : 'Customer'}} Name
@@ -75,7 +75,7 @@
                             </div>
 
                             <!-- ACCOUNT PARTY -->
-                            <div *ngIf="accounting?.includes(f['type'].value)" class="form-group">
+                            <div *ngIf="accounting.includes(f['type'].value)" class="form-group">
 
                                 <label>Party Name</label>
 

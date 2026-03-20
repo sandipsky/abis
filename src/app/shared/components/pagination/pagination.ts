@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { MenuComponent } from '../menu/menu';
+import { Menu } from '../menu/menu';
 
 @Component({
   selector: 'app-paginator',
   templateUrl: './pagination.html',
   styleUrls: ['./pagination.scss'],
   standalone: true,
-  imports: [CommonModule, MenuComponent]
+  imports: [CommonModule, Menu]
 })
-export class PaginatorComponent {
+export class Paginator {
   @Input() pageSizeOptions: number[] = [10, 25, 50, 100];
   @Input() pageSize: number = 10;
   @Input() pageIndex: number = 0;
