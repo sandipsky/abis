@@ -99,11 +99,8 @@ export class Filter {
 
   removeFilter(filter: any) {
     this.filterList.update(list => list.filter(item => item !== filter));
-    
-    // Update the underlying column value
     const col = this.filterColumns().find(c => c.name === filter.filterName);
     if (col) col.value = null;
-
     this.emitFilterList();
   }
 
@@ -121,19 +118,6 @@ export class Filter {
       displayValue: f.displayValue
     }));
     this.onFilterChange.emit(mapped);
-  }
-
-  getUsers(event: any) {
-    clearTimeout(this.searchTimer);
-    const val = event.target.value.trim();
-    this.searchTerm.set(val);
-    this.isSearching.set(true);
-
-    // Mocking the async search
-    this.searchTimer = setTimeout(() => {
-      this.isSearching.set(false);
-      // Logic for service call would go here, updating userList.set(results)
-    }, 1000);
   }
 
   closeDropdown() {
