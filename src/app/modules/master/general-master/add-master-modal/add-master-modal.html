@@ -1,63 +1,53 @@
-<div class="modal">
-    <div class="modal-header">
-
-        <div class="btn btn-outlined no-hover small">
-            <img style="cursor: pointer;" src="../../../svg/add.svg" alt="">
-        </div>
-
-        <div class="modal-title-group">
-            <h1 class="modal-title">
-                {{mode}} {{title}}
-            </h1>
-            <h2 class="modal-sub-title">
-                Provide required information to {{mode}} {{title}}.
-            </h2>
-        </div>
-        <div (click)="closeDialog()" class="btn btn-outlined rounded small close-btn">
-            <img style="cursor: pointer;" src="../../../svg/close.svg" alt="">
-        </div>
-    </div>
-    <div class="modal-body">
-        <form class="row g-2" [formGroup]="modalForm">
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>{{title}}</label>
-                    <input type="text" class="form-control" formControlName="name" [placeholder]="placeholder" />
-                </div>
-            </div>
-
-            <!-- Tax Type Section  -->
-            <div *ngIf="title=='Tax Type'" class="col-md-12">
-                <ng-container>
-                    <div class="form-group">
-                        <label>Tax Rate</label>
-                        <input type="number" class="form-control" formControlName="tax_rate"
-                            placeholder="Enter Tax Rate" />
-                    </div>
-                </ng-container>
-            </div>
-            <!-- Tax Type Section End -->
-
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="">Status </label>
-                    <label class="switch">
-                        <input formControlName="status" type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button (click)="closeDialog()" type="button" class="btn btn-secondary">
-            Cancel
-        </button>
-        <button (click)="save()" type="button" class="btn btn-primary">
-            {{ mode }} {{title}}
-        </button>
+<form class="modal" [formGroup]="modalForm">
+  <div class="modal-header">
+    <div class="btn btn-outlined no-hover small">
+      <img style="cursor: pointer;" src="../../../svg/add.svg" alt="Add Icon">
     </div>
 
+    <div class="modal-title-group">
+      <h1 class="modal-title">{{ mode() }} {{ title() }}</h1>
+      <h2 class="modal-sub-title">Provide required information to {{ mode() }} {{ title() }}.</h2>
+    </div>
+
+    <div (click)="closeDialog()" class="btn btn-outlined rounded small close-btn">
+      <img style="cursor: pointer;" src="../../../svg/close.svg" alt="Close Icon">
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-2">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>{{ title() }}</label>
+          <input type="text" class="form-control" formControlName="name" [placeholder]="placeholder()" />
+        </div>
+      </div>
+
+      @if (title() === 'Tax Type') {
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Tax Rate</label>
+            <input type="number" class="form-control" formControlName="tax_rate" placeholder="Enter Tax Rate" />
+          </div>
+        </div>
+      }
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Status</label>
+          <label class="switch">
+            <input formControlName="status" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button (click)="closeDialog()" type="button" class="btn btn-secondary">Cancel</button>
+    <button (click)="save()" type="submit" class="btn btn-primary">
+      {{ mode() }} {{ title() }}
+    </button>
+  </div>
+</form>

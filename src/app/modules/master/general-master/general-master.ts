@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, signal, computed, inject, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
@@ -10,158 +10,141 @@ import { AuthService } from '../../../auth/auth.service';
 import { DeleteModalComponent } from '../../../shared/components/delete-modal/delete-modal.component';
 import { ExcelService } from '../../../shared/services/excel.service';
 import { MasterItem } from '../master.model';
+import { input } from '@angular/core';
 
 @Component({
   selector: 'app-general-master',
   templateUrl: './general-master.html',
   standalone: true,
-  imports: [CommonModule, SharedModule]
+  imports: [CommonModule, SharedModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+export class GeneralMaster implements OnInit {
+  // Services using inject()
+  private masterService = inject(MasterService);
+  private toastr = inject(ToastrService);
+  private authService = inject(AuthService);
+  private dialog = inject(MatDialog);
+  private excelService = inject(ExcelService);
 
-export class GeneralMaster {
-  @Input() endPoint: string = '';
-  @Input() masterName: string = '';
-  @Input() createMasterPermissionName: string = '';
-  @Input() editMasterPermissionName: string = '';
-  @Input() deleteMasterPermissionName: string = '';
-  @Input() exportMasterPermissionName: string = '';
-  @Input() printMasterPermissionName: string = '';
+  // Signal Inputs
+  endPoint = input.required<string>();
+  masterName = input.required<string>();
+  createMasterPermissionName = input<string>('');
+  editMasterPermissionName = input<string>('');
+  deleteMasterPermissionName = input<string>('');
+  exportMasterPermissionName = input<string>('');
+  printMasterPermissionName = input<string>('');
 
-  masterList: Array<any> = [];
-  masterSelected: boolean = false;
-  isSelected: boolean = false;
-  checklist: any;
-  checkedList: any[] = [];
-  checkedItems: any[] = [];
-  companyList: any[] = [];
-  listLength: number = 0;
-  length: number = 0;
+  // State Signals
+  masterList = signal<any[]>([]);
+  isLoading = signal<boolean>(false);
+  totalElements = signal<number>(0);
+  filterList = signal<any[]>([]);
+  operationList = signal<string[]>([]);
 
-  tableHeaders: any[] = []
-
-  sortedData: Array<any> = [];
-  searchText: string = '';
-  operationList: Array<string> = [];
-  isLoading: boolean = false;
-
-  filterColumns: any[] = [];
-
-  filterForm = {
+  filterForm = signal({
     pageIndex: 0,
     pageSize: 25,
     sortBy: 'name',
     sortDirection: 'asc',
-  }
-  filterList: any[] = [];
+  });
 
   @ViewChild('view', { static: true }) view!: TemplateRef<any>;
 
-  constructor(
-    private masterService: MasterService,
-    private toastr: ToastrService,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private excelService: ExcelService,
-  ) { }
+  // Computed Properties (Reactive derivation)
+  tableHeaders = computed(() => [
+    { name: 'SN', property: 'sn', sort: false },
+    { name: this.masterName(), property: 'name', sortBy: 'name', sort: true },
+    ...(this.masterName() === 'Tax Type'
+      ? [{ name: 'Tax Rate', property: 'tax_rate', sortBy: 'tax_rate', sort: true }]
+      : []),
+    { name: 'Status', property: 'status', sort: false, status: true }
+  ]);
+
+  filterColumns = computed(() => [
+    ...(this.masterName() === 'Tax Type'
+      ? [{ name: "Tax Rate", type: "text", formcontrolName: "tax_rate" }]
+      : []),
+    {
+      name: "Status",
+      type: "select",
+      formcontrolName: "status",
+      data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }]
+    }
+  ]);
 
   ngOnInit(): void {
-    this.operationList = this.authService.userPermissionList();
-    this.setTableHeaders();
-    this.setFilter();
+    this.operationList.set(this.authService.userPermissionList());
     this.getMasterList();
   }
 
-  setTableHeaders() {
-    this.tableHeaders = [
-      { name: 'SN', property: 'sn', sort: false },
-      { name: this.masterName, property: 'name', sortBy: 'name', sort: true },
-      ...(this.masterName === 'Tax Type'
-        ? [{ name: 'Tax Rate', property: 'rate', sortBy: 'rate', sort: true }]
-        : []),
-      { name: 'Status', property: 'status', sort: false, status: true }
-    ];
-  }
-
-  setFilter() {
-    this.filterColumns = [
-      ...(this.masterName === 'Tax Type'
-        ? [
-          {
-            name: "Tax Rate",
-            type: "text",
-            formcontrolName: "rate"
-          }
-        ]
-        : []),
-      {
-        name: "Status",
-        type: "select",
-        formcontrolName: "status",
-        data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }]
-      }
-    ];
-  }
-
   applyFilter(filters: any[]) {
-    this.filterList = filters;
-    this.filterForm.pageIndex = 0;
+    this.filterList.set(filters);
+    this.filterForm.update(f => ({ ...f, pageIndex: 0 }));
     this.getMasterList();
   }
 
   onChangedPage(pageData: PageEvent) {
-    this.filterForm.pageIndex = pageData.pageIndex;
-    this.filterForm.pageSize = pageData.pageSize;
+    this.filterForm.update(f => ({
+      ...f,
+      pageIndex: pageData.pageIndex,
+      pageSize: pageData.pageSize
+    }));
     this.getMasterList();
   }
 
   onSort({ column, direction }: any) {
-    this.filterForm.sortBy = column;
-    this.filterForm.sortDirection = direction;
+    this.filterForm.update(f => ({
+      ...f,
+      sortBy: column,
+      sortDirection: direction
+    }));
     this.getMasterList();
   }
 
   getMasterList(isExport?: boolean): void {
+    const currentForm = this.filterForm();
+
     let filter = {
-      filter: this.filterList || [],
+      filter: this.filterList() || [],
       pagination: {
-        pageIndex: isExport == true ? 0 : (this.filterForm.pageIndex || 0),
-        pageSize: isExport == true ? (this.length || 9999999) : (this.filterForm.pageSize || 25),
+        pageIndex: isExport ? 0 : currentForm.pageIndex,
+        pageSize: isExport ? (this.totalElements() || 999999) : currentForm.pageSize,
       },
-      sortDTO: [
-        {
-          field: this.filterForm.sortBy || 'name',
-          orderType: this.filterForm.sortDirection || 'asc',
-        },
-      ],
+      sortDTO: [{
+        field: currentForm.sortBy,
+        orderType: currentForm.sortDirection,
+      }],
     };
 
-    this.isLoading = true;
-    this.masterService.getMasterList(filter, this.endPoint).subscribe(
-      {
-        next: (res: any) => {
-          if (isExport == true) {
-            this.exportExcel(res?.content);
-            this.isLoading = false;
-          }
-          else {
-            this.masterList = res?.content || [];
-            this.checklist = res?.content || [];
-            this.length = res?.totalElements || 0;
-            this.isLoading = false;
-          }
-        },
-        error: (err) => {
-          this.toastr.error(err);
-          this.isLoading = false;
-        },
-      }
-    )
+    this.isLoading.set(true);
+    this.masterService.getMasterList(filter, this.endPoint()).subscribe({
+      next: (res: any) => {
+        if (isExport) {
+          this.exportExcel(res?.content);
+        } else {
+          this.masterList.set(res?.content || []);
+          this.totalElements.set(res?.totalElements || 0);
+        }
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.toastr.error(err);
+        this.isLoading.set(false);
+      },
+    });
   }
 
   openAddModal(master?: MasterItem) {
-    const item = { title: this.masterName, endPoint: this.endPoint, formData: master || {}, companies: this.companyList }
+    const item = {
+      title: this.masterName(),
+      endPoint: this.endPoint(),
+      formData: master || {},
+    };
+
     const dialogRef = this.dialog.open(MastersInlineModalComponent, {
-      data: { item: item },
+      data: { item },
       panelClass: ['slide-left', 'drawer-right'],
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
@@ -178,18 +161,16 @@ export class GeneralMaster {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getMasterList();
-      }
+      if (result) this.getMasterList();
     });
   }
 
   openDelete(master?: MasterItem): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       panelClass: 'slide-up',
+      disableClose: true,
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
-      disableClose: true,
       data: { item: master }
     });
 
@@ -203,31 +184,23 @@ export class GeneralMaster {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getMasterList();
-      }
+      if (result) this.getMasterList();
     });
   }
 
   exportExcel(masterList: MasterItem[]) {
-    let headers: string[] = ['SN', this.masterName];
-    if (this.masterName === 'Tax Type') {
-      headers.push('Tax Rate(%)');
-    }
+    // Note: Use signal accessors masterName() and internal logic
+    const headers = ['SN', this.masterName()];
+    if (this.masterName() === 'Tax Type') headers.push('Tax Rate(%)');
     headers.push('Status');
-    let exportData: any[] = [];
-    masterList.forEach((item, index) => {
-      const rowData: any[] = [
-        index + 1,
-        item.name
-      ];
-      if (this.masterName === 'Tax Type') {
-        rowData.push(item.tax_rate || '-');
-      }
-      rowData.push(item.status === true ? 'Active' : 'Inactive')
-      exportData.push(rowData);
-    });
-    // this.excelService.exportExcel(this.masterName, headers, exportData);
-  }
 
+    const exportData = masterList.map((item, index) => {
+      const row = [index + 1, item.name];
+      if (this.masterName() === 'Tax Type') row.push(item.tax_rate || '-');
+      row.push(item.status ? 'Active' : 'Inactive');
+      return row;
+    });
+
+    // this.excelService.exportExcel(this.masterName(), headers, exportData);
+  }
 }

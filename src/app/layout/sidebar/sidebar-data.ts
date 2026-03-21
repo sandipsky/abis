@@ -227,10 +227,10 @@ const sidebarData = [
                 icon: 'master',
                 activeIcon: 'master-active',
                 children: [
-                    { link: 'units', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: 'ViewUnit' },
-                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: 'ViewPackings' },
-                    { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: 'tax-type', activeIcon: 'tax-type-active', permission: 'ViewTaxType' },
-                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: 'product-category', activeIcon: 'product-category-active', permission: 'ViewProductCategories' },
+                    { link: 'units', label: 'Unit', tooltip: 'Unit', icon: '', activeIcon: '', permission: 'ViewUnit' },
+                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: '', activeIcon: '', permission: 'ViewPackings' },
+                    { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: '', activeIcon: '', permission: 'ViewTaxType' },
+                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: '', activeIcon: '', permission: 'ViewProductCategories' },
                 ]
             },
             {

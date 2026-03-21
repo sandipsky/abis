@@ -31,7 +31,7 @@
       line-height: 24px;
 
       &.email {
-        color: var(--cancel-text-color);
+        color: var(--cancel-color);
       }
     }
   }
@@ -71,7 +71,7 @@
 
   &.error {
     background-color: var(--error-bg-color);
-    border-color: var(--error-text-color);
+    border-color: var(--error-color);
   }
 }
 

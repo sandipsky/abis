@@ -73,7 +73,7 @@
 
             </div>
 
-            @for (notification of notifications(); track $index) {
+            @for (notification of notifications(); track notification.id) {
             <div class="notification-item">
                 <div class="notification-item-group">
                     <div class="notification-icon">

@@ -1,116 +1,81 @@
+import { Component, Inject, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
-import { SharedModule } from '../../../../shared/shared-module';
 
 @Component({
   selector: 'app-add-master-modal',
   templateUrl: './add-master-modal.html',
-  imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule, NgSelectModule]
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule],
+  changeDetection: ChangeDetectionStrategy.OnPush 
 })
 export class MastersInlineModalComponent {
-  modalForm: FormGroup;
-  placeholder: string = '';
-  endPoint: string = '';
-  title: string = '';
-  mode: string = 'Add';
+  private readonly fb = inject(FormBuilder);
+  private readonly dialogRef = inject(MatDialogRef<MastersInlineModalComponent>);
+  private readonly masterService = inject(MasterService);
+  private readonly toastr = inject(ToastrService);
+  public readonly data = inject(MAT_DIALOG_DATA);
 
-  constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<MastersInlineModalComponent>,
-    private masterService: MasterService,
-    private toastr: ToastrService,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  readonly title = signal<string>(this.data?.item?.title ?? '');
+  readonly mode = signal<'Add' | 'Edit'>(this.data?.item?.formData?.id ? 'Edit' : 'Add');
+  readonly endPoint = signal<string>(this.data?.item?.endPoint ?? '');
+  readonly placeholder = computed(() => `Enter ${this.title()}`);
+
+  modalForm: FormGroup;
+
+  constructor() {
     this.modalForm = this.fb.nonNullable.group({
       id: [],
-      name: ['', Validators.required],
+      name: [, Validators.required],
       status: [true, Validators.required],
-    })
-
-    if (data.item) {
-      this.placeholder = `Enter ${data.item.title}`
-      this.title = data.item.title
-      this.endPoint = data.item.endPoint
-
-      if (data.item.title == "Tax Type") {
-        this.modalForm.addControl('tax_rate', this.fb.control(null));
-        this.modalForm.get('tax_rate')?.addValidators(Validators.required);
-        this.modalForm.get('tax_rate')?.updateValueAndValidity();
-      }
-
-      if (data.item.formData) {
-        if (data.item.formData.id != null) {
-          this.mode = 'Edit';
-        }
-        this.modalForm.patchValue(data.item.formData);
-      }
-
-      if (data.name) {
-        this.modalForm.get('name')?.setValue(data.name);
-      }
-    }
+    });
+    this.initializeDynamicFields();
   }
 
-  get f() {
-    return this.modalForm.controls;
+  private initializeDynamicFields() {
+    if (this.title() === "Tax Type") {
+      this.modalForm.addControl('tax_rate', this.fb.control(this.data?.item?.formData?.tax_rate ?? null, [Validators.required]));
+    }
+
+    if (this.data?.item?.formData) {
+      this.modalForm.patchValue(this.data.item.formData);
+    }
   }
 
   save() {
     this.modalForm.markAllAsTouched();
-    if (this.modalForm.invalid) {
-      return;
-    }
+    if (this.modalForm.invalid) return;
 
-    let formData = this.modalForm.value;
+    const payload = this.modalForm.value;
 
-    this.masterService.addUnitMaster(this.endPoint, formData).subscribe(
-      {
-        next: (res: any) => {
-          this.toastr.success(res.message, 'Success', {
-            closeButton: true,
-          });
-          this.closeDialog(res);
-        },
-        error: (err) => {
-          this.toastr.error(err.message, 'Error', {
-            closeButton: true,
-          });
-        },
-      }
-    );
+    this.masterService.addUnitMaster(this.endPoint(), payload).subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.message, 'Success', { closeButton: true });
+        this.closeDialog(res);
+      },
+      error: (err) => {
+        this.toastr.error(err.message, 'Error', { closeButton: true });
+      },
+    });
   }
 
-  isRequiredInvalid(fieldName: string): boolean {
-    const field = this.modalForm.get(fieldName);
-    return !!(
-      field &&
-      field.invalid &&
-      (field.dirty || field.touched) &&
-      field.errors?.['required']
-    );
-  }
-
-  public closeDialog(data?: any) {
+  public closeDialog(res?: any) {
     this.dialogRef.removePanelClass('slide-left');
     this.dialogRef.addPanelClass('slide-left-close');
 
     setTimeout(() => {
-      if (data) {
+      if (res) {
         this.dialogRef.close({
-          id: data.post_data_id,
+          id: res.post_data_id,
           name: this.modalForm.value.name,
         });
-      }
-      else {
+      } else {
         this.dialogRef.close();
       }
     }, 400);
   }
 }
-
-

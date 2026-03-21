@@ -2,7 +2,7 @@
   <table class="table">
     <thead>
       <tr>
-        @for (item of tableHeaders(); track $index) {
+        @for (item of tableHeaders(); track item.property) {
         <th [style.width]="item.property === 'sn' ? '100px' : null" [class.text-end]="item.align === 'right'">
           @if (item.sort) {
           <a class="sort-by" (click)="onSort(item)">{{ item.name }}</a>
@@ -20,9 +20,9 @@
 
     @if (tableData().length > 0) {
     <tbody>
-      @for (data of tableData(); track data; let rowIndex = $index) {
+      @for (data of tableData(); track data.id; let rowIndex = $index) {
       <tr>
-        @for (header of tableHeaders(); track header; let colIndex = $index) {
+        @for (header of tableHeaders(); track header.property; let colIndex = $index) {
         <td [class.text-end]="header.align === 'right'">
 
           @if (header.property === 'sn') {

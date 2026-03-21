@@ -36,14 +36,14 @@
                     </div>
 
                     <div class="quickadd-container">
-                        @for (quickItem of quickAddItems; track $index) {
+                        @for (quickItem of quickAddItems; track quickItem.name) {
                         <div class="quickadd-content">
                             <div [style.color]="quickItem.color" class="content-title">
                                 <img [src]="'../../../svg/quickadd/' + quickItem.icon + '.svg'" alt="">
                                 {{quickItem.name | uppercase}}
                             </div>
 
-                            @for (subQuickItem of quickItem.items; track $index) {
+                            @for (subQuickItem of quickItem.items; track subQuickItem.name) {
                             <div (click)="openQuickAdd(subQuickItem)" class="content-item">
                                 <img src="../../../svg/quickadd/plus.svg" alt="">
                                 <span>
@@ -57,13 +57,13 @@
                 </div>
             </app-menu>
 
-            @for(group of sidebarData; track $index) {
+            @for(group of sidebarData; track group.title) {
             <div class="link-group">
                 <div class="group-title">
                     {{group.title}}
                 </div>
 
-                @for(item of group.items; track $index) {
+                @for(item of group.items; track item.label) {
 
                 @if (item.children && hasChildPermission(item.children)) {
                 <a href="javascript:void(0)" (click)="toggleSubMenu(item)" class="link-item">
@@ -91,11 +91,13 @@
                     {{activeSubMenu().label | uppercase }}
                 </div>
 
-                @for(item of activeSubMenu().children; track $index) {
+                @for(item of activeSubMenu().children; track item.label) {
                 @if (hasPermission(item.permission)) {
                 <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
-                    <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    @if (item.icon) {
+                        <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    }
                     <span>{{ item.label }}</span>
                 </a>
                 }
