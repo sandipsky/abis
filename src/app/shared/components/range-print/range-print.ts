@@ -80,9 +80,6 @@ export class RangePrintComponent {
     "Payment",
     "Debit Note",
     "Credit Note",
-    "Material Issue",
-    "Material Issue Return",
-    "Finish Good"
   ];
 
   partyTypes = ["Customer", "Vendor"];

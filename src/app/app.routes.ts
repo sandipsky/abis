@@ -19,6 +19,10 @@ export const routes: Routes = [
                 path: 'dashboard',
                 loadComponent: () => import('./modules/dashboard/dashboard').then(m => m.Dashboard),
             },
+            {
+                path: 'products',
+                loadComponent: () => import('./modules/products/products').then(m => m.Products),
+            },
            ...masterRoutes
         ]
     },
