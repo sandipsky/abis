@@ -90,6 +90,11 @@
               "buildTarget": "abis:build:development"
             }
           },
+          "options": {
+            "allowedHosts": [
+              "front1.abisplus.local"
+            ]
+          },
           "defaultConfiguration": "development"
         }
       }

@@ -1,76 +1,67 @@
+import { Component, computed, inject, input, output, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-// import { SortEvent } from '../sortable-directive/sortable-header.directive';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Subscription } from 'rxjs';
-import { Menu } from '../menu/menu';
 import { FormsModule } from '@angular/forms';
-// import { DateService } from 'src/app/services/date.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { Menu } from '../menu/menu';
+import { SortEvent } from '../../models/sort.model';
+import { ConfigurationService } from '../../services/configuration.service';
+import { DateService } from '../../services/date.service';
+import { AmountPipe } from "../../pipes/amount-pipe";
 
 @Component({
   selector: 'app-table',
-  imports: [CommonModule,
-    FormsModule,
-    Menu, MatTooltipModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, Menu, MatTooltipModule, AmountPipe],
   templateUrl: './table.html',
-  standalone: true
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Table {
-  @Input() tableHeaders: any[] = [];
-  @Input() tableData: any[] = [];
-  @Input() filterData: any = {
-    pageIndex: 0,
-    pageSize: 25
-  };
-  @Input() actions: string[] = [];
-  @Input() actionMode: string = 'inline';
-  @Input() hasEditPermission: boolean = true;
-  @Input() hasChangePermission: boolean = true;
-  @Input() hasCopyPermission: boolean = true;
-  @Input() hasDeletePermission: boolean = true;
-  @Input() hasDeactivatePermission = true;
-  @Input() hasReactivatePermission = true;
-  @Input() hasHistoryPermission = true;
-  @Input() hasAddUserPermission = true;
-  @Input() hasCancelPermission = true;
-  @Input() hasPurchasePermission = true;
-  @Input() hasSalesPermission = true;
-  @Input() hasHoldPermission = true;
-  @Input() hasPendingPermission = true;
-  // @Output() sortChange = new EventEmitter<SortEvent>();
-  @Output() onEdit = new EventEmitter<any>();
-  @Output() onChange = new EventEmitter<any>();
-  @Output() onCopy = new EventEmitter<any>();
-  @Output() onStatusChange = new EventEmitter<any>();
-  @Output() onView = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
-  @Output() onViewHistory = new EventEmitter<any>();
-  @Output() onAddUser = new EventEmitter<any>();
-  @Output() onCancel = new EventEmitter<any>();
-  @Output() onPurchase = new EventEmitter<any>();
-  @Output() onSales = new EventEmitter<any>();
-  @Output() onHold = new EventEmitter<any>();
-  @Output() onPending = new EventEmitter<any>();
+  // Services
+  private configService = inject(ConfigurationService);
+  private dateService = inject(DateService);
 
-  dateType: 'AD' | 'BS' = 'BS';
-  configSubscription!: Subscription;
-  companyDetails: any;
+  // Inputs as Signals
+  tableHeaders = input<any[]>([]);
+  tableData = input<any[]>([]);
+  filterData = input<any>({ pageIndex: 0, pageSize: 25 });
+  actions = input<string[]>([]);
 
-  // constructor(private configService: ConfigServiceService, public dateService: DateService) { }
+  // Permissions as Signals (with default values)
+  hasEditPermission = input(true);
+  hasChangePermission = input(true);
+  hasDeletePermission = input(true);
+  hasCancelPermission = input(true);
+  hasPurchasePermission = input(true);
+  hasSalesPermission = input(true);
+  hasHoldPermission = input(true);
+  hasPendingPermission = input(true);
 
-  ngOnInit() {
-    // this.configSubscription = this.configService.companyDetails$.subscribe((c) => {
-    //   this.dateType = c?.calendar_format;
-    //   this.companyDetails = c;
-    // });
-  }
+  // Outputs
+  sortChange = output<SortEvent>();
+  onEdit = output<any>();
+  onChange = output<any>();
+  onCopy = output<any>();
+  onStatusChange = output<any>();
+  onView = output<any>();
+  onDelete = output<any>();
+  onViewHistory = output<any>();
+  onAddUser = output<any>();
+  onCancel = output<any>();
+  onPurchase = output<any>();
+  onSales = output<any>();
+  onHold = output<any>();
+  onPending = output<any>();
+
+  // Derived State / Reactive Config
+  // Converts the Observable configuration to a Signal automatically
+  private configData = toSignal(this.configService.configuration$);
+  
+  // Computed property that updates whenever the config signal changes
+  dateType = computed(() => this.configData()?.dateType ?? 'BS');
 
   onSort(event: any) {
-    // this.sortChange.emit(event);
+    this.sortChange.emit(event);
   }
-
-  ngOnDestory() {
-    this.configSubscription.unsubscribe();
-  }
-
 }

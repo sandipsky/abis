@@ -18,17 +18,15 @@ export class Filter {
   searchBy = input<string>('');
   fromDate = input<string>('');
   toDate = input<string>('');
-  showFromDate = input<boolean>(true);
-  showToDate = input<boolean>(true);
+  showFromDate = input<boolean>(false);
+  showToDate = input<boolean>(false);
 
   onFilterChange = output<any[]>();
   onFromDateChange = output<any>();
   onToDateChange = output<any>();
 
-  // --- View Queries (Signal-based) ---
   filterDropdown = viewChild<Menu>('filterDropdown');
 
-  // --- Internal State (Signals) ---
   filterList = signal<any[]>([]);
   searchText = signal<string>('');
   searchTerm = signal<string>('');

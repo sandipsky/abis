@@ -2,119 +2,107 @@
   <table class="table">
     <thead>
       <tr>
-        @for (item of tableHeaders; track $index) {
-          <th [style.width]="item.property === 'sn' ? '100px' : null" [class.text-end]="item.align === 'right'">
-            @if (item.sort) {
-              <a class="sort-by">{{ item.name }}</a>
-            } @else {
-              {{ item.name }}
-            }
-          </th>
+        @for (item of tableHeaders(); track $index) {
+        <th [style.width]="item.property === 'sn' ? '100px' : null" [class.text-end]="item.align === 'right'">
+          @if (item.sort) {
+          <a class="sort-by" (click)="onSort(item)">{{ item.name }}</a>
+          } @else {
+          {{ item.name }}
+          }
+        </th>
         }
-        
-        @if (actions.length > 0) {
-          <th style="width: 100px;" class="text-center print-hidden">Action</th>
+
+        @if (actions().length > 0) {
+        <th style="width: 100px;" class="text-center print-hidden">Action</th>
         }
       </tr>
     </thead>
 
-    @if (tableData.length > 0) {
-      <tbody>
-        @for (data of tableData; track data; let rowIndex = $index) {
-          <tr>
-            @for (header of tableHeaders; track header; let colIndex = $index) {
-              <td [class.text-end]="header.align === 'right'">
-                
-                @if (header.property === 'sn') {
-                  {{ rowIndex + filterData.pageIndex * filterData.pageSize + 1 }}
-                }
+    @if (tableData().length > 0) {
+    <tbody>
+      @for (data of tableData(); track data; let rowIndex = $index) {
+      <tr>
+        @for (header of tableHeaders(); track header; let colIndex = $index) {
+        <td [class.text-end]="header.align === 'right'">
 
-                @else if (header.status) {
-                    <span class="status" [class.success]="data[header.property]" [class.error]="!data[header.property]">
-                      {{ data[header.property] ? 'Active' : 'Inactive' }}
-                    </span>
-                }
+          @if (header.property === 'sn') {
+          {{ rowIndex + filterData().pageIndex * filterData().pageSize + 1 }}
+          }
 
-                @else if (header.special_status) {
-                  @if (data[header.property]) {
-                    <span class="status" [ngClass]="{
+          @else if (header.status) {
+          <span class="status" [class.success]="data[header.property]" [class.error]="!data[header.property]">
+            {{ data[header.property] ? 'Active' : 'Inactive' }}
+          </span>
+          }
+
+          @else if (header.special_status) {
+          <span class="status" [ngClass]="{
                       'success': ['Active', 'Purchased', 'Issued'].includes(data[header.property]),
                       'error': ['Inactive', 'Cancelled'].includes(data[header.property]),
                       'warn': data[header.property] === 'Pending',
                       'primary': ['Frozen', 'Hold'].includes(data[header.property]),
                       'disabled': data[header.property] === 'Vacant'
                     }">
-                      <div class="circle"></div>
-                      {{ data[header.property] }}
-                    </span>
-                  } @else { N/A }
-                }
+            <div class="circle"></div>
+            {{ data[header.property] }}
+          </span>
+          }
 
-                @else if (header.date) {
-                  <span>{{ data[header.property] || '-' }}</span>
-                }
+          @else if (header.date) {
+          <span>{{ data[header.property] || '-' }}</span>
+          }
 
-                @else {
-                  {{ data[header.property] || 'N/A' }}
-                }
-              </td>
-            }
+          @else if (header.amount) {
+          <span>{{ data[header.property] | amount }}</span>
+          }
 
-            <td class="print-hidden actions">
-              <app-menu [mode]="'right'">
-                <div dropdown-display>
-                  ...
-                </div>
-
-                <div *ngIf="actions.includes('view')" (click)="onView.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/eye.svg" alt="" /> View Details
-                </div>
-
-                <div *ngIf="actions.includes('edit') && hasEditPermission" (click)="onEdit.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/edit.svg" alt="" /> Edit Details
-                </div>
-
-                <div *ngIf="actions.includes('delete') && hasDeletePermission" (click)="onDelete.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/trash.svg" alt="" /> Delete
-                </div>
-
-                <div *ngIf="actions.includes('copy') && hasEditPermission" (click)="onCopy.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/document.svg" alt="" /> Copy
-                </div>
-
-                <div *ngIf="actions.includes('cancel') && hasCancelPermission" (click)="onCancel.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/cancel.svg" alt="" /> Cancel
-                </div>
-
-                <div *ngIf="actions.includes('purchase') && hasPurchasePermission" (click)="onPurchase.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/purchase.svg" alt="" /> Purchase
-                </div>
-
-                <div *ngIf="actions.includes('sales') && hasSalesPermission" (click)="onSales.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/purchase.svg" alt="" /> Sales
-                </div>
-
-                <div *ngIf="actions.includes('hold') && hasCancelPermission" (click)="onHold.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/hold.svg" alt="" /> Hold
-                </div>
-
-                <div *ngIf="actions.includes('pending') && hasCancelPermission" (click)="onPending.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/pending.svg" alt="" /> Pending
-                </div>
-              </app-menu>
-            </td>
-          </tr>
+          @else {
+          {{ data[header.property]}}
+          }
+        </td>
         }
-      </tbody>
+
+        <td class="print-hidden actions">
+          <app-menu [mode]="'right'">
+
+            <div dropdown-display>
+              ...
+            </div>
+
+            <div dropdown-content>
+              @if (actions().includes('view')) {
+              <div (click)="onView.emit(data)" class="dropdown-item" dropdown-item>
+                <img src="../../../svg/eye.svg" alt="" /> View Details
+              </div>
+              }
+
+              @if (actions().includes('edit') && hasEditPermission()) {
+              <div (click)="onEdit.emit(data)" class="dropdown-item" dropdown-item>
+                <img src="../../../svg/edit.svg" alt="" /> Edit Details
+              </div>
+              }
+
+              @if (actions().includes('delete') && hasDeletePermission()) {
+              <div (click)="onDelete.emit(data)" class="dropdown-item" dropdown-item>
+                <img src="../../../svg/trash.svg" alt="" /> Delete
+              </div>
+              }
+            </div>
+
+          </app-menu>
+        </td>
+      </tr>
+      }
+    </tbody>
     } @else {
-      <tbody>
-        <tr>
-          <td class="no-data" [attr.colspan]="tableHeaders.length + 1">
-            <h3>No Data</h3>
-            <p>No Records Found...</p>
-          </td>
-        </tr>
-      </tbody>
+    <tbody>
+      <tr>
+        <td class="no-data" [attr.colspan]="tableHeaders().length + 1">
+          <h3>No Data</h3>
+          <p>No Records Found...</p>
+        </td>
+      </tr>
+    </tbody>
     }
   </table>
 </div>

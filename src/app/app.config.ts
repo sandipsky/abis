@@ -3,11 +3,16 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideToastr()
+    provideToastr(),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    )
   ]
 };

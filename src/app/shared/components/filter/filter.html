@@ -38,14 +38,6 @@
                         [items]="filter.data" [placeholder]="'Select'">
                     </ng-select>
                     }
-
-                    @if (filter.type === 'search-select') {
-                    <ng-select (input)="getUsers($event)" [loading]="isSearching()"
-                        [notFoundText]="searchTerm() === '' ? 'Please Type to Search' : 'Not Found'" [appendTo]="'body'"
-                        bindLabel="name" bindValue="id" [(ngModel)]="filter.value" [items]="userList()"
-                        [placeholder]="'Select'">
-                    </ng-select>
-                    }
                 </div>
                 }
             </div>
@@ -57,11 +49,13 @@
         </div>
     </app-menu>
 
-    <div class="filter-btn date">
-        <span [class.active]="dateType() === 'AD'" (click)="dateType.set('AD')" class="datelabel">AD</span>
-        <span class="sep">|</span>
-        <span [class.active]="dateType() === 'BS'" (click)="dateType.set('BS')" class="datelabel">BS</span>
-    </div>
+    @if (showFromDate() || showToDate()) {
+        <div class="filter-btn date">
+            <span [class.active]="dateType() === 'AD'" (click)="dateType.set('AD')" class="datelabel">AD</span>
+            <span class="sep">|</span>
+            <span [class.active]="dateType() === 'BS'" (click)="dateType.set('BS')" class="datelabel">BS</span>
+        </div>
+    }
 
     @if (showFromDate()) {
     <div style="width: 130px;" class="d-flex align-items-center gap-md">
