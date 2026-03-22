@@ -5,19 +5,22 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
+import { SpinnerService } from '../../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-add-master-modal',
   templateUrl: './add-master-modal.html',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule],
-  changeDetection: ChangeDetectionStrategy.OnPush 
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MastersInlineModalComponent {
-  private readonly fb = inject(FormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<MastersInlineModalComponent>);
-  private readonly masterService = inject(MasterService);
-  private readonly toastr = inject(ToastrService);
+  private readonly _fb = inject(FormBuilder);
+  private readonly _dialogRef = inject(MatDialogRef<MastersInlineModalComponent>);
+  private readonly _masterService = inject(MasterService);
+  private readonly _toastr = inject(ToastrService);
+  private readonly _spinnerService = inject(SpinnerService);
+
   public readonly data = inject(MAT_DIALOG_DATA);
 
   readonly title = signal<string>(this.data?.item?.title ?? '');
@@ -28,7 +31,7 @@ export class MastersInlineModalComponent {
   modalForm: FormGroup;
 
   constructor() {
-    this.modalForm = this.fb.nonNullable.group({
+    this.modalForm = this._fb.nonNullable.group({
       id: [],
       name: [, Validators.required],
       status: [true, Validators.required],
@@ -38,7 +41,7 @@ export class MastersInlineModalComponent {
 
   private initializeDynamicFields() {
     if (this.title() === "Tax Type") {
-      this.modalForm.addControl('tax_rate', this.fb.control(this.data?.item?.formData?.tax_rate ?? null, [Validators.required]));
+      this.modalForm.addControl('tax_rate', this._fb.control(this.data?.item?.formData?.tax_rate ?? null, [Validators.required]));
     }
 
     if (this.data?.item?.formData) {
@@ -52,29 +55,32 @@ export class MastersInlineModalComponent {
 
     const payload = this.modalForm.value;
 
-    this.masterService.addUnitMaster(this.endPoint(), payload).subscribe({
+    this._spinnerService.setSpinner(true);
+    this._masterService.addUnitMaster(this.endPoint(), payload).subscribe({
       next: (res: any) => {
-        this.toastr.success(res.message, 'Success', { closeButton: true });
+        this._toastr.success(res.message, 'Success', { closeButton: true });
         this.closeDialog(res);
+        this._spinnerService.setSpinner(false);
       },
       error: (err) => {
-        this.toastr.error(err.message, 'Error', { closeButton: true });
+        this._toastr.error(err.message, 'Error', { closeButton: true });
+        this._spinnerService.setSpinner(false);
       },
     });
   }
 
   public closeDialog(res?: any) {
-    this.dialogRef.removePanelClass('slide-left');
-    this.dialogRef.addPanelClass('slide-left-close');
+    this._dialogRef.removePanelClass('slide-left');
+    this._dialogRef.addPanelClass('slide-left-close');
 
     setTimeout(() => {
       if (res) {
-        this.dialogRef.close({
-          id: res.post_data_id,
+        this._dialogRef.close({
+          id: res.postdata_id,
           name: this.modalForm.value.name,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

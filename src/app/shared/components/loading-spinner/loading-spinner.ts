@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-loading-spinner',
@@ -7,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './loading-spinner.scss',
 })
 export class LoadingSpinner {
-
+  private _spinnerService = inject(SpinnerService);
+  showSpinner = toSignal(this._spinnerService.showSpinner$);
 }

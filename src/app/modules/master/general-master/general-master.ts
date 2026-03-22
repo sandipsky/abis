@@ -11,6 +11,7 @@ import { DeleteModalComponent } from '../../../shared/components/delete-modal/de
 import { ExcelService } from '../../../shared/services/excel.service';
 import { MasterItem } from '../master.model';
 import { input } from '@angular/core';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-general-master',
@@ -20,14 +21,13 @@ import { input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneralMaster implements OnInit {
-  // Services using inject()
-  private masterService = inject(MasterService);
-  private toastr = inject(ToastrService);
-  private authService = inject(AuthService);
-  private dialog = inject(MatDialog);
-  private excelService = inject(ExcelService);
+  private _masterService = inject(MasterService);
+  private _toastr = inject(ToastrService);
+  private _authService = inject(AuthService);
+  private _dialog = inject(MatDialog);
+  private _spinnerService = inject(SpinnerService);
+  private _excelService = inject(ExcelService);
 
-  // Signal Inputs
   endPoint = input.required<string>();
   masterName = input.required<string>();
   createMasterPermissionName = input<string>('');
@@ -36,9 +36,7 @@ export class GeneralMaster implements OnInit {
   exportMasterPermissionName = input<string>('');
   printMasterPermissionName = input<string>('');
 
-  // State Signals
   masterList = signal<any[]>([]);
-  isLoading = signal<boolean>(false);
   totalElements = signal<number>(0);
   filterList = signal<any[]>([]);
   operationList = signal<string[]>([]);
@@ -75,7 +73,7 @@ export class GeneralMaster implements OnInit {
   ]);
 
   ngOnInit(): void {
-    this.operationList.set(this.authService.userPermissionList());
+    this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();
   }
 
@@ -104,34 +102,32 @@ export class GeneralMaster implements OnInit {
   }
 
   getMasterList(isExport?: boolean): void {
-    const currentForm = this.filterForm();
-
     let filter = {
       filter: this.filterList() || [],
       pagination: {
-        pageIndex: isExport ? 0 : currentForm.pageIndex,
-        pageSize: isExport ? (this.totalElements() || 999999) : currentForm.pageSize,
+        pageIndex: isExport ? 0 : this.filterForm().pageIndex,
+        pageSize: isExport ? (this.totalElements() || 999999) : this.filterForm().pageSize,
       },
       sortDTO: [{
-        field: currentForm.sortBy,
-        orderType: currentForm.sortDirection,
+        field: this.filterForm().sortBy,
+        orderType: this.filterForm().sortDirection,
       }],
     };
 
-    this.isLoading.set(true);
-    this.masterService.getMasterList(filter, this.endPoint()).subscribe({
+    this._spinnerService.setSpinner(true);
+    this._masterService.getMasterList(filter, this.endPoint()).subscribe({
       next: (res: any) => {
         if (isExport) {
           this.exportExcel(res?.content);
         } else {
           this.masterList.set(res?.content || []);
           this.totalElements.set(res?.totalElements || 0);
+          this._spinnerService.setSpinner(false);
         }
-        this.isLoading.set(false);
       },
       error: (err) => {
-        this.toastr.error(err);
-        this.isLoading.set(false);
+        this._toastr.error(err);
+        this._spinnerService.setSpinner(false);
       },
     });
   }
@@ -143,7 +139,7 @@ export class GeneralMaster implements OnInit {
       formData: master || {},
     };
 
-    const dialogRef = this.dialog.open(MastersInlineModalComponent, {
+    const dialogRef = this._dialog.open(MastersInlineModalComponent, {
       data: { item },
       panelClass: ['slide-left', 'drawer-right'],
       enterAnimationDuration: '0ms',
@@ -166,7 +162,7 @@ export class GeneralMaster implements OnInit {
   }
 
   openDelete(master?: MasterItem): void {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
+    const dialogRef = this._dialog.open(DeleteModalComponent, {
       panelClass: 'slide-up',
       disableClose: true,
       enterAnimationDuration: '0ms',
