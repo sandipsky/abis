@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  isAuthenticated(): boolean {
+  isAuthenticated() {
     return true;
   }
 

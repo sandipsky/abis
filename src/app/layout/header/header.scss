@@ -4,6 +4,8 @@
     align-items: center;
     gap: 16px;
     align-self: stretch;
+    row-gap: 12px;
+    flex-wrap: wrap;
 
     img {
         cursor: pointer;

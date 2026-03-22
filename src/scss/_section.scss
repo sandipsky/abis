@@ -23,10 +23,14 @@
         align-items: flex-start;
         padding: 12px;
         border-bottom: 1px solid var(--separator-color);
+        row-gap: 12px;
+        flex-wrap: wrap;
 
         .section-header-btn-group {
             display: flex;
             gap: 8px;
+            row-gap: 12px;
+            flex-wrap: wrap;
         }
     }
 

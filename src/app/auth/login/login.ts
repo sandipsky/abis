@@ -2,12 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-// import { ToastrService } from 'ngx-toastr';
 import packageJson from '../../../../package.json'
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-// import { ConfigServiceService } from '../configuration/config-service/config-service.service';
-
 
 @Component({
   selector: 'app-login',
@@ -18,7 +15,6 @@ import { CommonModule } from '@angular/common';
 export class Login {
   loginForm: FormGroup;
   isLoading: boolean = false;
-  companyName: string = '';
   fiscalYearList: any[] = [];
   fiscalYearId: number | null = null;
 
@@ -29,7 +25,6 @@ export class Login {
     public authService: AuthService,
     public router: Router,
     private toastr: ToastrService,
-    // private configurationService: ConfigServiceService
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -38,9 +33,6 @@ export class Login {
   }
 
   ngOnInit() {
-    // this.configurationService.getCompanyName().subscribe((res: string) => {
-    //   this.companyName = res;
-    // });
     this.getFiscalYearDropdown();
   }
 
@@ -99,27 +91,10 @@ export class Login {
       .subscribe({
         next: (res: any) => {
           localStorage.setItem('fiscalYear', this.fiscalYearList.find(item => item.id == this.fiscalYearId).name);
-          localStorage.setItem('firstDate', this.fiscalYearList.find(item => item.id == this.fiscalYearId).fiscal_year_first_day_nepali_date || '');
-          localStorage.setItem('lastDate', this.fiscalYearList.find(item => item.id == this.fiscalYearId).fiscal_year_last_day_nepali_date || '');
-          localStorage.setItem('isCurrent', this.fiscalYearList.find(item => item.id == this.fiscalYearId)?.is_current == true ? 'Yes' : 'No');
+          
           this.isLoading = false;
-          this.loginForm.reset();
           this.toastr.success("Logged In Successfully.", "Success");
-
-          if (res?.user_information?.first_password_reset == true) {
-            this.router.navigate(['reset-password'], {
-              queryParams: {
-                id: res?.user_information?.id
-              }
-            });
-            localStorage.removeItem("id_token");
-            localStorage.removeItem("userInfo");
-            localStorage.removeItem("fiscalYear");
-            localStorage.removeItem("isCurrent");
-          }
-          else {
-            this.router.navigate(['dashboard']);
-          }
+          this.router.navigate(['dashboard']);
         },
         error: (err: any) => {
           this.isLoading = false;

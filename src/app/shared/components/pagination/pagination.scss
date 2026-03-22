@@ -1,10 +1,11 @@
 .paginator {
     display: flex;
-    height: 32px;
     padding: 0 12px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
+    row-gap: 12px;
+    flex-wrap: wrap;
 }
 
 .paginator-dropdown-btn {
@@ -86,6 +87,8 @@
 .arrow-buttons {
     display: flex;
     gap: 6px;
+    row-gap: 12px;
+    flex-wrap: wrap;
 }
 
 span {
