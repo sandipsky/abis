@@ -1,53 +1,49 @@
 <div class="login-page">
   <div class="image-container">
-    <img src="../../assets/img/login.png" alt="" />
-        <h1 style="color: white;" class="version subheading-text">Version {{currentApplicationVersion}}</h1>
+    <img src="../../assets/img/login.png" alt="Login Banner" />
+    <h1 class="version subheading-text" style="color: white;">Version {{currentApplicationVersion}}</h1>
   </div>
 
   <div class="login-container">
-
-
     <div class="form-container">
-
       <div class="logo-container">
-        <img src="../../assets/img/logo.png" alt="" />
-
+        <img src="../../assets/img/logo.png" alt="Logo" />
       </div>
 
       <h1 class="heading-text">Welcome to ABIS</h1>
-
-      <h3 class="subheading-text">
-        Sign in to manage your accounting, billing, and inventory operations seamlessly.
-      </h3>
+      <h3 class="subheading-text">Sign in to manage your accounting, billing, and inventory operations.</h3>
 
       <br />
 
       <form [formGroup]="loginForm" class="login-form row g-2">
-        <!-- <div class="col-md-12">
+        <div class="col-md-12">
           <div class="form-group">
-            <label for="">Fiscal Year</label>
+            <label>Fiscal Year</label>
             <div class="input-wrapper">
-              <img class="left-icon" src="../../assets/svg/calendar.svg" alt="Password" />
-              <select class="form-control" [(ngModel)]="fiscalYearId" [ngModelOptions]="{ standalone: true }">
+              <img class="left-icon" src="../../svg/calendar.svg" alt="Calendar" />
+              <select class="form-control" 
+                      [ngModel]="fiscalYearId()" 
+                      (ngModelChange)="fiscalYearId.set($event)"
+                      [ngModelOptions]="{ standalone: true }">
                 <option disabled selected hidden [ngValue]="null">Select Fiscal Year</option>
-                <option *ngFor="let year of fiscalYearList" [ngValue]="year?.id">{{year?.name}}</option>
+                <option *ngFor="let year of fiscalYearList()" [ngValue]="year?.id">{{year?.name}}</option>
               </select>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <div class="col-md-12">
           <div class="form-group">
             <label>Username</label>
             <div class="input-wrapper">
-              <img class="left-icon" src="../../svg/user.svg" alt="" />
-              <input [class.error]="isRequiredInvalid('username')" type="email" formControlName="username"
-                class="form-control" placeholder="Enter Email" />
+              <img class="left-icon" src="../../svg/user.svg" alt="User" />
+              <input [class.error]="isRequiredInvalid('username')" 
+                     type="email" 
+                     formControlName="username"
+                     class="form-control" 
+                     placeholder="Enter Email" />
             </div>
-
-            <div *ngIf="isRequiredInvalid('username')" class="alert error">
-              This field is required.
-            </div>
+            <div *ngIf="isRequiredInvalid('username')" class="alert error">This field is required.</div>
           </div>
         </div>
 
@@ -55,33 +51,32 @@
           <div class="form-group">
             <label>Password</label>
             <div class="input-wrapper">
-              <img class="left-icon" src="../../svg/lock.svg" alt="" />
-              <input [class.error]="isRequiredInvalid('password')" type="password"
-                [type]="hide == true ? 'password' : 'text'" class="form-control" placeholder="Enter Password"
-                formControlName="password" />
-              @if (hide==true) {
-              <img (click)="hide = !hide" class="right-icon clickable" src="../../svg/eye-slash.svg" alt="" />
-              } @else {
-              <img (click)="hide = !hide" class="right-icon clickable" src="../../svg/eye-login.svg" alt="" />
-              }
+              <img class="left-icon" src="../../svg/lock.svg" alt="Lock" />
+              <input [class.error]="isRequiredInvalid('password')" 
+                     [type]="hidePassword() ? 'password' : 'text'" 
+                     class="form-control" 
+                     placeholder="Enter Password"
+                     formControlName="password" />
+              
+              <img (click)="togglePasswordVisibility()" 
+                   class="right-icon clickable" 
+                   [src]="hidePassword() ? '../../svg/eye-slash.svg' : '../../svg/eye-login.svg'" 
+                   alt="Toggle Visibility" />
             </div>
-
-            <div *ngIf="isRequiredInvalid('password')" class="alert error">
-              This field is required.
-            </div>
+            <div *ngIf="isRequiredInvalid('password')" class="alert error">This field is required.</div>
           </div>
         </div>
 
-        <br />
-
         <div style="margin: 32px 0" class="col-md-12">
-          <button [class.disabled]="isLoading == true" (click)="login()" style="padding: 12px 16px; width: 100%"
-            class="btn btn-primary">
-            Login
+          <button [disabled]="isLoading()" 
+                  [class.disabled]="isLoading()" 
+                  (click)="login()" 
+                  style="padding: 12px 16px; width: 100%"
+                  class="btn btn-primary">
+            {{ isLoading() ? 'Logging in...' : 'Login' }}
           </button>
         </div>
       </form>
-
     </div>
 
     <div class="footer-container">

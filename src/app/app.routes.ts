@@ -3,6 +3,7 @@ import { Layout } from './layout/layout';
 import { authGuard } from './auth/auth.guard';
 import { loginGuard } from './auth/login.guard';
 import { masterRoutes } from './modules/master/master.routes';
+import { settingsRoutes } from './modules/settings/settings.routes';
 
 export const routes: Routes = [
     {
@@ -23,7 +24,8 @@ export const routes: Routes = [
                 path: 'products',
                 loadComponent: () => import('./modules/products/products').then(m => m.Products),
             },
-           ...masterRoutes
+           ...masterRoutes,
+           ...settingsRoutes,
         ]
     },
     {

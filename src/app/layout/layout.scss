@@ -3,6 +3,7 @@
     height: 100vh;
 
     .main-container {
-        flex: 1;
+        // flex: 1;
+        width: calc(100vw - 240px);
     }
 }

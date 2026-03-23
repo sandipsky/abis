@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SpinnerService } from '../../services/spinner.service';
 
@@ -7,6 +7,7 @@ import { SpinnerService } from '../../services/spinner.service';
   imports: [],
   templateUrl: './loading-spinner.html',
   styleUrl: './loading-spinner.scss',
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class LoadingSpinner {
   private _spinnerService = inject(SpinnerService);

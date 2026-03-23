@@ -27,7 +27,7 @@ body {
 }
 
 .cdk-global-scrollblock {
-  overflow-y:  auto !important;
+  overflow-y: auto !important;
 }
 
 //datepicker
@@ -106,4 +106,50 @@ ne-datepicker {
 
 .ng-select .ng-spinner-loader {
   display: none;
+}
+
+
+.print-only {
+  display: none;
+}
+
+@media print {
+
+  .sidenav,
+  .sidebar,
+  .header,
+  .section-header,
+  .filter-section,
+  .paginator,
+  .print-hidden,
+  .sort-by:before,
+  .sort-by:after {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+  }
+
+  .print-only {
+    display: block;
+  }
+
+  .main-content {
+    .outlet-content {
+      padding: 0 !important;
+    }
+  }
+
+  .section {
+    padding: 0 !important;
+    border: none;
+  }
+
+  .table-responsive {
+    overflow: visible !important;
+  }
+
+  .mat-drawer-container {
+    overflow: visible !important;
+    margin-left: -240px !important;
+  }
 }

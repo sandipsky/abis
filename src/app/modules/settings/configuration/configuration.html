@@ -1,0 +1,74 @@
+<div class="master-nav">
+  <div class="nav-item"
+       *ngFor="let group of setupItems(); let i = index"
+       [class.active]="selectedTabIndex() === i"
+       (click)="selectTab(i)">
+    {{ group.name }}
+  </div>
+</div>
+
+<div class="section main">
+
+  <div class="section-header">
+    <div class="d-flex align-items-center gap-md">
+      <h1 class="section-title">{{ selectedGroup()?.name }}</h1>
+      <button class="btn btn-outlined no-hover small">
+        {{ selectedGroup()?.items?.length }}
+      </button>
+    </div>
+
+    <div class="section-header-btn-group">
+      <button *ngIf="operationList.includes('EditConfig')"
+              (click)="onEdit()"
+              class="btn btn-primary">
+        Edit Details
+      </button>
+    </div>
+  </div>
+
+  <div class="section-content">
+    <div class="config-container">
+
+      @for (item of selectedGroup()?.items; track $index) {
+
+        <div class="config-item">
+
+          <div class="config-item-title-group">
+            <h1 class="config-title">{{ item.name }}</h1>
+            <h3 class="config-sub-title">{{ item.description }}</h3>
+          </div>
+
+          @if (item.type == 'image') {
+            <div class="img-container">
+              @if (selectedImg) {
+                <img [src]="selectedImg?.url" alt="">
+              }
+            </div>
+          }
+
+          @if (item.type == 'input') {
+            <div class="btn btn-outlined no-hover">
+              {{ item.value || 'N/A' }}
+            </div>
+          }
+
+          @if (item.type == 'dropdown' || item.type == 'radio') {
+            <div class="btn btn-outlined no-hover">
+              {{ item.displayValue || 'N/A' }}
+            </div>
+          }
+
+          @if (item.type == 'toggle') {
+            <div class="btn btn-outlined no-hover">
+              {{ item.displayValue || 'N/A' }}
+            </div>
+          }
+
+        </div>
+
+      }
+
+    </div>
+  </div>
+
+</div>
