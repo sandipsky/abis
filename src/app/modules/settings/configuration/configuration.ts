@@ -6,14 +6,16 @@ import { ConfigurationService } from '../../../shared/services/configuration.ser
 import { AuthService } from '../../../auth/auth.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
 import { CommonModule } from '@angular/common';
-import { AddConfiguration } from './add-configuration/add-configuration';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.html',
   styleUrls: ['./configuration.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Configuration {
@@ -88,10 +90,11 @@ export class Configuration {
 
   public operationList: any = [];
 
-  selectedTabIndex = signal<number>(0);
-  selectedImg: any;
+  editMode = signal<boolean>(false);
 
-  // ✅ computed for cleaner template
+  selectedTabIndex = signal<number>(0);
+  selectedImg = signal<{ file: File | null, url: string, name: string } | null>(null);
+
   selectedGroup = computed(() => {
     return this.setupItems()[this.selectedTabIndex()] || null;
   });
@@ -103,7 +106,7 @@ export class Configuration {
     public dialog: MatDialog,
     @Optional() private dialogRef: MatDialogRef<any>,
     public spinnerService: SpinnerService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getAllConfigList();
@@ -156,7 +159,17 @@ export class Configuration {
 
           const imgName = res?.find((item: any) => item?.name == 'logo')?.value;
           if (imgName) {
-            this.selectedImg = this.configurationService.getCompanyImage(imgName);
+            fetch(`${environment.apiUrl}/master/${imgName}`, {
+              headers: { Authorization: `Bearer ${this.authService.getToken()}` }
+            })
+              .then(resp => resp.blob())
+              .then(blob => {
+                this.selectedImg.set({
+                  file: null,
+                  url: URL.createObjectURL(blob),
+                  name: imgName,
+                });
+              });
           }
         },
 
@@ -166,33 +179,104 @@ export class Configuration {
       });
   }
 
-  // ❌ NOT CHANGED (as requested)
-  onEdit() {
-    this.dialogRef = this.dialog.open(AddConfiguration, {
-      panelClass: ['drawer-right', 'slide-left'],
-      enterAnimationDuration: '0ms',
-      exitAnimationDuration: '0ms',
-      disableClose: true,
-      data: this.setupItems()[this.selectedTabIndex()]?.items
-    });
+  onSelectImage(event: any): void {
+    if (!event.target.files) {
+      this.selectedImg.set(null);
+      return;
+    }
 
-    this.dialogRef.backdropClick().subscribe(() => {
-      this.closeDialog();
-    });
+    let file = event.target.files[0];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
-    this.dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getAllConfigList();
+    if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
+      this.toastr.error(
+        'Please upload only jpg, jpeg, png or pdf files',
+        'Error',
+        { closeButton: true }
+      );
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.toastr.error("File size exceeds 5MB limit", 'Error', { closeButton: true });
+      this.selectedImg.set(null);
+      return;
+    }
+
+    try {
+      if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+        this.selectedImg.set({
+          file: file,
+          url: URL.createObjectURL(file),
+          name: file.name,
+        });
       }
-    });
+      else {
+        this.selectedImg.set(null);
+      }
+    } catch (error) {
+      this.toastr.error("Failed to compress image", 'Error');
+    }
   }
 
-  closeDialog() {
-    this.dialogRef.removePanelClass('slide-left');
-    this.dialogRef.addPanelClass('slide-left-close');
+  saveImage() {
+    if (this.selectedImg == null) {
+      return
+    }
 
-    setTimeout(() => {
-      this.dialogRef.close();
-    }, 400);
+    let formData = new FormData();
+
+    if (this.selectedImg != null) {
+      formData.append('file', this.selectedImg()?.file as File);
+    }
+    this.configurationService.setCompanyImage(formData)
+      .subscribe(
+        {
+          next: (res: any) => {
+            if (res?.success == true) {
+              res?.messages?.forEach((message: any) => {
+                this.toastr.success(message.message, 'Success', {
+                  closeButton: true,
+                });
+              })
+            }
+            else {
+              res?.messages?.forEach((message: any) => {
+                this.toastr.error(message.message, 'Error', {
+                  closeButton: true,
+                });
+              });
+            }
+          },
+          error: (err) => {
+            err?.error?.messages?.forEach((message: any) => {
+              this.toastr.error(message.message, 'Error', {
+                closeButton: true,
+              });
+            });
+          },
+        }
+      )
+  }
+
+  saveConfiguration() {
+    this.configurationService.addConfiguration(this.selectedGroup().filter((it: any) => it.name != 'logo'))
+      .subscribe(
+        {
+          next: (res) => {
+            if (res.success == true) {
+              this.toastr.success(res?.messages[0]?.message);
+            }
+            else {
+              this.toastr.error(res?.messages[0]?.message);
+            }
+          },
+          error: (err) => {
+            this.toastr.error(err);
+          },
+        }
+      )
+
+    this.saveImage();
   }
 }

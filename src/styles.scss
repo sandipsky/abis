@@ -139,13 +139,20 @@ ne-datepicker {
     }
   }
 
-  .section {
+  .section, .section-content {
     padding: 0 !important;
+    margin: 0 !important;
     border: none;
+  }
+
+  td, th {
+    padding: 4px !important;
+    font-size: 12px !important;
   }
 
   .table-responsive {
     overflow: visible !important;
+    width: 100% !important;
   }
 
   .mat-drawer-container {

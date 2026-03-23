@@ -52,6 +52,13 @@
     }
   }
 
+  .btn-outlined {
+    &:hover {
+      background: inherit !important;
+      color: inherit !important;
+    }
+  }
+
 }
 
 .master-nav {
