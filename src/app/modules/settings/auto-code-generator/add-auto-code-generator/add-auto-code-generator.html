@@ -1,35 +1,23 @@
 <div class="modal">
   <div class="modal-header">
     <div class="modal-titles">
-      <h1 class="modal-title">
-        {{ modalForm.value.id != null ? 'Edit' : 'Add'}} Code Generator
-      </h1>
-      <h2 class="modal-sub-title">
-        Edit the auto-generated code used for this billing term.
-      </h2>
+      <h1 class="modal-title">Edit Code Generator</h1>
+      <h2 class="modal-sub-title">Edit the auto-generated code used for this billing term.</h2>
     </div>
     <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
-      <img src="../../../../../assets/svg/close.svg" alt="">
+      <img src="../../../../../svg/close.svg" alt="Close">
     </button>
   </div>
 
   <div class="modal-body">
     <form [formGroup]="modalForm">
       <div class="row g-2">
-
-
         <div class="col-md-12">
-
           <div class="d-flex align-items-center justify-content-between">
             <div>
-              <h1 class="config-title">
-                Generate Audo Code Automatically
-              </h1>
-              <h3 class="config-sub-title">
-                Enable this option to create auto code without manual entry.
-              </h3>
+              <h1 class="config-title">Generate Auto Code Automatically</h1>
+              <h3 class="config-sub-title">Enable this option to create auto code without manual entry.</h3>
             </div>
-
             <label class="switch">
               <input formControlName="auto_increment_enabled" type="checkbox">
               <span class="slider round"></span>
@@ -37,14 +25,12 @@
           </div>
         </div>
 
-
-
-        <ng-container *ngIf="modalForm.get('auto_increment_enabled')?.value === true">
+        @if (autoIncrementSignal()) {
           <div class="col-md-12">
             <div class="form-group">
               <label>Alphabet Field</label>
-              <input formControlName="alphabet_section" type="text" class="form-control" placeholder="BT-"
-                (keypress)="allowOnlyAlphabets($event)" />
+              <input formControlName="alphabet_section" type="text" class="form-control" 
+                     placeholder="BT-" (keypress)="allowOnlyAlphabets($event)" />
             </div>
           </div>
 
@@ -52,23 +38,20 @@
             <div class="form-group">
               <label>Number Field (Compulsory) <span class="text-danger">*</span></label>
               <input formControlName="numeric_section" type="text" class="form-control"
-                [class.error]="isRequiredInvalid('numeric_section')" placeholder="0000" />
-              <div *ngIf="isRequiredInvalid('numeric_section')" class="alert error">
-                Starting number is required.
-              </div>
+                     [class.error]="isRequiredInvalid('numeric_section')" placeholder="0000" />
+              
+              @if (isRequiredInvalid('numeric_section')) {
+                <div class="alert error">Starting number is required.</div>
+              }
             </div>
           </div>
-        </ng-container>
+        }
       </div>
     </form>
   </div>
-  <div class="modal-footer">
-    <button (click)="closeDialog()" type="button" class="btn btn-secondary btn-outlined">
-      Cancel
-    </button>
 
-    <button (click)="saveForm()" type="button" class="btn btn-primary">
-      {{ modalForm.value.id != null ? 'Update' : 'Save'}} Generator
-    </button>
+  <div class="modal-footer">
+    <button (click)="closeDialog()" type="button" class="btn btn-secondary btn-outlined">Cancel</button>
+    <button (click)="saveForm()" type="button" class="btn btn-primary">Update</button>
   </div>
 </div>

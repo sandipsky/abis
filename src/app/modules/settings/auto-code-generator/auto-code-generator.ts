@@ -1,7 +1,7 @@
-import { Component, Input, Optional } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../auth/auth.service';
 import { IdGeneratorService } from './auto-code-generator.service';
 import { AddCodeGeneratorComponent } from './add-auto-code-generator/add-auto-code-generator';
@@ -13,77 +13,59 @@ import { AddCodeGeneratorComponent } from './add-auto-code-generator/add-auto-co
   standalone: true,
   imports: [CommonModule],
 })
-export class AutoCodeGenerator {
-  isLoading: boolean = false;
-  autoCodeList: any[] = [];
-  operationList: any[] = [];
-  
-  @Input() filterData: any[] = []
-  @Input() editPermission: string = '';
+export class AutoCodeGenerator implements OnInit {
+  // 1. Modern Dependency Injection using inject()
+  private toastr = inject(ToastrService);
+  public authService = inject(AuthService);
+  private service = inject(IdGeneratorService);
+  private dialog = inject(MatDialog);
 
-  constructor(
-    private toastr: ToastrService,
-    public authService: AuthService,
-    private service: IdGeneratorService,
-    @Optional() private autoCodeDialogRef: MatDialogRef<any>,
-    private dialog: MatDialog,
-  ) { }
+  // 2. State converted to Signals
+  autoCodeList = signal<any[]>([]);
+  operationList = signal<any[]>([]);
 
   ngOnInit(): void {
     this.getIdConfig();
-    this.operationList = this.authService.userPermissionList();
+    this.operationList.set(this.authService.userPermissionList() || []);
   }
 
   getIdConfig() {
-    this.isLoading = true;
     this.service.getConfig().subscribe({
       next: (data) => {
-        this.autoCodeList = this.filterData?.length
-          ? data.filter((item: any) =>
-            this.filterData.includes(item.item_name)
-          )
-          : data;
-        this.isLoading = false;
+        this.autoCodeList.set(data); // Updating signal value
       },
       error: (err) => {
         this.toastr.error(err?.error?.error, 'Error', {
           closeButton: true,
         });
-        this.isLoading = false;
-
       }
     });
   }
 
   openAutoCodeDialog(family?: any, i?: number) {
-    let familyData = null;
-    if (family) {
-      familyData = { ...family, index: i }
-    }
-    this.autoCodeDialogRef = this.dialog.open(AddCodeGeneratorComponent, {
+    const familyData = family ? { ...family, index: i } : null;
+
+    const dialogRef = this.dialog.open(AddCodeGeneratorComponent, {
       panelClass: ['slide-left', 'drawer-right'],
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
       disableClose: true,
-      data: {
-        formData: familyData
-      }
+      data: { formData: familyData }
     });
 
-    this.autoCodeDialogRef.backdropClick().subscribe(() => {
-      this.autoCodeDialogRef.removePanelClass('slide-left');
-      this.autoCodeDialogRef.addPanelClass('slide-left-close');
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.removePanelClass('slide-left');
+      dialogRef.addPanelClass('slide-left-close');
 
       setTimeout(() => {
-        this.autoCodeDialogRef.close();
+        dialogRef.close();
       }, 400);
     });
 
-    this.autoCodeDialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getIdConfig();
       }
     });
   }
-
 }
