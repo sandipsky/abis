@@ -298,22 +298,6 @@ const sidebarData = [
                         activeIcon: 'document-numbering-scheme-active',
                         permission: 'ViewDocumentNumberingScheme'
                     },
-                    {
-                        link: 'backup-restore',
-                        label: 'Backup and Restore',
-                        tooltip: 'Backup and Restore',
-                        icon: 'backup-restore',
-                        activeIcon: 'backup-restore-active',
-                        permission: 'CreateDatabaseBackup'
-                    },
-                    {
-                        link: 'closing',
-                        label: 'Closing',
-                        tooltip: 'Closing',
-                        icon: 'closing',
-                        activeIcon: 'closing-active',
-                        permission: 'CloseCurrentFicalYear'
-                    },
                 ]
             },
 
