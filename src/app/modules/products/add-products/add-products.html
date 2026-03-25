@@ -186,7 +186,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Product Group</label>
-                                    <ng-select [addTag]="operationList.includes('Product.ProductGroups.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateProductGroups')"
                                         (change)="onAddItem($event, 'product_group_id', {title: 'Product Group', endPoint: 'productGroups'})"
                                         [items]="allGroups" bindLabel="name" bindValue="id"
                                         formControlName="product_group_id" placeholder="Select Group">
@@ -201,7 +201,7 @@
                             <div class="col-md-3" *ngIf="companyDetails?.company_reg_type != 'PAN'">
                                 <div class="form-group">
                                     <label>Tax Type</label>
-                                    <ng-select [addTag]="operationList.includes('Product.TaxType.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateTaxType')"
                                         [items]="allTaxTypes"
                                         (change)="onAddItem($event, 'tax_type_id', {title: 'Tax Type', endPoint: 'tax_types'})"
                                         bindLabel="name" bindValue="id" placeholder="Select Tax Type"
@@ -217,7 +217,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Product Category</label>
-                                    <ng-select [addTag]="operationList.includes('Product.ProductCategories.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateProductCategories')"
                                         (change)="onMultiAdd($event, 'category_id', {title: 'Category', endPoint: 'categories'})"
                                         [items]="allCatrgories" bindLabel="name" bindValue="id" [multiple]="true"
                                         [(ngModel)]="selectedCategories" [ngModelOptions]="{standalone: true}"
@@ -233,7 +233,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Generic Name</label>
-                                    <ng-select [addTag]="operationList.includes('Product.Generic.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateGenericName')"
                                         (change)="onAddItem($event, 'generic_name_id', {title: 'Generic Name', endPoint: 'genericNames'})"
                                         [items]="allGenericNames" bindLabel="name" bindValue="id"
                                         placeholder="Select Generic Name" formControlName="generic_name_id">
@@ -249,7 +249,7 @@
                                 <div class="form-group">
                                     <label>Division <span *ngIf="requiredDivision">*</span></label>
                                     <ng-select [multiple]="true"
-                                        [addTag]="operationList.includes('Purchase.Division.Create')"
+                                        [addTag]="operationList.includes('CreateDivision')"
                                         (change)="setCompany($event); onMultiAdd($event, 'division_ids', {title: 'Division', endPoint: 'divisions', companies: allCompanies});"
                                         [items]="allDivisions" bindLabel="name" bindValue="id"
                                         placeholder="Select Division"
@@ -293,7 +293,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Packing</label>
-                                    <ng-select [addTag]="operationList.includes('Product.Packings.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreatePackings')"
                                         [items]="allPackings"
                                         (change)="onAddItem($event, 'packing_id', {title: 'Packing', endPoint: 'packings'})"
                                         bindLabel="name" bindValue="id" placeholder="Select Packing"
@@ -309,7 +309,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Primary Unit</label>
-                                    <ng-select [addTag]="operationList.includes('Product.Units.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateUnits')"
                                         [items]="allUnits"
                                         (change)="onAddItem($event, 'primary_unit_id', {title: 'Unit', endPoint: 'units'})"
                                         bindLabel="name" bindValue="id" placeholder="Select Primary Unit"
@@ -351,7 +351,7 @@
                                                 class="text-danger">*</span></label>
                                         <ng-select [class.readonly]="f['has_secondary_unit'].value != true"
                                             [readonly]="f['has_secondary_unit'].value != true"
-                                            [addTag]="operationList.includes('Product.Units.Create')" [items]="allUnits"
+                                            [addTag]="operationList.includes('CreateUnits')" [items]="allUnits"
                                             (change)="onAddItem($event, 'secondary_unit_id', {title: 'Unit', endPoint: 'units'})"
                                             bindLabel="name" bindValue="id" placeholder="Select Secondary Unit"
                                             formControlName="secondary_unit_id"
@@ -503,7 +503,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Purchase <span *ngIf="requiredPurchase == true">*</span></label>
-                                    <ng-select [addTag]="operationList.includes('Accounting.Account.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateAccount')"
                                         (change)="onAddAccount($event, 'purchase_account_master_id')"
                                         [items]="accountDropdownList" bindLabel="name" bindValue="id"
                                         placeholder="Select" formControlName="purchase_account_master_id"
@@ -519,7 +519,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Purchase Return <span *ngIf="requiredPurchase == true">*</span></label>
-                                    <ng-select [addTag]="operationList.includes('Accounting.Account.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateAccount')"
                                         (change)="onAddAccount($event, 'purchase_return_account_master_id')"
                                         [items]="accountDropdownList" bindLabel="name" bindValue="id"
                                         placeholder="Select" formControlName="purchase_return_account_master_id"
@@ -535,7 +535,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Sales <span *ngIf="requiredSales == true">*</span></label>
-                                    <ng-select [addTag]="operationList.includes('Accounting.Account.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateAccount')"
                                         (change)="onAddAccount($event, 'sales_account_master_id')"
                                         [items]="accountDropdownList" bindLabel="name" bindValue="id"
                                         placeholder="Select" formControlName="sales_account_master_id"
@@ -551,7 +551,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Sales Return <span *ngIf="requiredSales == true">*</span></label>
-                                    <ng-select [addTag]="operationList.includes('Accounting.Account.Create')"
+                                    <ng-select [addTag]="operationList.includes('CreateAccount')"
                                         (change)="onAddAccount($event, 'sales_return_account_master_id')"
                                         [items]="accountDropdownList" bindLabel="name" bindValue="id"
                                         placeholder="Select" formControlName="sales_return_account_master_id"
@@ -850,14 +850,14 @@
                         <div class="col-md-3">
                             <div class="form-group view">
                                 <label>Division</label>
-                                <span>{{ selectedProduct?.division_name || 'N/A'}}</span>
+                                <span>{{ selectedProduct?.division_names || 'N/A'}}</span>
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="form-group view">
                                 <label>Company</label>
-                                <span>{{ selectedProduct?.company_names || 'N/A'}}</span>
+                                <span>{{ selectedProduct?.company_name || 'N/A'}}</span>
                             </div>
                         </div>
 
@@ -1153,3 +1153,7 @@
     </div>
 </div>
 }
+
+<div *ngIf="isLoading == true">
+    <app-loading-spinner></app-loading-spinner>
+</div>

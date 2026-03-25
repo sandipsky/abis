@@ -1,26 +1,22 @@
-// import { Component, Input, Optional, TemplateRef, ViewChild } from '@angular/core';
+// import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 // import { ToastrService } from 'ngx-toastr';
-// import { AuthService } from 'src/app/auth/auth.service';
-// import { ExcelService } from 'src/app/services/excel.service';
 // import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 // import { CommonModule } from '@angular/common';
-// import { SharedModule } from 'src/app/shared/shared/shared.module';
 // import { PageEvent } from '@angular/material/paginator';
-// import { DropdownsService } from 'src/app/services/dropdowns.service';
-// import { AddVendorsComponent } from './add-vendors/add-vendors.component';
-// import { Table } from 'src/app/components/table/table';
-// import { DeleteModalComponent } from 'src/app/components/delete-modal/delete-modal.component';
-// import { UnitMasterService } from '../master.service';
+// import { AddEmployeeComponent } from './add-roles-permission/add-roles-permission.component';
+// import { RolesService } from './roles-permission.service';
+// import { SharedModule } from '../../shared/shared-module';
+// import { AuthService } from '../../auth/auth.service';
+// import { DeleteModalComponent } from '../../shared/components/delete-modal/delete-modal.component';
 
 // @Component({
-//   selector: 'app-vendors',
-//   templateUrl: './vendors.component.html',
+//   selector: 'app-roles-permission',
+//   templateUrl: './roles-permission.html',
 //   standalone: true,
-//   imports: [CommonModule, SharedModule, Table]
+//   imports: [CommonModule, SharedModule]
 // })
 
-// export class VendorsComponent {
-//   endPoint: string = 'vendors';
+// export class RolesPermissionComponent {
 //   masterList: any[] = [];
 //   length: number = 0;
 //   searchText: string = '';
@@ -30,59 +26,42 @@
 
 //   filterColumns: any[] = [
 //     {
-//       name: "Vendor Name",
-//       formcontrolName: "name",
+//       name: "Role Code",
 //       type: "text",
-//     },
-//     {
-//       name: "Registration No",
-//       formcontrolName: "registrationNo",
-//       type: "text",
-//     },
-//     {
-//       name: "Contact No",
-//       formcontrolName: "contactNo",
-//       type: "text",
-//     },
-//     {
-//       name: "Address",
-//       formcontrolName: "address",
-//       type: "text",
+//       formcontrolName: "code"
 //     },
 //     {
 //       name: "Status",
 //       type: "select",
-//       formcontrolName: "status",
+//       formcontrolName: "activeStatus",
 //       data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }]
 //     }
 //   ];
 
 //   filterForm = {
 //     pageIndex: 0,
-//     pageSize: 25,
+//     pageSize: 10,
 //     sortBy: '',
 //     sortDirection: '',
 //   }
 
 //   tableHeaders = [
 //     { name: 'SN', property: 'sn', sort: false },
-//     { name: 'Vendor Name', property: 'name', sortBy: 'name', sort: true },
-//     { name: 'Registration No.', property: 'registration_no', sortBy: 'registrationNo', sort: true },
-//     { name: 'Contact No.', property: 'contact_no', sortBy: 'contactNo', sort: true },
-//     { name: 'Address', property: 'address', sortBy: 'address', sort: true },
-//     { name: 'Status', property: 'status', sortBy: 'status', sort: false, status: true, editStatus: false }
+//     { name: 'Role Code', property: 'code', sortBy: 'code', sort: true },
+//     { name: 'Role Name', property: 'name', sortBy: 'name', sort: true },
+//     { name: 'Status', property: 'status', sortBy: 'active_status', sort: true, status: true },
+
 //   ];
 
 //   filterList: any[] = [];
 //   @ViewChild('view', { static: true }) view!: TemplateRef<any>;
 
 //   constructor(
-//     private masterService: UnitMasterService,
+//     private rolespermissionService: RolesService,
 //     private toastr: ToastrService,
 //     private authService: AuthService,
 //     private dialog: MatDialog,
-//     @Optional() private dialogRef: MatDialogRef<any>,
-//     private excelService: ExcelService,
+//     private dialogRef: MatDialogRef<any>,
 //   ) { }
 
 //   ngOnInit(): void {
@@ -109,12 +88,12 @@
 //   }
 
 
-//   getMasterList(isExport?: boolean): void {
+//   getMasterList(isExport?: boolean, isPDF?: boolean): void {
 //     let filter = {
 //       filter: this.filterList || [],
 //       pagination: {
 //         pageIndex: isExport == true ? 0 : (this.filterForm.pageIndex || 0),
-//         pageSize: isExport == true ? (this.length || 9999999) : (this.filterForm.pageSize || 25),
+//         pageSize: isExport == true ? (this.length || 9999999) : (this.filterForm.pageSize || 10),
 //       },
 //       sortDTO: [
 //         {
@@ -125,36 +104,79 @@
 //     };
 
 //     this.isLoading = true;
-//     this.masterService.getMasterList(filter, this.endPoint).subscribe(
+//     this.rolespermissionService.getRolesList(filter).subscribe(
 //       {
 //         next: (res: any) => {
 //           if (isExport == true) {
 //             this.exportExcel(res?.content);
 //             this.isLoading = false;
 //           }
+//           else if (isPDF == true) {
+//             this.pdfprint(res?.content);
+//             this.isLoading = false;
+//           }
 //           else {
 //             this.masterList = res?.content || [];
+//             this.masterList = this.masterList.map(item => {
+//               item.permissions = [{ id: 1, name: 'HR' }, { id: 1, name: 'Purchase' }, { id: 1, name: 'Sales' }, { id: 1, name: 'Sales Re' }]
+//               return item;
+//             })
 //             this.length = res?.totalElements || 0;
 //             this.isLoading = false;
 //           }
 //         },
 //         error: (err) => {
-//           this.toastr.error(err);
+//           this.toastr.error(err, 'Error');
 //           this.isLoading = false;
 //         },
 //       }
 //     )
 //   }
 
-//   showForm(data?: any, isView?: boolean) {
-//     this.dialogRef = this.dialog.open(AddVendorsComponent, {
-//       panelClass: ['drawer-right', 'slide-left'],
+//   changeStatus(data: any) {
+//     this.isLoading = true;
+//     this.rolespermissionService.changeRoleStatus(data, data.id).subscribe(
+//       {
+//         next: (res: any) => {
+//           if (res?.success == true) {
+//             res?.messages?.forEach((message: any) => {
+//               this.toastr.success(message.message, 'Success', {
+//                 closeButton: true,
+//               });
+//             });
+//             this.isLoading = false;
+//           }
+//           else {
+//             res?.messages?.forEach((message: any) => {
+//               this.toastr.error(message.message, 'Error', {
+//                 closeButton: true,
+//               });
+//             });
+//             this.isLoading = false;
+//           }
+//         },
+//         error: (err) => {
+//           err?.error?.messages?.forEach((message: any) => {
+//             this.toastr.error(message.message, 'Error', {
+//               closeButton: true,
+//             });
+//           });
+//           this.isLoading = false;
+//         },
+//       }
+//     )
+//   }
+
+//   showForm(data?: any, isView?: boolean, type?: string) {
+//     this.dialogRef = this.dialog.open(AddEmployeeComponent, {
+//       panelClass: ['fullscreen', 'slide-up'],
 //       enterAnimationDuration: '0ms',
 //       exitAnimationDuration: '0ms',
 //       disableClose: true,
 //       data: {
 //         formData: data,
-//         isView: isView
+//         isView: isView,
+//         mode: type
 //       }
 //     });
 
@@ -181,18 +203,13 @@
 //     });
 
 //     this.dialogRef.backdropClick().subscribe(() => {
-//       this.dialogRef.removePanelClass('slide-up');
-//       this.dialogRef.addPanelClass('slide-up-close');
-
-//       setTimeout(() => {
-//         this.dialogRef.close();
-//       }, 400);
+//       this.closeDialog();
 //     });
 
 //     this.dialogRef.afterClosed().subscribe(result => {
 //       if (result) {
 //         this.isLoading = true;
-//         this.masterService.deleteMaster(data.id, this.endPoint).subscribe({
+//         this.rolespermissionService.deleteRolesAndOperations(data.id).subscribe({
 //           next: (res: any) => {
 //             res.messages.forEach((message: any) => {
 //               if (res.success == true) {
@@ -230,18 +247,17 @@
 //   }
 
 //   private closeDialog() {
-//     this.dialogRef.removePanelClass('slide-left');
-//     this.dialogRef.addPanelClass('slide-left-close');
+//     this.dialogRef.removePanelClass('slide-up');
+//     this.dialogRef.addPanelClass('slide-down');
 
 //     setTimeout(() => {
 //       this.dialogRef.close();
 //     }, 400);
 //   }
 
-//   pdfprint() {
+//   pdfprint(itemList: any[]) {
+    
 //   }
-
-
 //   exportExcel(masterList: any[]) {
 //     const headers = this.tableHeaders.map(h => h.name);
 //     const exportData = masterList.map((item, index) => {
@@ -256,7 +272,7 @@
 //       });
 //     });
 
-//     this.excelService.exportExcel('vendors', headers, exportData);
+//     // this.excelService.exportExcel('Roles', headers, exportData);
 //   }
 
 // }

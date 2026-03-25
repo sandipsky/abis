@@ -146,7 +146,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Designation <span class="text-danger">*</span></label>
-                        <ng-select [addTag]="operationList.includes('CreateDesignation')" [items]="designationList"
+                        <ng-select [class.error]="isRequiredInvalid('designation_id')" [addTag]="operationList.includes('CreateDesignation')" [items]="designationList"
                             bindLabel="name" bindValue="id" placeholder="Select Designation"
                             formControlName="designation_id"
                             (change)="onAddItem($event, 'designation_id', {title: 'Designation', endPoint: 'designations'})"
@@ -195,7 +195,7 @@
 
                         <div class="row g-2">
 
-                            <div *ngIf="f['account_non_locked'].value == false" class="col-md-12">
+                            <div *ngIf="f['account_non_locked']?.value == false" class="col-md-12">
                                 <div class="form-group">
                                     <label>Login Status</label>
                                     <div style="width: 100%;" class="d-flex align-items-center justify-content-between">
@@ -445,7 +445,7 @@
 
                     <div class="row g-2">
 
-                        <div *ngIf="selectedUser.account_non_locked == false" class="col-md-12">
+                        <div *ngIf="selectedUser?.account_non_locked == false" class="col-md-12">
                             <div class="form-group">
                                 <label>Login Status</label>
                                 <div style="width: 100%;" class="d-flex align-items-center justify-content-between">

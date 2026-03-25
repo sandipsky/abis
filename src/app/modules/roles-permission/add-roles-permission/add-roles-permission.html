@@ -1,0 +1,306 @@
+<div class="modal">
+  <div class="modal-header">
+    <div class="modal-titles">
+      <h1 class="modal-title">
+        {{ data.isView == true ? 'View' : data.mode == 'copy' ? 'Copy' : modalForm.value.id ? 'Update' : 'Add'}} Roles
+        and Permissions
+      </h1>
+      <h2 class="modal-sub-title">
+        Add new users to manage access and permissions efficiently.
+      </h2>
+    </div>
+
+    <button (click)="closeDialog()" type="button" class="btn-close modal-title">
+      <img src="../../../../../assets/svg/close.svg" alt="" />
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="modalForm">
+      <div class="section-group row first">
+        <div class="col-md-4">
+          <h1 class="section-group-title">Role Configuration Details</h1>
+          <h3 class="section-group-subtitle">
+            Provide details on role configuration and management.
+          </h3>
+        </div>
+
+        <div class="col-md-8 row">
+
+          @if (data.isView != true) {
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Role Code</label>
+              <input formControlName="code" type="text" class="form-control" placeholder="Enter Role Code" />
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Role Name</label>
+              <input formControlName="name" type="text" class="form-control" placeholder="Enter Role Name" />
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea rows="1" formControlName="description" class="form-control" placeholder="Enter Description">
+              </textarea>
+            </div>
+          </div>
+          }
+          @else {
+          <div class="col-md-4">
+            <div class="form-group view">
+              <label>Role Code</label>
+              <span>{{modalForm.value.code || 'N/A'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group view">
+              <label>Role Name</label>
+              <span>{{modalForm.value.name || 'N/A'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group view">
+              <label>Description</label>
+              <span>{{modalForm.value.description || 'N/A'}}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+
+      <div style="padding-top: 20px; padding-bottom: 2px;" class="row">
+        <div
+          style="margin: 0; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 12px;"
+          class="section col-md-2">
+          <div class="section-header">
+            <div class="section-header-details">
+              <h1 class="section-header-title">Modules List</h1>
+              <h3 class="section-header-subtitle">Select Module and assign permissions accordingly</h3>
+            </div>
+          </div>
+
+          <div style="height: calc(100vh - 520px); overflow: auto;" class="tab-container">
+            <div *ngFor="let master of permissionList; trackBy: trackByParent; let i = index" class="tab-item"
+              [class.active]="activeTabIndex === i" (click)="selectTab(i)">
+              <span>{{ master.parent_module || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+
+        <div style="margin: 0; padding: 0; border-top: 0; gap: 0;" class="section col-md-10">
+          <div
+            style="margin: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 12px;  border-left: 0;"
+            class="section">
+            <div class="section-header">
+              <div class="section-header-details">
+                <h1 class="section-header-title">Permissions Management</h1>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="height: calc(100vh - 470px); overflow: auto; margin: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border: 0;"
+            class="section">
+
+            @for (master_module of activeModule?.master_modules; track master_module.master_module; let
+            activeIndex=$index) {
+            <app-accordion [isOpen]="activeIndex == openAccordionIndex">
+              <div style="width: 100%; cursor: normal;" class="d-flex align-items-center justify-content-between"
+                accordion-header>
+                <div class="d-flex align-items-center gap-md">
+                  {{ master_module?.master_module }}
+
+                  <div class="d-flex items-center justify-content-center cursor-pointer">
+                    <img (click)="toggleAccordion(activeIndex)" class="caret"
+                      [class.rotate]="activeIndex == openAccordionIndex" src="../../../../assets/svg/caret.svg" alt="">
+                  </div>
+
+                </div>
+
+                <div class="d-flex align-items-center gap-md">
+                  <dropdown-menu *ngIf="data.isView != true && operationList.includes('IAM.RolePermissionScope.View')"
+                    #dp0 [showActiveState]="false" [closeOnItemClick]="false" [contentMode]="true">
+                    <div style="color: var(--primary-color);" class="text-underline" dropdown-display>
+                      Bulk Assign Scope
+                    </div>
+
+                    <div *ngIf="operationList.includes('IAM.RolePermissionScope.Assign')" dropdown-content>
+                      <div style="padding: 12px;" class="modal-header">
+                        <div style="white-space: nowrap; font-size: 14px;" class="modal-title">Assign Scope
+                        </div>
+                      </div>
+
+                      <div style="padding: 12px;" class="modal-body">
+                        @for (scope of scopeList; track scope; let j = $index) {
+                        <div class="d-flex align-items-center gap-md mb-md">
+                          <input type="radio" [id]="'scope_' + master_module?.master_module + '_' + j"
+                            [name]="'scope_' + master_module?.master_module" [value]="scope"
+                            [(ngModel)]="master_module._tempScope" [ngModelOptions]="{ standalone: true }" />
+
+                          <label [for]="'scope_' + master_module?.master_module + '_' + j">{{scope}}</label>
+                        </div>
+                        }
+                      </div>
+
+                      <div style="padding: 12px;" class="modal-footer">
+                        <button style="width: 100%;" class="btn btn-soft"
+                          (click)="assignBulkMasterScope(master_module); dp0?.close()">Assign</button>
+                      </div>
+                    </div>
+                  </dropdown-menu>
+
+                  <label class="d-flex align-items-center gap-sm">
+                    <input [disabled]="data.isView == true" type="checkbox"
+                      [checked]="isMasterAllSelected(master_module)" (change)="checkAllMaster($event, master_module)" />
+                    Select All
+                  </label>
+                </div>
+
+
+
+              </div>
+
+              <div accordion-body>
+                <div class="permission-container row"
+                  *ngFor="let module of master_module?.modules; trackBy: trackByModule">
+                  <div class="col-md-3 d-flex align-items-start gap-md">
+                    <h2 class="permission-title">
+                      {{ module?.module_name }}
+                    </h2>
+
+                    <!-- <input type="checkbox" name="" id="" [checked]="isAllSelected(module)"
+                      (change)="checkAll($event, module)">
+                    Select All -->
+
+                    <dropdown-menu
+                      *ngIf="activeIndex == openAccordionIndex && data.isView != true && operationList.includes('IAM.RolePermissionScope.View')"
+                      #dp1 [showActiveState]="false" [closeOnItemClick]="false" [contentMode]="true">
+                      <div style="color: var(--primary-color);" class="text-underline" dropdown-display>
+                        Bulk Assign Scope
+                      </div>
+
+                      <div *ngIf="operationList.includes('IAM.RolePermissionScope.Assign')" dropdown-content>
+                        <div style="padding: 12px;" class="modal-header">
+                          <div style="white-space: nowrap; font-size: 14px;" class="modal-title">Assign Scope
+                          </div>
+                        </div>
+
+                        <div style="padding: 12px;" class="modal-body">
+                          @for (scope of scopeList; track scope; let j = $index) {
+                          <div class="d-flex align-items-center gap-md mb-md">
+                            <input type="radio" [id]="'scope_' + module?.id + '_' + j" [name]="'scope_' + module?.id"
+                              [value]="scope" [(ngModel)]="module._tempScope" [ngModelOptions]="{ standalone: true }" />
+
+                            <label [for]="'scope_' + module?.id + '_' + j">{{scope}}</label>
+                          </div>
+                          }
+                        </div>
+
+                        <div style="padding: 12px;" class="modal-footer">
+                          <button style="width: 100%;" class="btn btn-soft"
+                            (click)="assignBulkScope(module); dp1.close()">Assign</button>
+                        </div>
+                      </div>
+                    </dropdown-menu>
+                  </div>
+
+
+                  <div style="row-gap: 20px;" class="col-md-9 row">
+
+                    @for (operation of module?.operations; track operation.id) {
+                    <div class="col-md-4 d-flex gap-md align-items-center">
+                      <input [disabled]="data.isView == true" type="checkbox"
+                        (change)="checkPermission($event, operation)" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="operation.selected" />
+
+                      <h2 class="permission-title">{{ operation?.name }}</h2>
+
+                      @if (activeIndex == openAccordionIndex && data.isView != true &&
+                      operationList.includes('IAM.RolePermissionScope.View')) {
+                      <dropdown-menu [showActiveState]="false" #dp [closeOnItemClick]="false" [contentMode]="true">
+                        <div dropdown-display class="status disabled" [class.success]="operation.scope === 'ORG'"
+                          [class.warn]="operation.scope === 'SELF'" [class.cancel]="operation.scope === 'TEAM'">
+                          <div class="circle"></div>
+                          {{ operation?.scope || 'No Scope' }}
+                        </div>
+
+                        <div *ngIf="operationList.includes('IAM.RolePermissionScope.Assign')" dropdown-content>
+                          <div style="padding: 12px;" class="modal-header">
+                            <div style="white-space: nowrap; font-size: 14px;" class="modal-title">Assign Scope
+                            </div>
+                          </div>
+
+                          <div style="padding: 12px;" class="modal-body">
+                            @for (scope of scopeList; track scope; let j = $index) {
+                            <div class="d-flex align-items-center gap-md mb-md">
+                              <input type="radio" [id]="'scope_' + operation.id + '_' + j"
+                                [name]="'scope_' + operation.id" [value]="scope" [(ngModel)]="operation._tempScope"
+                                [ngModelOptions]="{ standalone: true }" />
+
+                              <label [for]="'scope_' + operation?.id + '_' + j">{{scope}}</label>
+                            </div>
+                            }
+                          </div>
+
+                          <div style="padding: 12px;" class="modal-footer">
+                            <button style="width: 100%;" class="btn btn-soft"
+                              (click)="assignScope(operation); dp.close()">Assign</button>
+                          </div>
+                        </div>
+                      </dropdown-menu>
+                      }
+                      @else {
+                      <div class="status disabled" [class.success]="operation.scope === 'ORG'"
+                        [class.warn]="operation.scope === 'SELF'" [class.cancel]="operation.scope === 'TEAM'">
+                        <div class="circle"></div>
+                        {{ operation?.scope || 'No Scope' }}
+                      </div>
+                      }
+                    </div>
+                    }
+
+
+                  </div>
+                </div>
+
+              </div>
+            </app-accordion>
+
+            }
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+
+  <div *ngIf="data.isView != true" class="modal-footer">
+    <div class="footer-info">
+      <img src="../../../../assets/svg/info-circle.svg" alt="" />
+      Note : These Fields are Mandatory
+    </div>
+
+    <div class="button-group">
+      <button (click)="closeDialog()" type="button" class="btn btn-secondary btn-outlined">
+        Cancel
+      </button>
+
+      <button (click)="saveForm()" type="button" class="btn btn-primary">
+        {{ data?.mode == 'copy' ? 'Copy' : modalForm.value.id ? 'Update': 'Add'}} Role
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading == true">
+  <app-loading-spinner></app-loading-spinner>
+</div>

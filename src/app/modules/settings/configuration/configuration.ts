@@ -117,6 +117,26 @@ export class Configuration {
     this.selectedTabIndex.set(index);
   }
 
+  // onEdit() {
+  //   this.dialogRef = this.dialog.open(AddConfigComponent, {
+  //     panelClass: ['drawer-right', 'slide-left'],
+  //     enterAnimationDuration: '0ms',
+  //     exitAnimationDuration: '0ms',
+  //     disableClose: true,
+  //     data: this.setupItems[this.selectedTabIndex]?.items
+  //   });
+
+  //   this.dialogRef.backdropClick().subscribe(() => {
+  //     this.closeDialog();
+  //   });
+
+  //   this.dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.getAllConfigList();
+  //     }
+  //   });
+  // }
+
   getAllConfigList(): void {
     this.configurationService.getAllConfigData()
       .subscribe({

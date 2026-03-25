@@ -1,0 +1,40 @@
+<div class="section">
+    <div class="section-header">
+        <div class="section-header-details">
+            <h1 class="section-header-title">Roles and Permissions</h1>
+            <h3 class="section-header-subtitle">Define roles and assign permissions to maintain a secure workflow.</h3>
+        </div>
+        <div class="section-header-btn-group">
+            <button (click)="getMasterList(false, true)" class="print-btn">
+                <img src="assets/img/print.svg" alt="" />
+                Print
+            </button>
+            <button (click)="getMasterList(true, false)" class="export-btn">
+                <img src="assets/img/excel.svg" alt="excel icon" />
+                Export
+            </button>
+            <button *ngIf="operationList.includes('IAM.Role.Create')" (click)="showForm()" class="btn btn-primary">+ Add
+                Role</button>
+        </div>
+    </div>
+
+    <filter-section (onFilterChange)="applyFilter($event)" [filterColumns]="filterColumns"
+        searchBy="name"></filter-section>
+
+    <app-table [actions]="['view', 'edit', 'delete', 'copy']" actionMode="''"
+        [hasEditPermission]="operationList.includes('IAM.Role.Edit')"
+        [hasDeletePermission]="operationList.includes('IAM.Role.DeleteIfUnused')" [hasCopyPermission]="true"
+        [hasDeactivatePermission]="operationList.includes('IAM.Role.Deactivate')"
+        [hasReactivatePermission]="operationList.includes('IAM.Role.Reactivate')" (sortChange)="onSort($event)"
+        [tableHeaders]="tableHeaders" [filterData]="filterForm" [tableData]="masterList"
+        (onView)="showForm($event, true)" (onChange)="showForm($event, false, 'change')"
+        (onEdit)="showForm($event, false, 'edit')" (onCopy)="showForm($event, false, 'copy')"  (onDelete)="deleteItem($event)"
+        (onStatusChange)="changeStatus($event)"></app-table>
+
+    <app-paginator (pageChange)="onChangedPage($event)" [pageSize]="filterForm.pageSize" [length]="length"
+        [pageIndex]="filterForm.pageIndex"></app-paginator>
+</div>
+
+<div *ngIf="isLoading == true">
+    <app-loading-spinner></app-loading-spinner>
+</div>

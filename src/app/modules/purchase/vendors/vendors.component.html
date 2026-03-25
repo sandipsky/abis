@@ -1,4 +1,4 @@
-<!-- <div class="section main">
+<div class="section main">
     <div class="section-header">
         <filter-section (onFilterChange)="applyFilter($event)" [filterColumns]="filterColumns"
             searchBy="name"></filter-section>
@@ -31,4 +31,8 @@
         <app-paginator (pageChange)="onChangedPage($event)" [pageSize]="filterForm.pageSize" [length]="length"
             [pageIndex]="filterForm.pageIndex"></app-paginator>
     </div>
-</div> -->
+</div>
+
+<div *ngIf="isLoading == true">
+    <app-loading-spinner></app-loading-spinner>
+</div>

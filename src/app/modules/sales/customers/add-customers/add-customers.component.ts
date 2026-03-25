@@ -132,6 +132,30 @@
 //     this.getDivisionList();
 //     this.getHQList();
 //     this.getCategoryList();
+//     this.handleRegValidation();
+//   }
+
+//   handleRegValidation() {
+//     const regTypeControl = this.modalForm.get('reg_type');
+//     const regNoControl = this.modalForm.get('reg_no');
+
+//     regNoControl?.valueChanges.subscribe(value => {
+//       if (value) {
+//         regTypeControl?.setValidators([Validators.required]);
+//       } else {
+//         regTypeControl?.clearValidators();
+//       }
+//       regTypeControl?.updateValueAndValidity({ emitEvent: false });
+//     });
+
+//     regTypeControl?.valueChanges.subscribe(value => {
+//       if (value) {
+//         regNoControl?.setValidators([Validators.required]);
+//       } else {
+//         regNoControl?.clearValidators();
+//       }
+//       regNoControl?.updateValueAndValidity({ emitEvent: false });
+//     });
 //   }
 
 //   get f() { return this.modalForm.controls; }

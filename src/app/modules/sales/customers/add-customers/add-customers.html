@@ -1,4 +1,4 @@
-<!-- <div class="modal full">
+<div class="modal full">
     <div class="modal-header">
         <div class="modal-titles">
             <h1 class="modal-title">
@@ -41,6 +41,9 @@
                             </div>
                         </div>
                         <input type="text" class="form-control" formControlName="reg_no" placeholder="Enter No." />
+                        <div class="alert error" *ngIf="f['reg_type'].touched && f['reg_type'].errors?.['required']">
+                            Registration type is required
+                        </div>
                     </div>
                 </div>
 
@@ -113,9 +116,9 @@
                 <div *ngIf="companyDetails?.division_wise_sales== '1'" class="col-md-12">
                     <div class="section">
                         <div class="d-flex justify-content-between">
-                            <h1 class="section-title">Headquarter-Division Information</h1>
+                            <h1 class="section-title">Headquarter-Division Information <span style="color: var(--error-color);">*</span> </h1>
                             <button class="btn btn-secondary btn-transparent text-uppercase"
-                                (click)="addHqDivision()"><i class="fa-solid fa-circle-plus"></i>
+                                (click)="addHqDivision()">+
                                 Add Entry</button>
                         </div>
 
@@ -153,9 +156,9 @@
 
                                         <td>
                                             <div class="text-danger">
-                                                <button class="btn btn-outline-danger text-danger border-0"
-                                                    (click)="removeHqDivision(i)"><i
-                                                        class="fa-solid fa-circle-minus"></i></button>
+                                                <button class="btn btn-outlined small" (click)="removeHqDivision(i)">
+                                                    <img src="../../../../assets/svg/trash.svg" alt="">
+                                                </button>
                                             </div>
                                         </td>
                                     </ng-container>
@@ -171,7 +174,7 @@
                         <div class="d-flex justify-content-between">
                             <h1 class="section-title">Division-Discount Information</h1>
                             <button class="btn btn-secondary btn-transparent text-uppercase"
-                                (click)="addDiscountCondition()"><i class="fa-solid fa-circle-plus"></i>
+                                (click)="addDiscountCondition()">+
                                 Add Entry</button>
                         </div>
 
@@ -234,9 +237,10 @@
 
                                         <td style="width: 50px;">
                                             <div class="text-danger">
-                                                <button class="btn btn-outline-danger text-danger border-0"
-                                                    (click)="removeDiscountCondition(i)"><i
-                                                        class="fa-solid fa-circle-minus"></i></button>
+                                                <button class="btn btn-outlined small"
+                                                    (click)="removeDiscountCondition(i)"> <img
+                                                        src="../../../../assets/svg/trash.svg" alt="">
+                                                </button>
                                             </div>
                                         </td>
                                     </ng-container>
@@ -333,7 +337,7 @@
             <div class="col-md-3">
                 <div class="form-group view">
                     <label>Registration No.</label>
-                    <span class="form-value">{{ selectedCustomer?.reg_no || '-' }}</span>
+                    <span class="form-value">{{ selectedCustomer?.registration_no || '-' }}</span>
                 </div>
             </div>
 
@@ -519,4 +523,4 @@
 
 <div *ngIf="isLoading == true">
     <app-loading-spinner></app-loading-spinner>
-</div> -->
+</div>
