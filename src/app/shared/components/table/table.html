@@ -53,6 +53,12 @@
           <span>{{ data[header.property] || '-' }}</span>
           }
 
+          @else if (header.linkUrl == true) {
+          <span class="redirect-link" (click)="onView.emit(data)">
+            {{ data[header.property]}}
+          </span>
+          }
+
           @else if (header.amount) {
           <span>{{ data[header.property] | amount }}</span>
           }
@@ -66,33 +72,33 @@
         <td class="print-hidden">
           <div class="actions">
             <app-menu [mode]="'right'">
-  
+
               <div dropdown-display>
                 <button class="btn btn-outlined small">
                   <img src="../../../svg/more.svg" alt="">
                 </button>
               </div>
-  
+
               <div dropdown-content>
                 @if (actions().includes('view')) {
                 <div (click)="onView.emit(data)" class="dropdown-item" dropdown-item>
                   <img src="../../../svg/eye.svg" alt="" /> View Details
                 </div>
                 }
-  
+
                 @if (actions().includes('edit') && hasEditPermission()) {
                 <div (click)="onEdit.emit(data)" class="dropdown-item" dropdown-item>
                   <img src="../../../svg/edit.svg" alt="" /> Edit Details
                 </div>
                 }
-  
+
                 @if (actions().includes('delete') && hasDeletePermission()) {
                 <div (click)="onDelete.emit(data)" class="dropdown-item" dropdown-item>
                   <img src="../../../svg/trash.svg" alt="" /> Delete
                 </div>
                 }
               </div>
-  
+
             </app-menu>
           </div>
         </td>
