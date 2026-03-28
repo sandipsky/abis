@@ -23,7 +23,9 @@
             <td>{{ product?.prefix || "-" }}</td>
             <td class="print-hidden">
               <div class="actions">
-                <img (click)="viewBillingTerm(product)" src="../../../svg/eye.svg" alt="" />
+                <div class="btn btn-outlined small">
+                  <img (click)="viewBillingTerm(product)" src="../../../svg/eye.svg" alt="" />
+                </div>
               </div>
             </td>
           </tr>
@@ -44,144 +46,135 @@
           {{formTitle}} Document Numbering Scheme
         </h1>
       </div>
-      <button (click)="closeDialog()" type="button" class="btn btn-outlined small rounded">
-
-        <img src="../../../../../assets/svg/close.svg" alt="">
+      <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
+        <img src="../../../../assets/svg/close.svg" alt="">
       </button>
     </div>
     <div class="modal-body">
-        <div class="row gy-2">
-          <div class="col-md-12">
+      <div class="row gy-2">
+        <div class="col-md-12">
 
-            <div style="flex-direction: row; justify-content: space-between;" class="form-group view">
-              <label>Module</label>
-              <div class="chip primary">
-                <div class="circle"></div>
-                {{ documentNumberView?.module || '-' }}
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-md-12">
-            <div style="flex-direction: row; justify-content: space-between;" class="form-group view">
-              <label>Sub Module</label>
-              <div class="chip info">
-                <div class="circle"></div>
-                {{ documentNumberView?.name || '-' }}
-              </div>
+          <div style="flex-direction: row; justify-content: space-between;" class="form-group view">
+            <label>Module</label>
+            <div class="chip primary">
+              <div class="circle"></div>
+              {{ documentNumberView?.module || '-' }}
             </div>
           </div>
 
-          <div class="col-md-12">
-            <div class="section section-dark">
-              <div class="section-title">
-                Valid Date
-              </div>
+        </div>
 
-
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Start Date</label>
-                    <span>{{ documentNumberView?.start_date || '-' }}</span>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>End Date</label>
-                    <span>{{ documentNumberView?.end_date || '-' }}</span>
-                  </div>
-                </div>
-              </div>
+        <div class="col-md-12">
+          <div style="flex-direction: row; justify-content: space-between;" class="form-group view">
+            <label>Sub Module</label>
+            <div class="chip info">
+              <div class="circle"></div>
+              {{ documentNumberView?.name || '-' }}
             </div>
           </div>
+        </div>
 
-
-          <div class="col-md-12">
-            <div class="section section-dark">
-              <div class="section-title">
-                Numbering Style and Format
-              </div>
-
-
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Numbering Style</label>
-                    <span>{{ documentNumberView?.numbering_style || '-' }}</span>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Prefix</label>
-                    <span>{{ documentNumberView?.prefix || '-' }}</span>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Body Length</label>
-                    <span>{{ documentNumberView?.body_length || '-' }}</span>
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Total Length</label>
-                    <span>{{ documentNumberView?.total_length || '-' }}</span>
-                  </div>
-                </div>
-
-              </div>
+        <div class="col-md-12">
+          <div class="section section-dark">
+            <div class="section-title">
+              Valid Date
             </div>
-          </div>
 
 
-          <div class="col-md-12">
-            <div class="section section-dark">
-              <div class="section-title">
-                Option
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Start Date</label>
+                  <span>{{ documentNumberView?.start_date || '-' }}</span>
+                </div>
               </div>
 
-
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Start No.</label>
-                    <div>{{ documentNumberView?.start_no || '-' }}</div>
-                  </div>
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>End Date</label>
+                  <span>{{ documentNumberView?.end_date || '-' }}</span>
                 </div>
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>Current No.</label>
-                    <span>{{ documentNumberView?.current_no || '-' }}</span>
-                  </div>
-                </div>
-
-
-                <div class="col-md-3">
-                  <div class="form-group view">
-                    <label>End No.</label>
-                    <span>{{ documentNumberView?.end_no || '-' }}</span>
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
         </div>
-    </div>
-    <div *ngIf="formTitle != 'View'" class="modal-footer">
-      <button appPreventDefault title="Alt+S" [accessKey]="'s'" (click)="null" class="btn btn-primary text-uppercase">
-        Save
-      </button>
-      <button (click)="closeDialog()" class="btn btn-secondary btn-transparent text-uppercase">
-        Cancel
-      </button>
+
+
+        <div class="col-md-12">
+          <div class="section section-dark">
+            <div class="section-title">
+              Numbering Style and Format
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Numbering Style</label>
+                  <span>{{ documentNumberView?.numbering_style || '-' }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Prefix</label>
+                  <span>{{ documentNumberView?.prefix || '-' }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Body Length</label>
+                  <span>{{ documentNumberView?.body_length || '-' }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Total Length</label>
+                  <span>{{ documentNumberView?.total_length || '-' }}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <div class="section section-dark">
+            <div class="section-title">
+              Option
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Start No.</label>
+                  <div>{{ documentNumberView?.start_no || '-' }}</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>Current No.</label>
+                  <span>{{ documentNumberView?.current_no || '-' }}</span>
+                </div>
+              </div>
+
+
+              <div class="col-md-3">
+                <div class="form-group view">
+                  <label>End No.</label>
+                  <span>{{ documentNumberView?.end_no || '-' }}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

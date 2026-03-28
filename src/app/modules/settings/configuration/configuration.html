@@ -108,24 +108,23 @@
         </div>
         }
         @else {
-        <div class="btn btn-outlined no-hover">
+        <span class="config-title">
           {{ item.value || 'N/A' }}
-        </div>
+        </span>
         }
         }
 
         @if (item.type == 'dropdown') {
         @if (editMode() == true) {
-        <ng-select class="form-control" type="text" bindValue="id" bindLabel="name" [items]="item.valueList"
-          [(ngModel)]="item.value"></ng-select>
+        <ng-select type="text" bindValue="id" bindLabel="name" [items]="item.valueList"
+          [(ngModel)]="item.id"></ng-select>
         }
         @else {
-        <div class="btn btn-outlined no-hover">
+        <span class="config-title">
           {{ item.displayValue || 'N/A' }}
-        </div>
+        </span>
         }
         }
-
         @if (item.type == 'radio') {
         @if (editMode() == true) {
         <div class="d-flex gap-md">
@@ -142,9 +141,9 @@
         </div>
         }
         @else {
-        <div class="btn btn-outlined no-hover">
+        <span class="config-title">
           {{ item.displayValue || 'N/A' }}
-        </div>
+        </span>
         }
         }
 
@@ -157,9 +156,9 @@
         </label>
         }
         @else {
-        <div class="btn btn-outlined no-hover">
+        <span class="config-title">
           {{ item.displayValue || 'N/A' }}
-        </div>
+        </span>
         }
         }
 

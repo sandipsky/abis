@@ -280,12 +280,13 @@ export class Configuration {
   }
 
   saveConfiguration() {
-    this.configurationService.addConfiguration(this.selectedGroup().filter((it: any) => it.name != 'logo'))
+    this.configurationService.addConfiguration(this.selectedGroup().items.filter((it: any) => it.name != 'logo'))
       .subscribe(
         {
           next: (res) => {
             if (res.success == true) {
               this.toastr.success(res?.messages[0]?.message);
+              this.editMode.set(false);
             }
             else {
               this.toastr.error(res?.messages[0]?.message);
