@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import sidebarData from './sidebar-data';
@@ -18,6 +18,7 @@ import { Menu } from '../../shared/components/menu/menu';
 export class Sidebar {
   sidebarData = sidebarData;
   activeSubMenu = signal<any>(null);
+  isCollapsed = model<boolean>(false);
 
   private _router = inject(Router);
   private _breadcrumbService = inject(BreadcrumbService);
@@ -97,8 +98,28 @@ export class Sidebar {
     });
   }
 
+  toggleSidebar() {
+    this.isCollapsed.update(val => !val);
+  }
+
   toggleSubMenu(item: any) {
     this.activeSubMenu.set(item);
+
+    if (item.children && item.children.length) {
+      const firstAllowedChild = item.children.find((child: any) =>
+        this.hasPermission(child.permission)
+      );
+
+      if (firstAllowedChild) {
+        this._router.navigate([firstAllowedChild.link]);
+
+        this.updateBreadCrumb(
+          firstAllowedChild.label,
+          firstAllowedChild.link,
+          item.label
+        );
+      }
+    }
   }
 
   clearSubMenu() {
@@ -133,7 +154,7 @@ export class Sidebar {
       for (const item of group.items) {
         if (item.children) {
           const activeChild = item.children.find((child: any) =>
-            currentUrl.includes(child.link)
+            currentUrl == '/' + child.link
           );
 
           if (activeChild) {

@@ -1,8 +1,8 @@
-<div class="sidebar">
+<div class="sidebar" [class.collapsed]="isCollapsed()">
     <div class="logo-container">
         <h1 class="logo">ABIS</h1>
 
-        <div style="padding: 4px;" class="btn btn-outlined">
+        <div (click)="toggleSidebar()" style="padding: 4px;" class="btn btn-outlined">
             <img style="cursor: pointer;" src="../../../svg/sidebar.svg" alt="">
         </div>
     </div>
@@ -12,7 +12,10 @@
             @if (!activeSubMenu()) {
             <app-menu #q [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
                 <div dropdown-display [class.active]="q.isOpen()" class="btn btn-outlined-primary">
-                    + Quick Add Item
+                    +
+                    @if (!isCollapsed()) {
+                    <span> Quick Add Item</span>
+                    }
                 </div>
 
                 <div dropdown-content class="quickadd-dropdown">
@@ -66,14 +69,14 @@
                 @for(item of group.items; track item.label) {
 
                 @if (item.children && hasChildPermission(item.children)) {
-                <a href="javascript:void(0)" (click)="toggleSubMenu(item)" class="link-item">
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" href="javascript:void(0)" (click)="toggleSubMenu(item)" class="link-item">
                     <img [src]="'../../../svg/' + item.icon + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                     <img class="caret" src="../../../svg/caret.svg" alt="">
                 </a>
                 }
                 @else if (hasPermission(item.permission)) {
-                <a (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="false" (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
                     #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
@@ -86,17 +89,19 @@
             }
             @else {
             <div class="link-group cursor-pointer">
-                <div (click)="clearSubMenu()" class="group-title">
+                <div (click)="clearSubMenu()" class="group-title sub">
                     <img class="caret rotate-180" src="../../../svg/caret.svg" alt="">
-                    {{activeSubMenu().label | uppercase }}
+                    <span>
+                        {{activeSubMenu().label | uppercase }}
+                    </span>
                 </div>
 
                 @for(item of activeSubMenu().children; track item.label) {
                 @if (hasPermission(item.permission)) {
-                <a (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     @if (item.icon) {
-                        <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     }
                     <span>{{ item.label }}</span>
                 </a>
@@ -107,7 +112,7 @@
         </div>
 
         <div class="bottom-links">
-            <a [matTooltip]="'User Manual'" [matTooltipDisabled]="true" [routerLink]="'help'" routerLinkActive="active"
+            <a [matTooltipClass]="'right'" [matTooltip]="'User Manual'" [matTooltipDisabled]="true" [routerLink]="'help'" routerLinkActive="active"
                 #rla="routerLinkActive" class="link-item">
                 <img [src]="'../../../svg/user-plus.svg'" alt="">
                 <span>User Manual</span>

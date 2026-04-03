@@ -11,5 +11,5 @@ import { Header } from './header/header';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Layout {
-
+  isCollapsed = false;
 }
