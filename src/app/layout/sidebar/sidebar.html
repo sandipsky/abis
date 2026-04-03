@@ -69,15 +69,18 @@
                 @for(item of group.items; track item.label) {
 
                 @if (item.children && hasChildPermission(item.children)) {
-                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" href="javascript:void(0)" (click)="toggleSubMenu(item)" class="link-item">
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
+                    [matTooltipDisabled]="!isCollapsed()" href="javascript:void(0)" (click)="toggleSubMenu(item)"
+                    class="link-item">
                     <img [src]="'../../../svg/' + item.icon + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                     <img class="caret" src="../../../svg/caret.svg" alt="">
                 </a>
                 }
                 @else if (hasPermission(item.permission)) {
-                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
-                    #rla="routerLinkActive" class="link-item">
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
+                    [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link)"
+                    [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
                 </a>
@@ -88,7 +91,7 @@
             }
             }
             @else {
-            <div class="link-group cursor-pointer">
+            <div [class.animate-in]="showSubMenuAnimation()" class="link-group cursor-pointer submenu-container">
                 <div (click)="clearSubMenu()" class="group-title sub">
                     <img class="caret rotate-180" src="../../../svg/caret.svg" alt="">
                     <span>
@@ -98,7 +101,9 @@
 
                 @for(item of activeSubMenu().children; track item.label) {
                 @if (hasPermission(item.permission)) {
-                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
+                    [matTooltipDisabled]="!isCollapsed()"
+                    (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     @if (item.icon) {
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
@@ -112,8 +117,8 @@
         </div>
 
         <div class="bottom-links">
-            <a [matTooltipClass]="'right'" [matTooltip]="'User Manual'" [matTooltipDisabled]="true" [routerLink]="'help'" routerLinkActive="active"
-                #rla="routerLinkActive" class="link-item">
+            <a [matTooltipClass]="'right'" [matTooltip]="'User Manual'" [matTooltipDisabled]="true"
+                [routerLink]="'help'" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                 <img [src]="'../../../svg/user-plus.svg'" alt="">
                 <span>User Manual</span>
             </a>

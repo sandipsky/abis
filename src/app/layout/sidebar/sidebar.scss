@@ -99,6 +99,17 @@
         }
     }
 
+    .submenu-container {
+        opacity: 0;
+        transform: translateY(15px);
+        transition: opacity 0.25s ease-out, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 
     .quickadd-dropdown {
         width: 1300px;
@@ -173,7 +184,7 @@
     &.collapsed {
         width: 68px;
         overflow: hidden;
-        transition: all 0.3s ease;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
         .group-title.sub {
             justify-content: center;
@@ -184,7 +195,9 @@
         }
 
         .link-item {
-            span, .caret {
+
+            span,
+            .caret {
                 white-space: nowrap;
                 display: none;
             }

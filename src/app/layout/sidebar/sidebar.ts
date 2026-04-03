@@ -102,8 +102,13 @@ export class Sidebar {
     this.isCollapsed.update(val => !val);
   }
 
+  showSubMenuAnimation = signal(false);
+
   toggleSubMenu(item: any) {
     this.activeSubMenu.set(item);
+    setTimeout(() => {
+      this.showSubMenuAnimation.set(true);
+    }, 10);
 
     if (item.children && item.children.length) {
       const firstAllowedChild = item.children.find((child: any) =>
@@ -123,7 +128,11 @@ export class Sidebar {
   }
 
   clearSubMenu() {
-    this.activeSubMenu.set(null);
+    this.showSubMenuAnimation.set(false);
+    setTimeout(() => {
+      this.activeSubMenu.set(null);
+      this._router.navigate(['dashboard']);
+    }, 200);
   }
 
   openQuickAdd(item: any) {
@@ -159,6 +168,9 @@ export class Sidebar {
 
           if (activeChild) {
             this.activeSubMenu.set(item);
+            setTimeout(() => {
+              this.showSubMenuAnimation.set(true);
+            }, 10);
             this._breadcrumbService.updateBreadcrumbs({
               label: activeChild.label,
               link: activeChild.link,
@@ -167,7 +179,7 @@ export class Sidebar {
             return;
           }
         } else if (currentUrl.includes(item.link)) {
-          this.activeSubMenu.set(null);
+          this.clearSubMenu();
           this._breadcrumbService.updateBreadcrumbs({
             label: item.label,
             link: item.link
