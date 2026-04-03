@@ -76,7 +76,7 @@
                 </a>
                 }
                 @else if (hasPermission(item.permission)) {
-                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="false" (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
+                <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'" [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link)" [routerLink]="item.link" routerLinkActive="active"
                     #rla="routerLinkActive" class="link-item">
                     <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
                     <span>{{ item.label }}</span>
