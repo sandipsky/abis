@@ -1,9 +1,15 @@
 <div class="sidebar" [class.collapsed]="isCollapsed()">
     <div class="logo-container">
-        <h1 class="logo">ABIS</h1>
+
+        @if (isCollapsed()) {
+        <h1 class="logo">A</h1>
+        }
+        @else {
+            <h1 class="logo">ABIS</h1>
+        }
 
         <div (click)="toggleSidebar()" style="padding: 4px;" class="btn btn-outlined">
-            <img style="cursor: pointer;" src="../../../svg/sidebar.svg" alt="">
+            <img class="cursor-pointer" [class.rotate-180]="isCollapsed()" src="../../../svg/sidebar.svg" alt="">
         </div>
     </div>
 
@@ -14,7 +20,7 @@
                 <div dropdown-display [class.active]="q.isOpen()" class="btn btn-outlined-primary">
                     +
                     @if (!isCollapsed()) {
-                    <span> Quick Add Item</span>
+                    <span style="white-space: nowrap;"> Quick Add Item</span>
                     }
                 </div>
 

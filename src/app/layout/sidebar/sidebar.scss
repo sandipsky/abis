@@ -4,10 +4,11 @@
     background-color: #F6F7F5;
     height: 100%;
     width: 240px;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
     .logo-container {
         display: flex;
-        padding: 16px 20px;
+        padding: 16px;
         align-self: stretch;
         align-items: center;
         justify-content: space-between;
@@ -75,6 +76,7 @@
             align-self: stretch;
             border-radius: 8px;
             text-decoration: none;
+            white-space: nowrap;
 
             color: var(--text-secondary-color);
             font-size: 14px;
@@ -184,7 +186,6 @@
     &.collapsed {
         width: 68px;
         overflow: hidden;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
         .group-title.sub {
             justify-content: center;
@@ -199,7 +200,7 @@
             span,
             .caret {
                 white-space: nowrap;
-                display: none;
+                opacity: 0;
             }
         }
     }
