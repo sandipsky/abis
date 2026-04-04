@@ -1,34 +1,49 @@
 <div class="section main">
     <div class="section-header">
-        <filter-section (onFilterChange)="applyFilter($event)" [filterColumns]="filterColumns"
-            searchBy="name"></filter-section>
+        <filter-section (onFilterChange)="applyFilter($event)" 
+                        [filterColumns]="filterColumns()"
+                        searchBy="name">
+        </filter-section>
 
         <div class="section-header-btn-group">
-            <button *ngIf="operationList.includes('ExportProduct')" onclick="window.print()" class="btn btn-secondary">
-                <img src="../../../assets/svg/print.svg" alt="">
-                Print
-            </button>
-            <button *ngIf="operationList.includes('ExportProduct')" (click)="getMasterList(true)"
-                class="btn btn-secondary">
-                <img src="../../../assets/svg/download.svg" alt="">
-                Export
-            </button>
+            @if (hasPermission('ExportProduct')) {
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <img src="../../../assets/svg/print.svg" alt="">
+                    Print
+                </button>
+                <button (click)="getMasterList(true)" class="btn btn-secondary">
+                    <img src="../../../assets/svg/download.svg" alt="">
+                    Export
+                </button>
+            }
 
-            <button *ngIf="operationList.includes('CreateProduct') || true" (click)="showForm()" class="btn btn-primary">+ Add
-                Product</button>
+            @if (hasPermission('CreateProduct')) {
+                <button (click)="showForm()" class="btn btn-primary">
+                    + Add Product
+                </button>
+            }
         </div>
     </div>
 
     <div class="section-content">
+        <app-table 
+            [actions]="['view', 'edit', 'delete']" 
+            (sortChange)="onSort($event)" 
+            [tableHeaders]="tableHeaders()"
+            [hasDeletePermission]="hasPermission('DeleteProduct')"
+            [hasEditPermission]="hasPermission('EditProduct')" 
+            [filterData]="filterForm()"
+            [tableData]="masterList()" 
+            (onView)="showForm($event, true)" 
+            (onEdit)="showForm($event)"
+            (onDelete)="deleteItem($event)">
+        </app-table>
 
-        <app-table [actions]="['view', 'edit', 'delete']" (sortChange)="onSort($event)" [tableHeaders]="tableHeaders"
-            [hasDeletePermission]="operationList.includes('DeleteProduct')"
-            [hasEditPermission]="operationList.includes('EditProduct')" [filterData]="filterForm"
-            [tableData]="masterList" (onView)="showForm($event, true)" (onEdit)="showForm($event)"
-            (onDelete)="deleteItem($event)"></app-table>
-
-        <app-paginator (pageChange)="onChangedPage($event)" [pageSize]="filterForm.pageSize" [length]="length"
-            [pageIndex]="filterForm.pageIndex"></app-paginator>
+        <app-paginator 
+            (pageChange)="onChangedPage($event)" 
+            [pageSize]="filterForm().pageSize" 
+            [length]="length()"
+            [pageIndex]="filterForm().pageIndex">
+        </app-paginator>
     </div>
-
 </div>
