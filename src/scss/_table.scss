@@ -68,14 +68,14 @@
     background-color: var(--bg-semi-light-color);
     font-weight: 500;
     line-height: 20px;
-    padding: 8px;
+    padding: 6px 8px;
   }
 
   td {
-    padding: 8px;
+    padding: 6px 8px;
     font-weight: 400;
     font-size: 14px;
-    line-height: 24px;
+    white-space: nowrap;
     border-bottom: 1px solid var(--separator-color);
 
     .actions {
@@ -88,10 +88,6 @@
         cursor: pointer;
       }
     }
-  }
-
-  tr:nth-child(even) td {
-    // background-color: var(--text-white-color);
   }
 }
 

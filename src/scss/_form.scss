@@ -16,6 +16,23 @@
     }
   }
 
+  &.checkbox {
+    height: 100%;
+
+    .checkbox-group {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+  }
+
   &.view {
     label {
       color: var(--text-quaternary-color);
@@ -38,7 +55,7 @@
 }
 
 .form-control {
-  padding: 8px;
+  padding: 6px 8px;
   border: 1px solid var(--separator-color);
   background-color: var(--bg-lightest-color);
   border-radius: 8px;

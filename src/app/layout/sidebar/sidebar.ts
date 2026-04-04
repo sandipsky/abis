@@ -179,7 +179,10 @@ export class Sidebar {
             return;
           }
         } else if (currentUrl.includes(item.link)) {
-          this.clearSubMenu();
+          this.showSubMenuAnimation.set(false);
+          setTimeout(() => {
+            this.activeSubMenu.set(null);
+          }, 200);
           this._breadcrumbService.updateBreadcrumbs({
             label: item.label,
             link: item.link

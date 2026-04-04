@@ -37,7 +37,7 @@ ne-datepicker {
 
 .nepali-date-picker {
   .np_datepicker_input {
-    padding: 8px !important;
+    padding: 6px 8px !important;
     border: 1px solid var(--separator-color) !important;
     background-color: var(--bg-lightest-color) !important;
     border-radius: 8px !important;
@@ -84,8 +84,9 @@ ne-datepicker {
 }
 
 .ng-select .ng-select-container {
-  padding: 8px !important;
+  padding: 6px 0px !important;
   height: auto !important;
+  min-height: auto !important;
   border: 1px solid var(--separator-color);
   background-color: var(--bg-lightest-color);
   border-radius: 8px;
@@ -107,6 +108,10 @@ ne-datepicker {
   display: none;
 }
 
+.ng-select .ng-clear-wrapper {
+  height: 17px;
+}
+
 .mat-mdc-tooltip {
   position: relative;
   background-color: gray;
@@ -122,9 +127,11 @@ ne-datepicker {
     border-right: 0.5rem solid transparent;
     border-bottom: 0.5rem solid gray;
   }
+
   &.below {
     overflow: initial;
     margin-top: 1rem;
+
     &:after {
       top: -0.5rem;
       right: calc(50% - 0.5rem);
@@ -135,6 +142,7 @@ ne-datepicker {
   &.above {
     overflow: initial;
     margin-bottom: 1rem;
+
     &:after {
       bottom: -0.5rem;
       right: calc(50% - 0.5rem);
@@ -145,6 +153,7 @@ ne-datepicker {
   &.right {
     overflow: initial;
     margin-left: 1rem;
+
     &:after {
       left: -0.65rem;
       top: calc(50% - 0.25rem);
@@ -155,6 +164,7 @@ ne-datepicker {
   &.left {
     overflow: initial;
     margin-right: 1rem;
+
     &:after {
       right: -0.75rem;
       top: calc(50% - 0.25rem);
@@ -194,13 +204,15 @@ ne-datepicker {
     }
   }
 
-  .section, .section-content {
+  .section,
+  .section-content {
     padding: 0 !important;
     margin: 0 !important;
     border: none;
   }
 
-  td, th {
+  td,
+  th {
     padding: 4px !important;
     font-size: 12px !important;
     white-space: nowrap;
@@ -216,4 +228,3 @@ ne-datepicker {
     margin-left: -240px !important;
   }
 }
-

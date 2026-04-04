@@ -14,7 +14,7 @@
                 Export
             </button>
 
-            <button *ngIf="operationList.includes('CreateProduct')" (click)="showForm()" class="btn btn-primary">+ Add
+            <button *ngIf="operationList.includes('CreateProduct') || true" (click)="showForm()" class="btn btn-primary">+ Add
                 Product</button>
         </div>
     </div>
@@ -31,8 +31,4 @@
             [pageIndex]="filterForm.pageIndex"></app-paginator>
     </div>
 
-</div>
-
-<div *ngIf="isLoading == true">
-    <app-loading-spinner></app-loading-spinner>
 </div>
