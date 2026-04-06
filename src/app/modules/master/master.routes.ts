@@ -17,8 +17,8 @@ export const masterRoutes: Routes = [{
     canActivate: [authGuard]
 },
 {
-    path: 'product-category',
-    loadComponent: () => import('./product-category/product-category').then(m => m.ProductCategory),
+    path: 'category',
+    loadComponent: () => import('./category/category').then(m => m.Category),
     canActivate: [authGuard]
 },
 ];

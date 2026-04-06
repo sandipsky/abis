@@ -101,8 +101,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Product Type</label>
-                            <ng-select [items]="productTypeList" bindLabel="name" bindValue="id"
-                                formControlName="product_type" (change)="onChangeProductType($event)"
+                            <ng-select [items]="[]" bindLabel="name" bindValue="id" formControlName="product_type"
                                 placeholder="Select Product Type"
                                 [class.is-invalid]="f['product_type'].invalid && (f['product_type'].dirty ||f['product_type'].touched)">
                             </ng-select>
@@ -112,8 +111,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Product Category</label>
-                            <ng-select [items]="productTypeList" bindLabel="name" bindValue="id"
-                                formControlName="product_type" (change)="onChangeProductType($event)"
+                            <ng-select [items]="[]" bindLabel="name" bindValue="id" formControlName="product_type"
                                 placeholder="Select Product Type"
                                 [class.is-invalid]="f['product_type'].invalid && (f['product_type'].dirty ||f['product_type'].touched)">
                             </ng-select>
@@ -124,7 +122,6 @@
                         <div class="form-group">
                             <label>Tax Type</label>
                             <ng-select [addTag]="operationList.includes('CreateTaxType')" [items]="allTaxTypes"
-                                (change)="onAddItem($event, 'tax_type_id', {title: 'Tax Type', endPoint: 'tax_types'})"
                                 bindLabel="name" bindValue="id" placeholder="Select Tax Type"
                                 formControlName="tax_type_id">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
@@ -140,8 +137,7 @@
                             <label>Purchasable </label>
 
                             <label class="switch">
-                                <input [checked]="selectedTypeName.includes('purchasable')"
-                                    (change)="getType('purchasable')" type="checkbox">
+                                <input type="checkbox">
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -152,8 +148,7 @@
                             <label>Sellable </label>
 
                             <label class="switch">
-                                <input (change)="getType('sellable')" [checked]="selectedTypeName.includes('sellable')"
-                                    type="checkbox">
+                                <input type="checkbox">
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -178,7 +173,6 @@
                         <div class="form-group">
                             <label>Packing</label>
                             <ng-select [addTag]="operationList.includes('CreatePackings')" [items]="allPackings"
-                                (change)="onAddItem($event, 'packing_id', {title: 'Packing', endPoint: 'packings'})"
                                 bindLabel="name" bindValue="id" placeholder="Select Packing"
                                 formControlName="packing_id">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
@@ -193,7 +187,6 @@
                         <div class="form-group">
                             <label>Primary Unit</label>
                             <ng-select [addTag]="operationList.includes('CreateUnits')" [items]="allUnits"
-                                (change)="onAddItem($event, 'primary_unit_id', {title: 'Unit', endPoint: 'units'})"
                                 bindLabel="name" bindValue="id" placeholder="Select Primary Unit"
                                 formControlName="primary_unit_id"
                                 [class.is-invalid]="f['primary_unit_id'].invalid && (f['primary_unit_id'].dirty ||f['primary_unit_id'].touched)">
@@ -233,9 +226,8 @@
                                         class="text-danger">*</span></label>
                                 <ng-select [class.readonly]="f['has_secondary_unit'].value != true"
                                     [readonly]="f['has_secondary_unit'].value != true"
-                                    [addTag]="operationList.includes('CreateUnits')" [items]="allUnits"
-                                    (change)="onAddItem($event, 'secondary_unit_id', {title: 'Unit', endPoint: 'units'})"
-                                    bindLabel="name" bindValue="id" placeholder="Select Secondary Unit"
+                                    [addTag]="operationList.includes('CreateUnits')" [items]="allUnits" bindLabel="name"
+                                    bindValue="id" placeholder="Select Secondary Unit"
                                     formControlName="secondary_unit_id"
                                     [class.is-invalid]="f['secondary_unit_id'].invalid && (f['secondary_unit_id'].dirty ||f['secondary_unit_id'].touched)">
                                     <ng-template ng-tag-tmp let-search="searchTerm">
@@ -451,7 +443,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3" *ngIf="companyDetails?.company_reg_type != 'PAN'">
+                    <div class="col-md-3">
                         <div class="form-group view">
                             <label>Tax Type</label>
                             <span>{{ selectedProduct?.tax_type_name || 'N/A'}}</span>
@@ -461,14 +453,14 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Purchasable</label>
-                            <span>{{ selectedTypeName.includes('purchasable') == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct.includes('purchasable') == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Sellable</label>
-                            <span>{{ selectedTypeName.includes('sellable') ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct.includes('sellable') ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 

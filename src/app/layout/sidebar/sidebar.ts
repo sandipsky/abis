@@ -45,9 +45,7 @@ export class Sidebar {
       items: [
         { name: 'Sales' },
         { name: 'Sales Return' },
-        { name: 'Dispatch' },
         { name: 'Sales Order' },
-        { name: 'Bulk Order' },
         { name: 'B/D/E' },
         { name: 'Customer' }
       ]
@@ -63,17 +61,6 @@ export class Sidebar {
       ]
     },
     {
-      name: 'Manufacturing',
-      color: '#4CB139',
-      icon: 'manufacturing',
-      items: [
-        { name: 'Finished Goods Receipt' },
-        { name: 'Material Issues' },
-        { name: 'Material Issues Return' },
-        { name: 'Physical Stock Master' }
-      ]
-    },
-    {
       name: 'Accounting',
       color: '#E89C00',
       icon: 'accounting',
@@ -81,9 +68,6 @@ export class Sidebar {
         { name: 'Journal Entry' },
         { name: 'Payment' },
         { name: 'Payment Adjustment' },
-        { name: 'Cash/ Bank Voucher' },
-        { name: 'Credit Note' },
-        { name: 'Debit Note' },
         { name: 'Opening Balance' },
         { name: 'Account' }
       ]

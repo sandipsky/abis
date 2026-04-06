@@ -132,14 +132,6 @@ const sidebarData = [
                         activeIcon: 'opening-stock-active',
                         permission: 'ViewOpeningStock'
                     },
-                    {
-                        link: 'physical-stock-master',
-                        label: 'Physical Stock Master',
-                        tooltip: 'Physical Stock Master',
-                        icon: 'physical-stock-master',
-                        activeIcon: 'physical-stock-master-active',
-                        permission: 'ViewPhysicalStocks'
-                    },
                 ]
             },
             {
@@ -172,22 +164,6 @@ const sidebarData = [
                         icon: 'payment-adjustment',
                         activeIcon: 'payment-adjustment-active',
                         permission: 'ViewPaymentAdjustment'
-                    },
-                    {
-                        link: 'credit-note',
-                        label: 'Credit Note',
-                        tooltip: 'Credit Note',
-                        icon: 'credit-note',
-                        activeIcon: 'credit-note-active',
-                        permission: ['ViewVendorCreditNotes', 'ViewCustomerCreditNotes']
-                    },
-                    {
-                        link: 'debit-note',
-                        label: 'Debit Note',
-                        tooltip: 'Debit Note',
-                        icon: 'debit-note',
-                        activeIcon: 'debit-note-active',
-                        permission: ['ViewCustomerDebitNotes', 'ViewVendorDebitNotes']
                     },
                     {
                         link: 'opening-balance',
@@ -227,10 +203,10 @@ const sidebarData = [
                 icon: 'master',
                 activeIcon: 'master-active',
                 children: [
-                    { link: 'units', label: 'Unit', tooltip: 'Unit', icon: '', activeIcon: '', permission: 'ViewUnit' },
-                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: '', activeIcon: '', permission: 'ViewPackings' },
-                    { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: '', activeIcon: '', permission: 'ViewTaxType' },
-                    { link: 'product-category', label: 'Product Category', tooltip: 'Product Category', icon: '', activeIcon: '', permission: 'ViewProductCategories' },
+                    { link: 'units', label: 'Unit', tooltip: 'Unit', icon: 'unit', activeIcon: 'unit-active', permission: 'ViewUnit' },
+                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: 'packing', activeIcon: 'packing-active', permission: 'ViewPackings' },
+                    { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: 'taxtype', activeIcon: 'taxtype-active', permission: 'ViewTaxType' },
+                    { link: 'category', label: 'Category', tooltip: 'Category', icon: 'category', activeIcon: 'category-active', permission: 'ViewProductCategories' },
                 ]
             },
             {
