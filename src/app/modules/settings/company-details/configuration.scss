@@ -9,11 +9,11 @@
 
 .config-item {
   display: flex;
-  width: 898px;
+  width: 80%;
   padding: 16px;
   align-items: center;
-  border-radius: var(--Spacing-12, 12px);
   border: 1px solid #EBEDEB;
+  border-radius: var(--Spacing-12, 12px);
   background: #F7F7F7;
   box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 

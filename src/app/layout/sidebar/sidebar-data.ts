@@ -257,15 +257,6 @@ const sidebarData = [
                         activeIcon: 'configuration-active',
                         permission: 'ViewConfig'
                     },
-
-                    {
-                        link: 'auto-code-generator',
-                        label: 'Auto Code Generator',
-                        tooltip: 'Auto Code Generator',
-                        icon: 'auto-code-generator',
-                        activeIcon: 'auto-code-generator-active',
-                        permission: 'ViewAutoCodeGenerator'
-                    },
                     {
                         link: 'document-number-scheme',
                         label: 'Document Numbering',

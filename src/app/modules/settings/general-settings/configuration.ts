@@ -24,6 +24,15 @@ export class Configuration {
 
   setupItems = signal<any[]>([
     {
+      name: 'General Settings',
+      items: [
+        { name: 'Calendar Type', valueList: [{ id: "1", name: "AD" }, { id: "0", name: "BS" }], type: 'radio' },
+        { name: 'Language', valueList: [{ id: "1", name: "English" }, { id: "0", name: "Nepali" }], type: 'radio' },
+        { name: 'Theme', valueList: [{ id: "1", name: "Light" }, { id: "0", name: "Dark" }], type: 'radio' },
+        { name: 'Accent Color', valueList: [{ id: "1", name: "Green" }, { id: "0", name: "Blue" }], type: 'radio' },
+      ]
+    },
+    {
       name: 'Company Profile',
       items: [
         { name: 'logo', type: 'image' },
@@ -33,59 +42,18 @@ export class Configuration {
         { name: 'company_contact', type: 'input' },
         { name: 'company_address', type: 'input' },
         { name: 'company_email', type: 'input' },
-        { name: 'is_IRD_certified', valueList: [{ id: "1", name: "Certified" }, { id: "0", name: "Not Certified" }], type: 'radio' },
-        { name: 'username_IRD', type: 'input' },
-        { name: 'password_IRD', type: 'input' },
       ]
     },
+
     {
-      name: 'General Settings',
+      name: "Transaction",
       items: [
-        { name: 'pdf_format', type: 'dropdown', valueList: [{ id: "npl", name: "NPL" }] },
-        { name: 'default_rounding', type: 'toggle' },
-        { name: 'trade_price', type: 'toggle' },
-        { name: 'mfg_date', type: 'toggle' },
-        { name: 'is_free_sample', type: 'toggle' },
-        { name: 'allow_day_in_expiry', valueList: [{ id: "1", name: "DD/MM/YYYY" }, { id: "0", name: "MM/YYYY" }], type: 'radio' },
         { name: 'product_valuation_method', valueList: [{ id: "LIFO", name: "LIFO" }, { id: "FIFO", name: "FIFO" }, { id: "FEFO", name: "FEFO" }], type: 'radio' },
-      ]
-    },
-    {
-      name: "Purchase/Inventory",
-      items: [
-        { name: "default_unit_purchase", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_unit_purchase_order", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_unit_purchase_return", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "zero_value_purchase", type: "toggle" },
-        { name: "default_transaction_type_purchase", valueList: [{ id: "Cash", name: "Cash" }, { id: "Credit", name: "Credit" }], type: "radio" },
-        { name: "default_unit_inventories", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "zero_value_finish_goods", type: "toggle" },
+        { name: "Show Expiry Date", type: "toggle" },
+        { name: "Show Manufacturing Date", type: "toggle" },
+
       ],
     },
-    {
-      name: 'Sales',
-      items: [
-        { name: "division_wise_sales", type: "toggle" },
-        { name: "category_wise_discount", type: "toggle" },
-        { name: "sales_due_alert_days", type: "input" },
-        { name: "treat_expiry_as_product_stock", type: "toggle" },
-        { name: "default_unit_sales", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_unit_sales_return", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_unit_expiries", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_unit_sales_order", valueList: [{ id: "Primary", name: "Primary" }, { id: "Secondary", name: "Secondary" }], type: "radio" },
-        { name: "default_transaction_type_sales", valueList: [{ id: "Cash", name: "Cash" }, { id: "Credit", name: "Credit" }], type: "radio" },
-        { name: "zero_value_sales", type: "toggle" },
-        { name: "sales_order_hierarchy", type: "toggle" },
-      ]
-    },
-    {
-      name: 'User',
-      items: [
-        { name: "max_failed_attempts", type: "input" },
-        { name: "session_time_limit_hour", type: "input" },
-        { name: "time_frame_for_unlocking_user", type: "input" },
-      ]
-    }
   ]);
 
   public operationList: any = [];
@@ -117,25 +85,15 @@ export class Configuration {
     this.selectedTabIndex.set(index);
   }
 
-  // onEdit() {
-  //   this.dialogRef = this.dialog.open(AddConfigComponent, {
-  //     panelClass: ['drawer-right', 'slide-left'],
-  //     enterAnimationDuration: '0ms',
-  //     exitAnimationDuration: '0ms',
-  //     disableClose: true,
-  //     data: this.setupItems[this.selectedTabIndex]?.items
-  //   });
+  applyTheme(themeValue: string) {
+    const body = document.body;
 
-  //   this.dialogRef.backdropClick().subscribe(() => {
-  //     this.closeDialog();
-  //   });
-
-  //   this.dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.getAllConfigList();
-  //     }
-  //   });
-  // }
+    if (themeValue === '0') {
+      body.classList.add('dark-theme');
+    } else {
+      body.classList.remove('dark-theme');
+    }
+  }
 
   getAllConfigList(): void {
     this.configurationService.getAllConfigData()

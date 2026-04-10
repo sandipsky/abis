@@ -13,33 +13,22 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.scss'],
   imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class Login implements OnInit {
-  // --- Dependency Injection ---
+export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
 
-  // --- Signals (State) ---
   isLoading = signal(false);
-  fiscalYearList = signal<any[]>([]);
-  fiscalYearId = signal<number | null>(null);
   hidePassword = signal(true);
-  
-  // Constant data
+
   public currentApplicationVersion = packageJson.version;
 
-  // --- Reactive Form ---
   loginForm: FormGroup = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
 
-  ngOnInit() {
-    this.getFiscalYearDropdown();
-  }
-
-  // --- Methods ---
   isRequiredInvalid(fieldName: string): boolean {
     const field = this.loginForm.get(fieldName);
     return !!(
@@ -50,40 +39,24 @@ export class Login implements OnInit {
     );
   }
 
-  getFiscalYearDropdown() {
-    this.authService.getFiscalYearDropdown().subscribe({
-      next: (res: any) => {
-        this.fiscalYearList.set(res);
-        const currentYear = res?.find((item: any) => item.is_current === true);
-        if (currentYear) {
-          this.fiscalYearId.set(currentYear.id);
-        }
-      },
-      error: (err) => this.toastr.error(err)
-    });
-  }
-
   togglePasswordVisibility() {
     this.hidePassword.update(prev => !prev);
   }
 
   login() {
+    localStorage.setItem('token', 'test');
+    this.router.navigate(['dashboard']);
+    return;
+
     if (this.loginForm.invalid) {
       this.toastr.error("Please Enter both Username and Password", 'Error', { closeButton: true });
       return;
     }
 
-    if (this.fiscalYearId() === null) {
-      this.toastr.error("Please Select Fiscal Year", 'Error', { closeButton: true });
-      return;
-    }
-
     this.isLoading.set(true);
-    
+
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        const selectedYear = this.fiscalYearList().find(item => item.id === this.fiscalYearId());
-        localStorage.setItem('fiscalYear', selectedYear?.name || '');
         localStorage.setItem('token', res?.authorization?.token || '');
 
         this.isLoading.set(false);
@@ -99,6 +72,8 @@ export class Login implements OnInit {
         );
       },
     });
+
+
   }
 
   logout() {

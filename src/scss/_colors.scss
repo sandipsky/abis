@@ -40,3 +40,25 @@
   --premium-color: #ab20a9;
   --premium-bg-color: #fbcefa;
 }
+
+.dark-theme {
+  /* ================= Text Colors ================= */
+  --text-primary-color: #f9fafb;
+  --text-secondary-color: #d1d5db;
+  --text-tertiary-color: #9ca3af;
+  --text-quaternary-color: #6b7280;
+  --text-white-color: #ffffff;
+  --text-disabled-color: #6b7280;
+
+  /* ================= Separators ================= */
+  --separator-color: #374151;
+  --separator-alt-color: #2d2f2d;
+
+  /* ================= Backgrounds ================= */
+  --bg-lightest-color: #0f172a;
+  --bg-light-color: #111827;
+  --bg-semi-light-color: #1f2937;
+  --bg-semi-dark-color: #111827;
+  --bg-dark-color: #1f2937;
+  --bg-darkest-color: #374151;
+}
