@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoadingSpinner } from './shared/components/loading-spinner/loading-spinner';
+import { ConfigurationService } from './shared/services/configuration.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,10 @@ import { LoadingSpinner } from './shared/components/loading-spinner/loading-spin
   templateUrl: './app.html',
 })
 export class App {
+  private _configurationService = inject(ConfigurationService);
+
+  constructor() {
+    this._configurationService.loadSavedPreferences();
+  }
+
 }

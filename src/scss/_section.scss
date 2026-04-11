@@ -2,7 +2,8 @@
     padding: 12px;
     align-self: stretch;
     border-radius: 12px;
-    border: 1px solid var(--separator-medium-color, #EBEDEB);
+    border: 1px solid var(--separator-color, #EBEDEB);
+    background-color: var(--bg-lightest-color);
 
     &.section-dark {
         background: var(--bg-light-color, #F7F7F7);
@@ -61,99 +62,4 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-}
-
-
-.upload-image-box {
-    background-color: var(--text-white-color);
-    border: 1px solid var(--disabled-color);
-    align-self: stretch;
-    border-radius: 12px;
-    padding: 12px;
-    gap: 12px;
-    display: flex;
-    align-items: center;
-
-    .profile-container {
-        display: flex;
-        width: 52px;
-        height: 52px;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        flex-shrink: 0;
-        aspect-ratio: 1/1;
-        border-radius: 48px;
-        border: 1px solid var(--disabled-color);
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    .image-detail-container {
-        .image-title {
-            color: var(--text-primary-color);
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 24px;
-        }
-
-        .image-size {
-            color: var(--text-quaternary-color);
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 20px;
-        }
-    }
-
-    &.noimage {
-        border: 1px dashed var(--disabled-color);
-        background-color: var(--bg-light-color);
-
-        .profile-container {
-            border: 1px solid var(--disabled-color);
-        }
-
-        .image-detail-container {
-            .image-title {
-                font-size: 14px;
-                line-height: 20px;
-            }
-        }
-    }
-}
-
-
-.upload-item {
-    display: flex;
-    padding: var(--Spacing-8, 8px) var(--Spacing-16, 16px);
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-    border-radius: var(--Spacing-12, 12px);
-    background: var(--Background-Semi-Light, #F3F4F6);
-    margin: 12px 0;
-
-    img {
-        cursor: pointer;
-    }
-
-    .title {
-        color: var(--Text-Secondary, #1F2937);
-        font-size: var(--Font-Size-Body-Small, 14px);
-        font-style: normal;
-        font-weight: var(--Weight-Semi-Bold, 500);
-        line-height: var(--Line-Height-Body-Small, 20px);
-    }
-
-    .sub-title {
-        color: var(--Text-quaternary, #6B7280);
-        font-size: var(--Font-Size-Body-Small, 14px);
-        font-style: normal;
-        font-weight: var(--Weight-Regular, 400);
-        line-height: var(--Line-Height-Body-Small, 20px);
-    }
 }

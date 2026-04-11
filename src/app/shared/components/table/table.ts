@@ -56,10 +56,10 @@ export class Table {
 
   // Derived State / Reactive Config
   // Converts the Observable configuration to a Signal automatically
-  private configData = toSignal(this.configService.configuration$);
+  // private configData = toSignal(this.configService.configuration$);
   
   // Computed property that updates whenever the config signal changes
-  dateType = computed(() => this.configData()?.dateType ?? 'BS');
+  // dateType = computed(() => this.configData()?.dateType ?? 'BS');
 
   onSort(event: any) {
     this.sortChange.emit(event);

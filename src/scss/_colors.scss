@@ -7,8 +7,6 @@
   /* ================= Text Colors ================= */
   --text-primary-color: #07090f;
   --text-secondary-color: #555755;
-  --text-tertiary-color: #4b5563;
-  --text-quaternary-color: #6b7280;
   --text-white-color: #f9fafb;
   --text-disabled-color: #9ca3af;
 
@@ -20,7 +18,7 @@
   --bg-lightest-color: #fefefe;
   --bg-light-color: #f7f7f7;
   --bg-semi-light-color: #f3f4f6;
-  --bg-semi-dark-color: #f3f4f5;
+  --bg-semi-dark-color: #F6F7F5;
   --bg-dark-color: #ebedeb;
   --bg-darkest-color: #c1c5c0; 
 
@@ -45,8 +43,6 @@
   /* ================= Text Colors ================= */
   --text-primary-color: #f9fafb;
   --text-secondary-color: #d1d5db;
-  --text-tertiary-color: #9ca3af;
-  --text-quaternary-color: #6b7280;
   --text-white-color: #ffffff;
   --text-disabled-color: #6b7280;
 
@@ -55,10 +51,30 @@
   --separator-alt-color: #2d2f2d;
 
   /* ================= Backgrounds ================= */
-  --bg-lightest-color: #0f172a;
+  --bg-lightest-color: #1a2233;
   --bg-light-color: #111827;
   --bg-semi-light-color: #1f2937;
-  --bg-semi-dark-color: #111827;
+  --bg-semi-dark-color: #0f172a;
   --bg-dark-color: #1f2937;
   --bg-darkest-color: #374151;
+}
+
+.accent-green {
+  --primary-color: #4CB139;
+  --primary-bg-color: #EEF9EC;
+  --primary-alt-color: #3B8A2D;
+}
+
+/* BLUE */
+.accent-blue {
+  --primary-color: #2563eb;
+  --primary-bg-color: #e0ecff;
+  --primary-alt-color: #1d4ed8;
+}
+
+/* RED (optional future) */
+.accent-red {
+  --primary-color: #ef4444;
+  --primary-bg-color: #ffeaea;
+  --primary-alt-color: #dc2626;
 }

@@ -68,10 +68,6 @@ export class Products implements OnInit {
 
   ngOnInit(): void {
     this.operationList.set(this.authService.userPermissionList());
-
-    // Sync company details to signal
-    this.configService.companyDetails$.subscribe(details => this.companyDetails.set(details));
-
     this.getMasterList();
     this.loadDropdowns();
   }
