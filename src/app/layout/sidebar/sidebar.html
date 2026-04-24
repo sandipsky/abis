@@ -5,32 +5,22 @@
         <h1 class="logo">A</h1>
         }
         @else {
-            <h1 class="logo">ABIS</h1>
+        <h1 class="logo">ABIS</h1>
         }
 
-        <div (click)="toggleSidebar()" style="padding: 4px;" class="btn btn-outlined">
-            <img class="cursor-pointer" [class.rotate-180]="isCollapsed()" src="../../../svg/sidebar.svg" alt="">
-        </div>
+        <app-button (click)="toggleSidebar()" type="outlined" icon="sidebar" iconSize="16px" size="sm" />
     </div>
 
     <div class="links-container">
         <div class="main-links">
             @if (!activeSubMenu()) {
             <app-menu #q [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
-                <div dropdown-display [class.active]="q.isOpen()" class="btn btn-outlined-primary">
-                    +
-                    @if (!isCollapsed()) {
-                    <span style="white-space: nowrap;"> Quick Add Item</span>
-                    }
-                </div>
+
+                <app-button [fullWidth]="true" dropdown-display icon="add" [iconStrokeWidth]="2"
+                    [label]="!isCollapsed() ? 'Quick Add Item' : ''" type="primary-outlined" [active]="q.isOpen()" />
 
                 <div dropdown-content class="quickadd-dropdown">
                     <div class="quickadd-header">
-
-                        <div style="padding: 4px;" class="btn btn-outlined no-hover">
-                            <img style="cursor: pointer;" src="../../../svg/add.svg" alt="">
-                        </div>
-
                         <div class="title-group">
                             <h1 class="modal-title">
                                 Quick Add Items
@@ -48,13 +38,13 @@
                         @for (quickItem of quickAddItems; track quickItem.name) {
                         <div class="quickadd-content">
                             <div [style.color]="quickItem.color" class="content-title">
-                                <img [src]="'../../../svg/quickadd/' + quickItem.icon + '.svg'" alt="">
+                                <app-icon [strokeWidth]="1.5" [name]="quickItem.icon"></app-icon>
                                 {{quickItem.name | uppercase}}
                             </div>
 
                             @for (subQuickItem of quickItem.items; track subQuickItem.name) {
                             <div (click)="openQuickAdd(subQuickItem)" class="content-item">
-                                <img src="../../../svg/quickadd/plus.svg" alt="">
+                                <app-icon [strokeWidth]="1.5" name="add"></app-icon>
                                 <span>
                                     {{subQuickItem.name}}
                                 </span>
@@ -78,8 +68,10 @@
                 <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
                     [matTooltipDisabled]="!isCollapsed()" href="javascript:void(0)" (click)="toggleSubMenu(item)"
                     class="link-item">
-                    <img [src]="'../../../svg/' + item.icon + '.svg'" alt="">
+                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
+
                     <span>{{ item.label }}</span>
+
                     <img class="caret" src="../../../svg/caret.svg" alt="">
                 </a>
                 }
@@ -87,7 +79,7 @@
                 <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
                     [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link)"
                     [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
-                    <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
                     <span>{{ item.label }}</span>
                 </a>
                 }
@@ -112,7 +104,7 @@
                     (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     @if (item.icon) {
-                    <img [src]="'../../../svg/' + (rla.isActive ? item.activeIcon : item.icon) + '.svg'" alt="">
+                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
                     }
                     <span>{{ item.label }}</span>
                 </a>
@@ -125,7 +117,7 @@
         <div class="bottom-links">
             <a [matTooltipClass]="'right'" [matTooltip]="'User Manual'" [matTooltipDisabled]="true"
                 [routerLink]="'help'" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
-                <img [src]="'../../../svg/user-plus.svg'" alt="">
+                <app-icon [strokeWidth]="2" name="user-plus"></app-icon>
                 <span>User Manual</span>
             </a>
         </div>

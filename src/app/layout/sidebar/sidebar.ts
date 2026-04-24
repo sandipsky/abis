@@ -7,10 +7,12 @@ import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Menu } from '../../shared/components/menu/menu';
+import { Button } from '../../shared/components/ui/button/button';
+import { Icon } from '../../shared/components/ui/icon/icon';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, MatTooltipModule, RouterModule, Menu],
+  imports: [CommonModule, MatTooltipModule, RouterModule, Menu, Button, Icon],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -10,6 +10,7 @@ import { map, shareReplay } from 'rxjs';
   template: `
     <span class="icon-container"
       [style.--icon-color]="color()"
+      [style.--icon-stroke-width]="strokeWidth()"
       [style.--size]="size()"
       [innerHTML]="svgContent()">
     </span>
@@ -19,13 +20,15 @@ import { map, shareReplay } from 'rxjs';
       display: flex;
       align-items: center;
       justify-content: center;
+      color: var(--icon-color);
     }
     ::ng-deep svg {
       width: var(--size);
       height: var(--size);
     }
-    ::ng-deep svg path {
-      stroke: var(--icon-color);
+    ::ng-deep .icon-stroke {
+      stroke-width: var(--icon-stroke-width);
+      vector-effect: non-scaling-stroke;
     }
   `
 })
@@ -39,6 +42,7 @@ export class Icon {
   name = input.required<string>();
   size = input<string>('20px');
   color = input<string>('currentColor');
+  strokeWidth = input<string | number>(1.5);
 
   svgContent = signal<SafeHtml>('');
 
@@ -51,16 +55,30 @@ export class Icon {
       // ✅ reuse existing request or cached stream
       if (!Icon.cache.has(iconName)) {
         const request$ = this.http
-          .get(`assets/svg/${iconName}.svg`, { responseType: 'text' })
+          .get(`/svg/${iconName}.svg`, { responseType: 'text' })
           .pipe(
             map(svg => {
-              // optional cleanup
-              const cleaned = svg
-                .replace(/width="[^"]*"/g, '')
-                .replace(/height="[^"]*"/g, '')
-                .replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+              const doc = new DOMParser().parseFromString(svg, 'image/svg+xml');
+              const svgEl = doc.documentElement;
 
-              return this.sanitizer.bypassSecurityTrustHtml(cleaned);
+              svgEl.removeAttribute('width');
+              svgEl.removeAttribute('height');
+
+              const elements = [svgEl, ...Array.from(svgEl.querySelectorAll('*'))];
+              elements.forEach(el => {
+                const stroke = el.getAttribute('stroke');
+                const fill = el.getAttribute('fill');
+
+                if (stroke && stroke !== 'none') {
+                  el.setAttribute('stroke', 'currentColor');
+                  el.classList.add('icon-stroke');
+                }
+                if (fill && fill !== 'none') {
+                  el.setAttribute('fill', 'currentColor');
+                }
+              });
+
+              return this.sanitizer.bypassSecurityTrustHtml(svgEl.outerHTML);
             }),
             // 🔥 THIS is the key: caches + shares request
             shareReplay(1)

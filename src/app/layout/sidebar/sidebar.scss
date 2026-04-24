@@ -1,8 +1,8 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-semi-dark-color);
-    height: 100%;
+    background: var(--bg-semi-light);
+    height: 100vh;
     width: 240px;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -18,7 +18,7 @@
             font-weight: 600;
             font-family: "Inknut Antiqua", serif;
             text-align: center;
-            color: var(--text-primary-color);
+            color: var(--text-primary);
         }
     }
 
@@ -28,7 +28,7 @@
         flex-direction: column;
         overflow: visible;
         padding: 16px;
-        border-top: 1px solid var(--separator-color);
+        border-top: 1px solid var(--separator);
 
         .main-links {
             flex: 1;
@@ -52,7 +52,7 @@
                 font-size: 12px;
                 font-weight: 500;
                 line-height: 16px;
-                color: var(--text-secondary-color);
+                color: var(--text-secondary);
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -60,7 +60,7 @@
                 &.sub {
                     &:hover {
                         border-radius: 8px;
-                        background: var(--bg-dark-color);
+                        background: var(--bg-dark);
                     }
                 }
             }
@@ -79,7 +79,7 @@
             text-decoration: none;
             white-space: nowrap;
 
-            color: var(--text-secondary-color);
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 600;
             line-height: 20px;
@@ -90,14 +90,14 @@
 
             &:hover {
                 border-radius: 8px;
-                background: var(--bg-dark-color);
+                background: var(--bg-dark);
             }
 
             &.active {
                 border-radius: 8px;
-                background: var(--primary-color);
+                background: var(--accent);
                 box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.11);
-                color: var(--bg-lightest-color);
+                color: var(--bg-lightest);
             }
         }
     }
@@ -124,7 +124,7 @@
         align-items: center;
         gap: 16px;
         align-self: stretch;
-        border-bottom: 1px solid var(--separator-color);
+        border-bottom: 1px solid var(--separator);
 
         .title-group {
             flex: 1;
@@ -134,7 +134,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--primary-color);
+            color: var(--accent);
             cursor: pointer;
         }
     }
@@ -146,7 +146,7 @@
 
         .quickadd-content {
             padding: 12px;
-            border: 1px solid var(--separator-color);
+            border: 1px solid var(--separator);
             border-radius: 12px;
             flex: 1;
 
@@ -171,14 +171,14 @@
                 cursor: pointer;
 
                 span {
-                    color: var(--text-primary-color);
+                    color: var(--text-primary);
                     font-size: 14px;
                     font-weight: 500;
                     line-height: 20px;
                 }
 
                 &:hover {
-                    background-color: var(--bg-semi-light-color);
+                    background: var(--bg-semi-light);
                 }
             }
         }

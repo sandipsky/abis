@@ -13,8 +13,16 @@
   cursor: pointer;
   height: fit-content;
 
+  &.full {
+    width: 100%;
+  }
+
   &.rounded {
     border-radius: 50% !important;
+    padding: 4px !important;
+  }
+
+  &.small {
     padding: 4px !important;
   }
 

@@ -13,8 +13,12 @@ export class Button {
   type = model<'primary' | 'secondary' | 'outlined' | 'primary-outlined'>('primary');
   disabled = model<boolean>(false);
   icon = model<string>('');
+  iconSize = model<string>('');
+  iconStrokeWidth = model<string | number>('');
+  fullWidth = model<boolean>(false);
   rounded = model<boolean>(false);
+  active = model<boolean>(false);
   hoverable = model<boolean>(true);
   size = model<'sm' | 'md' | 'lg'>('md');
-  label = model.required<string>();
+  label = model<string>();
 }

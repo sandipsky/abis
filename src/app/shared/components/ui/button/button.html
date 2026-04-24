@@ -3,11 +3,14 @@
   'btn-secondary': type() === 'secondary',
   'btn-outlined': type() === 'outlined',
   'btn-outlined-primary': type() === 'primary-outlined',
-  'rounded': rounded() === true
+  'rounded': rounded() === true,
+  'small': size() == 'sm',
+  'active' : active(),
+  'full': fullWidth()
   }" [disabled]="disabled()">
 
   @if (icon()) {
-  <app-icon [name]="icon()"></app-icon>
+  <app-icon [size]="iconSize() || '18px'" [strokeWidth]="iconStrokeWidth()" [name]="icon()"></app-icon>
   }
 
   @if (label()) {
