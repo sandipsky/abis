@@ -1,0 +1,42 @@
+<div class="form-group" [class.view]="isView()">
+    @if (label()) {
+    <label>
+        {{ label() }}
+
+        @if (isRequired && !isView) {
+        <span>*</span>
+        }
+    </label>
+    }
+
+    @if(isView()) {
+    <span class="value"> {{value() || 'N/A'}}</span>
+    }
+    @else {
+
+    <div class="input-wrapper">
+        @if (leftIcon()) {
+        <span class="left-icon">
+            <app-icon [size]="'18px'" (click)="leftIconClick.emit()" [name]="leftIcon()"></app-icon>
+        </span>
+        }
+        <input [class.error]="hasError" [class.readonly]="readonly()" type="text" class="form-control" [value]="value()"
+            [readOnly]="readonly()" [disabled]="isDisabled()" [placeholder]="placeholder()"
+            (input)="handleInput($event)" (change)="handleChange($event)" (keyup)="handleKeyup($event)"
+            (keydown)="handleKeydown($event)" (keypress)="handlekeypress($event)" (keyup.enter)="handlekeyenter($event)"
+            (focus)="handleFocus($event)" (blur)="onTouched(); handleBlur($event)">
+        @if (rightIcon()) {
+        <div class="right-icon">
+            <app-icon (click)="rightIconClick.emit()" [name]="rightIcon()"></app-icon>
+        </div>
+        }
+    </div>
+
+    }
+
+    @if (showErrorMessage() && hasError) {
+    <div class="alert error">
+        {{errorMessage()}}
+    </div>
+    }
+</div>

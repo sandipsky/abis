@@ -1,0 +1,16 @@
+<button class="btn" [ngClass]="{
+  'btn-primary': type() === 'primary',
+  'btn-secondary': type() === 'secondary',
+  'btn-outlined': type() === 'outlined',
+  'btn-outlined-primary': type() === 'primary-outlined',
+  'rounded': rounded() === true
+  }" [disabled]="disabled()">
+
+  @if (icon()) {
+  <app-icon [name]="icon()"></app-icon>
+  }
+
+  @if (label()) {
+    <span>{{label()}}</span>
+  }
+</button>

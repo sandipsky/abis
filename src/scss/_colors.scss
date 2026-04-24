@@ -1,80 +1,56 @@
 :root {
-  /* ================= Primary ================= */
-  --primary-color: #4CB139;
-  --primary-bg-color: #EEF9EC;
-  --primary-alt-color: #3B8A2D;
+    --accent: #4CB139;
+    --accent-bg: #EEF9EC;
+    --accent-dark: #3B8A2D;
 
-  /* ================= Text Colors ================= */
-  --text-primary-color: #07090f;
-  --text-secondary-color: #555755;
-  --text-white-color: #f9fafb;
-  --text-disabled-color: #9ca3af;
+    --success: #36B37E;
+    --success-bg: #EBF7F2;
 
-  /* ================= Separators ================= */
-  --separator-color: #e5e7eb;
-  --separator-alt-color: #ebedeb;
+    --error: #FF4530;
+    --error-bg: #FFECEA;
 
-  /* ================= Backgrounds ================= */
-  --bg-lightest-color: #fefefe;
-  --bg-light-color: #f7f7f7;
-  --bg-semi-light-color: #f3f4f6;
-  --bg-semi-dark-color: #F6F7F5;
-  --bg-dark-color: #ebedeb;
-  --bg-darkest-color: #c1c5c0; 
+    --warn: #FFAB00;
+    --warn-bg: #FFF7E6;
 
-  /* ================= Status ================= */
-  --success-color: #36b37e;
-  --success-bg-color: #ebf7f2;
+    --info: #00B8D9;
+    --info-bg: #E6F0FC;
 
-  --error-color: #ff4530;
-  --error-bg-color: #ffecea;
+    --premium: #AB20A9;
+    --premium-bg: #FBCEFA;
 
-  --warn-color: #ffab00;
-  --warn-bg-color: #fff7e6;
+    /* ================= Text Colors ================= */
+    --text-primary: #07090F;
+    --text-secondary: #555755;
+    --text-tertiary: #646663;
+    --text-quaternary: #979996;
+    --text-white: #F9FAFB;
 
-  --info-color: #00b8d9;
-  --info-bg-color: #E6F0FC;
+    /* ================= Separators ================= */
+    --separator: #E5E7EB;
+    --separator-light: #EBEDEB;
+    --separator-dark: #DDE0DC;
 
-  --premium-color: #ab20a9;
-  --premium-bg-color: #fbcefa;
+    /* ================= Backgrounds ================= */
+    --bg-lightest: #FEFEFE;
+    --bg-light: #F7F7F7;
+    --bg-semi-light: #F6F7F5;
+    --bg-dark: #EBEDEB;
 }
 
-.dark-theme {
-  /* ================= Text Colors ================= */
-  --text-primary-color: #f9fafb;
-  --text-secondary-color: #d1d5db;
-  --text-white-color: #ffffff;
-  --text-disabled-color: #6b7280;
+.dark-mode {
+    /* ================= Text Colors ================= */
+    --text-primary: #F9FAFB;
+    --text-secondary: #D1D5DB;
+    --text-white: #FFFFFF;
 
-  /* ================= Separators ================= */
-  --separator-color: #374151;
-  --separator-alt-color: #2d2f2d;
+    /* ================= Separators ================= */
+    --separator: #374151;
+    --separator-light: #2D3036;
+    --separator-dark: #1F2937;
 
-  /* ================= Backgrounds ================= */
-  --bg-lightest-color: #1a2233;
-  --bg-light-color: #111827;
-  --bg-semi-light-color: #1f2937;
-  --bg-semi-dark-color: #0f172a;
-  --bg-dark-color: #1f2937;
-  --bg-darkest-color: #374151;
-}
-
-.accent-green {
-  --primary-color: #4CB139;
-  --primary-bg-color: #EEF9EC;
-  --primary-alt-color: #3B8A2D;
-}
-
-/* BLUE */
-.accent-blue {
-  --primary-color: #2563eb;
-  --primary-bg-color: #e0ecff;
-  --primary-alt-color: #1d4ed8;
-}
-
-/* RED (optional future) */
-.accent-red {
-  --primary-color: #ef4444;
-  --primary-bg-color: #ffeaea;
-  --primary-alt-color: #dc2626;
+    /* ================= Backgrounds ================= */
+    --bg-lightest: #1F2937;
+    --bg-light: #181A1F;
+    --bg-semi-light: #121418;
+    --bg-dark: #0B0C10;
 }
