@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { Menu } from '../../shared/components/menu/menu';
+import { Menu } from '../../shared/components/ui/menu/menu';
 import { Button } from '../../shared/components/ui/button/button';
 import { Icon } from '../../shared/components/ui/icon/icon';
 import sidebarData from './sidebar.data';

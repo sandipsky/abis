@@ -39,21 +39,18 @@
 }
 
 .paginator-btn {
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--accent);
     box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px;
     border-radius: 8px;
     padding: 6px;
     background: transparent;
     display: flex;
-    // width: 32px;
-    // height: 32px;
     justify-content: center;
     align-items: center;
     gap: 4px;
-    // aspect-ratio: 1/1;
     cursor: pointer;
 
-    color: var(--primary-color);
+    color: var(--accent);
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -63,7 +60,7 @@
     }
 
     &.active {
-        background-color: var(--primary-color);
+        background-color: var(--accent);
         color: #F9FAFB !important;
     }
 

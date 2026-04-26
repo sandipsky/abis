@@ -6,13 +6,13 @@
   gap: 6px;
 
   label {
-    color: var(--text-primary-color);
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-semi-bold);
-    line-height: var(--line-height-small);
+    color: var(--text-primary);
+    font-size: 14;
+    font-weight: 500;
+    line-height: 20px;
 
     span {
-      color: var(--error-color);
+      color: var(--error);
     }
   }
 
@@ -35,20 +35,20 @@
 
   &.view {
     label {
-      color: var(--text-quaternary-color);
+      color: var(--text-quaternary);
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
     }
 
     span {
-      color: var(--text-primary-color);
+      color: var(--text-primary);
       font-size: 15px;
       font-weight: 500;
       line-height: 24px;
 
       &.email {
-        color: var(--cancel-color);
+        color: var(--cancel);
       }
     }
   }
@@ -56,8 +56,8 @@
 
 .form-control {
   padding: 6px 8px;
-  border: 1px solid var(--separator-color);
-  background-color: var(--bg-lightest-color);
+  border: 1px solid var(--separator);
+  background: var(--bg-lightest);
   border-radius: 8px;
   outline: none;
   display: flex;
@@ -66,29 +66,29 @@
   gap: 12px;
   box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
-  color: var(--text-primary-color);
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-small);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 
   ::placeholder {
-    color: var(--disabled-color);
+    color: var(--disabled);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px var(--primary-bg-color);
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
   }
 
   &.readonly {
-    background-color: var(--disabled-alt-color);
-    color: var(text-disabled-color);
+    background: var(--disabled-alt);
+    color: var(text-disabled);
   }
 
   &.error {
-    background-color: var(--error-bg-color);
-    border-color: var(--error-color);
+    background: var(--error-bg);
+    border: var(--error);
   }
 }
 
@@ -137,23 +137,23 @@
   line-height: 16px;
 
   &.success {
-    background-color: var(--success-bg-color);
-    color: var(--success-color);
+    background: var(--success-bg);
+    color: var(--success);
   }
 
   &.error {
-    background-color: var(--error-bg-color);
-    color: var(--error-color);
+    background: var(--error-bg);
+    color: var(--error);
   }
 
   &.warn {
-    background-color: var(--warn-bg-color);
-    color: var(--warn-color);
+    background: var(--warn-bg);
+    color: var(--warn);
   }
 
   &.info {
-    background-color: var(--info-bg-color);
-    color: var(--info-color);
+    background: var(--info-bg);
+    color: var(--info);
   }
 }
 
@@ -177,7 +177,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background: #ccc;
   transition: 0.4s;
 }
 
@@ -188,16 +188,16 @@
   width: 16px;
   left: 2px;
   bottom: 2px;
-  background-color: white;
+  background: white;
   transition: 0.4s;
 }
 
 input:checked+.slider {
-  background-color: var(--success-color);
+  background: var(--success);
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px var(--success-color);
+  box-shadow: 0 0 1px var(--success);
 }
 
 input:checked+.slider:before {
@@ -249,11 +249,11 @@ textarea {
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
-    color: var(--text-primary-color);
+    color: var(--text-primary);
     cursor: pointer;
 
     &.active {
-      color: var(--primary-color);
+      color: var(--primary);
       border-radius: 4px;
       background: var(--Background-Lightest, #FEFEFE);
     }
@@ -272,7 +272,7 @@ textarea {
   align-items: center;
   gap: 16px;
   border-radius: 12px;
-  border: 1px dashed var(--separator-color);
+  border: 1px dashed var(--separator);
 
   .image-container {
     display: flex;
@@ -294,7 +294,7 @@ textarea {
   }
 
   .title {
-    color: var(--text-primary-color);
+    color: var(--text-primary);
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
@@ -302,7 +302,7 @@ textarea {
   }
 
   .sub-title {
-    color: var(--text-secondary-color);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -339,8 +339,8 @@ textarea {
       color: #16a34a;
 
       span {
-        background-color: #16a34a;
-        border-color: #16a34a;
+        background: #16a34a;
+        border: #16a34a;
       }
     }
   }

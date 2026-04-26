@@ -5,11 +5,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Menu } from '../menu/menu';
-import { SortEvent } from '../../models/sort.model';
-import { ConfigurationService } from '../../services/configuration.service';
-import { DateService } from '../../services/date.service';
-import { AmountPipe } from "../../pipes/amount-pipe";
-import { Button } from '../ui/button/button';
+import { SortEvent } from '../../../models/sort.model';
+import { ConfigurationService } from '../../../services/configuration.service';
+import { DateService } from '../../../services/date.service';
+import { AmountPipe } from "../../../pipes/amount-pipe";
+import { Button } from '../button/button';
 
 @Component({
   selector: 'app-table',

@@ -10,10 +10,14 @@
   }" [disabled]="disabled()">
 
   @if (icon()) {
-  <app-icon [size]="iconSize() || '18px'" [strokeWidth]="iconStrokeWidth()" [name]="icon()"></app-icon>
+  <app-icon [size]="iconSize() || '18px'" [name]="icon()"></app-icon>
   }
 
   @if (label()) {
-    <span>{{label()}}</span>
+  <span>{{label()}}</span>
+  }
+
+  @if (rightIcon()) {
+  <app-icon [size]="iconSize() || '18px'" [name]="rightIcon()"></app-icon>
   }
 </button>

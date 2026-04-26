@@ -1,5 +1,5 @@
 input {
-    color: var(--text-quaternary-color);
+    color: var(--text-quaternary);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -11,7 +11,7 @@ input {
 }
 
 .result {
-    color: var(--text-primary-color);
+    color: var(--text-primary);
     font-size: 24px;
     font-weight: 600;
     line-height: 32px;
@@ -24,35 +24,34 @@ input {
     display: flex;
     width: 52px;
     height: 52px;
-    padding: 16px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
 
-    border-radius: 48px;
-    border: 1px solid var(--separator-color, #EBEDEB);
-    background: var(--bg-lightest-color, #FEFEFE);
+    border-radius: 50%;
+    border: 1px solid var(--separator, #EBEDEB);
+    background: var(--bg-lightest, #FEFEFE);
     box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
-    color: var(--text-secondary-color, #555755);
+    color: var(--text-secondary, #555755);
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
 
     &:hover {
-        background-color: var(--bg-semi-light-color);
+        background: var(--bg-semi-light);
     }
 
     &.operator {
-        background: var(--primary-bg-color, #EEF9EC);
-        color: var(--primary-color, #4CB139);
-        border: var(--primary-bg-color, #EEF9EC);
+        background: var(--primary-bg, #EEF9EC);
+        color: var(--primary, #4CB139);
+        border: var(--primary-bg, #EEF9EC);
     }
 
     &.equal {
-        background: var(--primary-color, #4CB139);
+        background: var(--primary, #4CB139);
         color: #fff;
-        border: var(--primary-color, #4CB139);
+        border: var(--primary, #4CB139);
     }
 }

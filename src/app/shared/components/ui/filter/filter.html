@@ -1,26 +1,15 @@
 <div class="filter-section">
-    <div class="input-wrapper">
-        <img class="left-icon" src="../../../svg/search.svg" alt="">
-        <input placeholder="Search" type="text" class="form-control" [ngModel]="searchText()"
-            (ngModelChange)="searchText.set($event)" (keyup.enter)="onSearch()" />
-    </div>
+    <text-input placeholder="Search" leftIcon="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)"
+        (enter)="onSearch()" />
 
     <app-menu #filterDropdown [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
-        <button [class.active]="filterDropdown.isOpen()" dropdown-display class="filter-btn" type="button">
-            <img class="icon"
-                [src]="filterDropdown.isOpen() ? '../../../svg/filter-active.svg' : '../../../svg/filter.svg'" alt="">
-            Filters
-            <button class="btn btn-outlined no-hover">{{ filterColumns().length }}</button>
-            <img [src]="filterDropdown.isOpen() ? '../../../svg/caret-down-active.svg' : '../../../svg/caret-down.svg'"
-                alt="">
-        </button>
+        <app-button [class.active]="filterDropdown.isOpen()" dropdown-display icon="filter" rightIcon="caret"
+            label="Filters" />
 
         <div dropdown-content class="filter-dropdown">
             <div class="filter-header">
                 <h1 class="filter-header-title">Filter</h1>
-                <div (click)="closeDropdown()" type="button" class="btn btn-outlined small rounded">
-                    <img src="../../../svg/close.svg" alt="">
-                </div>
+                <app-button type="outlined" [rounded]="true" (click)="closeDropdown()" icon="close" />
             </div>
 
             <div class="filter-body">
@@ -43,18 +32,18 @@
             </div>
 
             <div class="filter-footer">
-                <button class="btn btn-secondary" (click)="closeDropdown()">Cancel</button>
-                <button class="btn btn-primary" (click)="applyFilter()">Apply</button>
+                <app-button type="secondary" (click)="closeDropdown()" label="Cancel" />
+                <app-button type="primary" (click)="applyFilter()" label="Cancel" />
             </div>
         </div>
     </app-menu>
 
     @if (showFromDate() || showToDate()) {
-        <div class="filter-btn date">
-            <span [class.active]="dateType() === 'AD'" (click)="dateType.set('AD')" class="datelabel">AD</span>
-            <span class="sep">|</span>
-            <span [class.active]="dateType() === 'BS'" (click)="dateType.set('BS')" class="datelabel">BS</span>
-        </div>
+    <div class="filter-btn date">
+        <span [class.active]="dateType() === 'AD'" (click)="dateType.set('AD')" class="datelabel">AD</span>
+        <span class="sep">|</span>
+        <span [class.active]="dateType() === 'BS'" (click)="dateType.set('BS')" class="datelabel">BS</span>
+    </div>
     }
 
     @if (showFromDate()) {
@@ -75,18 +64,18 @@
 </div>
 
 @if (filterList().length > 0) {
-    <div class="filter-options">
-        @for (item of filterList(); track item.formcontrolName) {
-        @if (item.type !== 'search') {
-        <div class="filter-item">
-            <span>{{item.filterName}}: {{item.displayValue}}</span>
-            <img (click)="removeFilter(item)" src="../../../svg/cross.svg" alt="">
-        </div>
-        }
-        }
-    
-        @if (filterList().length > 0) {
-        <span class="reset-text" (click)="removeAllFilter()">Reset Filters</span>
-        }
+<div class="filter-options">
+    @for (item of filterList(); track item.formcontrolName) {
+    @if (item.type !== 'search') {
+    <div class="filter-item">
+        <span>{{item.filterName}}: {{item.displayValue}}</span>
+        <img (click)="removeFilter(item)" src="../../../svg/cross.svg" alt="">
     </div>
+    }
+    }
+
+    @if (filterList().length > 0) {
+    <span class="reset-text" (click)="removeAllFilter()">Reset Filters</span>
+    }
+</div>
 }

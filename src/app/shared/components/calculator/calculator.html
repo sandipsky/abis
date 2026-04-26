@@ -6,17 +6,11 @@
         <div class="modal-title-group">
             <h1 class="modal-title">Calculator</h1>
         </div>
-        <div class="btn btn-outlined rounded small" (click)="dialogRef.close()">
-            <img src="../../../svg/close.svg" alt="close">
-        </div>
+        <app-button type="outlined" icon="close" [rounded]="true" (click)="dialogRef.close()" />
     </div>
 
     <div class="modal-body">
-        <input 
-            (keydown)="onKeyUp($event)" 
-            [ngModel]="input()" 
-            (ngModelChange)="input.set($event)"
-            type="text" 
+        <input (keydown)="onKeyUp($event)" [ngModel]="input()" (ngModelChange)="input.set($event)" type="text"
             class="calc-input">
 
         <h2 class="result">
@@ -25,16 +19,13 @@
 
         <div class="row gy-1 gx-3">
             @for (button of buttonsArray; track button.label) {
-                <div class="col-md-3">
-                    <button 
-                        (click)="addKey(button.label)" 
-                        style="width: 100%;"
-                        [class.operator]="button.type === 'operator' || button.type === 'action'"    
-                        [class.equal]="button.type === 'equal'"    
-                        class="calc-btn">
-                        {{ button.label }}
-                    </button>
-                </div>
+            <div class="col-md-3">
+                <button (click)="addKey(button.label)" style="width: 100%;"
+                    [class.operator]="button.type === 'operator' || button.type === 'action'"
+                    [class.equal]="button.type === 'equal'" class="calc-btn">
+                    {{ button.label }}
+                </button>
+            </div>
             }
         </div>
     </div>

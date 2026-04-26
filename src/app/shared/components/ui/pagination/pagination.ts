@@ -1,6 +1,7 @@
 import { Component, input, output, computed, model, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Menu } from '../menu/menu';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-paginator',
@@ -11,25 +12,20 @@ import { Menu } from '../menu/menu';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Paginator {
-  // Inputs as Signals
   pageSizeOptions = input<number[]>([10, 25, 50, 100]);
   length = input<number>(0);
   
-  // Model signals allow two-way binding and are writable
   pageSize = model<number>(10);
   pageIndex = model<number>(0);
 
-  // Output using the new output API
   pageChange = output<{ pageIndex: number; pageSize: number; length: number }>();
 
-  // Derived state: Total Pages
   totalPages = computed(() => {
     const len = this.length();
     const size = this.pageSize();
     return len > 0 ? Math.ceil(len / size) : 1;
   });
 
-  // Derived state: Visible Page Numbers
   visiblePages = computed(() => {
     const total = this.totalPages();
     const current = this.pageIndex() + 1;
@@ -45,7 +41,6 @@ export class Paginator {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   });
 
-  // Derived state: Range Label
   itemsInView = computed(() => {
     if (this.length() === 0) return 0;
     const remainingItems = this.length() - (this.pageIndex() * this.pageSize());
@@ -62,7 +57,7 @@ export class Paginator {
 
   onchangePageOption(size: number) {
     this.pageSize.set(size);
-    this.pageIndex.set(0); // Reset to first page when size changes
+    this.pageIndex.set(0); 
     this.emitChange();
   }
 

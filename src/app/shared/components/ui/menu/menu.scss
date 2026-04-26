@@ -3,7 +3,7 @@
 
     &.active {
         ::ng-deep [dropdown-display] {
-            background-color: var(--separator-color, #e5e7eb);
+            background-color: var(--separator);
             border-radius: 8px;
         }
     }
@@ -30,8 +30,8 @@
 
     padding: 8px;
     border-radius: 12px;
-    border: 1px solid var(--separator-color, #e5e7eb);
-    background: var(--bg-lightest-color, #fefefe);
+    border: 1px solid var(--separator);
+    background: var(--bg-lightest);
     box-shadow: 3px 9px 32px rgba(0, 0, 0, 0.1);
 
     &.nopadding {
@@ -49,12 +49,12 @@
     cursor: pointer;
 
     &:hover {
-        background-color: var(--separator-alt-color, #d1d5db);
+        background-color: var(--separator-light);
     }
 
     &.active {
-        background-color: var(--primary-bg-color, #e6f0fc);
-        color: var(--primary-color, #006ae4);
+        background-color: var(--accent-bg);
+        color: var(--accent, #006ae4);
     }
 }
 

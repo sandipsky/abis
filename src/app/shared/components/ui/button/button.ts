@@ -13,6 +13,7 @@ export class Button {
   type = model<'primary' | 'secondary' | 'outlined' | 'primary-outlined'>('primary');
   disabled = model<boolean>(false);
   icon = model<string>('');
+  rightIcon = model<string>('');
   iconSize = model<string>('');
   iconStrokeWidth = model<string | number>('');
   fullWidth = model<boolean>(false);

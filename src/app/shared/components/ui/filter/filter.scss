@@ -24,10 +24,10 @@
         gap: 4px;
 
         border-radius: 48px;
-        background: var(--bg-semi-light-color, #F1F2F0);
+        background: var(--bg-semi-light);
 
         span {
-            color: var(--text-secondary-color);
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
             line-height: 20px;
@@ -40,7 +40,7 @@
 }
 
 .reset-text {
-    color: var(--primary-color);
+    color: var(--accent);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -60,17 +60,17 @@
     align-items: center;
     gap: 6px;
     border-radius: 8px;
-    border: 1px solid var(--separator-color);
-    background: var(--bg-lightest-color);
+    border: 1px solid var(--separator);
+    background: var(--bg-lightest);
     box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
-    color: var(--text-secondary-color);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
 
     &.active {
-        background-color: var(--primary-alt-color);
+        background-color: var(--accent-dark);
         color: #F7F7F7;
     }
 
@@ -82,12 +82,12 @@
         cursor: pointer;
 
         &.active {
-            color: var(--primary-color);
+            color: var(--accent);
         }
     }
 
     .sep {
-        color: var(--separator-color);
+        color: var(--separator);
     }
 
     .icon {
@@ -127,7 +127,7 @@
     padding: 12px;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--separator-color);
+    border-bottom: 1px solid var(--separator);
     gap: 16px;
     align-self: stretch;
 
@@ -157,5 +157,5 @@
     gap: 12px;
     align-items: center;
     align-self: stretch;
-    border-top: 1px solid var(--separator-color);
+    border-top: 1px solid var(--separator);
 }
