@@ -6,6 +6,7 @@
 @forward "scss/_section";
 @forward "scss/_form";
 @forward "scss/_table";
+@forward "scss/_button";
 @forward 'ngx-toastr/toastr';
 @forward "@ng-select/ng-select/themes/default.theme.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
@@ -24,7 +25,7 @@ body {
   line-height: 1.25;
   font-weight: 400;
   overflow: hidden;
-  background-color: var(--bg-lightest-color);
+  background: var(--bg-lightest);
 }
 
 .cdk-global-scrollblock {
@@ -39,8 +40,8 @@ ne-datepicker {
 .nepali-date-picker {
   .np_datepicker_input {
     padding: 6px 8px !important;
-    border: 1px solid var(--separator-color) !important;
-    background-color: var(--bg-lightest-color) !important;
+    border: 1px solid var(--separator) !important;
+    background: var(--bg-lightest) !important;
     border-radius: 8px !important;
     outline: none !important;
     display: flex !important;
@@ -50,13 +51,13 @@ ne-datepicker {
     gap: 12px !important;
     box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
-    color: var(--text-primary-color) !important;
+    color: var(--text-primary) !important;
     font-size: var(--font-size-small) !important;
     font-weight: var(--font-weight-regular) !important;
     line-height: var(--line-height-small) !important;
 
     ::placeholder {
-      color: var(--disabled-color) !important;
+      color: var(--disabled) !important;
     }
   }
 
@@ -70,7 +71,7 @@ ne-datepicker {
 }
 
 .nepali-date-picker .datepicker__options-container {
-  background-color: var(--primary-color) !important;
+  background: var(--primary) !important;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
@@ -88,15 +89,15 @@ ne-datepicker {
   padding: 6px 0px !important;
   height: auto !important;
   min-height: auto !important;
-  border: 1px solid var(--separator-color);
-  background-color: var(--bg-lightest-color);
+  border: 1px solid var(--separator);
+  background: var(--bg-lightest);
   border-radius: 8px;
 
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 3px var(--primary-bg-color);
-    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-bg);
+    border: var(--primary);
   }
 }
 
@@ -115,7 +116,7 @@ ne-datepicker {
 
 .mat-mdc-tooltip {
   position: relative;
-  background-color: gray;
+  background: gray;
   border-radius: 8px;
   color: white;
 

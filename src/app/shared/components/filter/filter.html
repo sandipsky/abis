@@ -1,6 +1,11 @@
 <div class="filter-section">
-    <text-input placeholder="Search" leftIcon="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)"
-        (enter)="onSearch()" />
+    @if(searchBy() != '') {
+    <div class="input-wrapper">
+        <img class="left-icon" src="../../../svg/search.svg" alt="">
+        <input placeholder="Search" type="text" class="form-control" [ngModel]="searchText()"
+            (ngModelChange)="searchText.set($event)" (keyup.enter)="onSearch()" />
+    </div>
+    }
 
     <app-menu #filterDropdown [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
         <app-button [class.active]="filterDropdown.isOpen()" dropdown-display icon="filter" rightIcon="caret"

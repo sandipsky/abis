@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Table } from './components/ui/table/table';
-import { Menu } from './components/ui/menu/menu';
-import { Button } from './components/ui/button/button';
-import { Paginator } from './components/ui/pagination/pagination';
-import { Filter } from './components/ui/filter/filter';
+import { Table } from './components/table/table';
+import { Menu } from './components/menu/menu';
+import { Button } from './components/button/button';
+import { Paginator } from './components/pagination/pagination';
+import { Filter } from './components/filter/filter';
 
 @NgModule({
   declarations: [],

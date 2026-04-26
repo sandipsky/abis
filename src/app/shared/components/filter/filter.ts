@@ -4,14 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NepaliDatepickerModule } from 'np-datepicker-angular';
 import { Menu } from '../menu/menu';
-import { TextInput } from '../form/text-input/text-input';
-import { Icon } from '../icon/icon';
 import { Button } from '../button/button';
 
 @Component({
   selector: 'filter-section',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule, Menu, TextInput, Icon, Button],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, NepaliDatepickerModule, Menu, Button],
   templateUrl: './filter.html',
   styleUrls: ['./filter.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

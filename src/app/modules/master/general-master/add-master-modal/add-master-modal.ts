@@ -6,7 +6,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
 import { SpinnerService } from '../../../../shared/services/spinner.service';
-import { Button } from '../../../../shared/components/ui/button/button';
+import { Button } from '../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-add-master-modal',

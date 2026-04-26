@@ -6,7 +6,6 @@ import { Icon } from '../icon/icon';
   selector: 'app-button',
   imports: [CommonModule, Icon],
   templateUrl: './button.html',
-  styleUrl: './button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {

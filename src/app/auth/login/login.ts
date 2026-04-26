@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import packageJson from '../../../../package.json';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-import { Button } from '../../shared/components/ui/button/button';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   selector: 'app-login',

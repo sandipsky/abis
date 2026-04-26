@@ -13,7 +13,7 @@ import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../auth/auth.service';
 import { MastersInlineModalComponent } from '../../master/general-master/add-master-modal/add-master-modal';
 import { AmountPipe } from "../../../shared/pipes/amount-pipe";
-import { Button } from '../../../shared/components/ui/button/button';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-transaction',
