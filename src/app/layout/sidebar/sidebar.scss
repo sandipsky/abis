@@ -118,27 +118,6 @@
         width: 1300px;
     }
 
-    .quickadd-header {
-        display: flex;
-        padding: 20px;
-        align-items: center;
-        gap: 16px;
-        align-self: stretch;
-        border-bottom: 1px solid var(--separator);
-
-        .title-group {
-            flex: 1;
-        }
-
-        .clearall {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            cursor: pointer;
-        }
-    }
-
     .quickadd-container {
         display: flex;
         padding: 16px;

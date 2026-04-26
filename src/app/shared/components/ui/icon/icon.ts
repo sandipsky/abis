@@ -10,7 +10,6 @@ import { map, shareReplay } from 'rxjs';
   template: `
     <span class="icon-container"
       [style.--icon-color]="color()"
-      [style.--icon-stroke-width]="strokeWidth()"
       [style.--size]="size()"
       [innerHTML]="svgContent()">
     </span>
@@ -27,7 +26,6 @@ import { map, shareReplay } from 'rxjs';
       height: var(--size);
     }
     ::ng-deep .icon-stroke {
-      stroke-width: var(--icon-stroke-width);
       vector-effect: non-scaling-stroke;
     }
   `

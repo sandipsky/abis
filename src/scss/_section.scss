@@ -2,11 +2,11 @@
     padding: 12px;
     align-self: stretch;
     border-radius: 12px;
-    border: 1px solid var(--separator-color, #EBEDEB);
-    background-color: var(--bg-lightest-color);
+    border: 1px solid var(--separator);
+    background: var(--bg-lightest);
 
     &.section-dark {
-        background: var(--bg-light-color, #F7F7F7);
+        background: var(--bg-light);
     }
 
     &.main {
@@ -23,7 +23,7 @@
         justify-content: space-between;
         align-items: flex-start;
         padding: 12px;
-        border-bottom: 1px solid var(--separator-color);
+        border-bottom: 1px solid var(--separator);
         row-gap: 12px;
         flex-wrap: wrap;
 
@@ -51,14 +51,14 @@
 }
 
 .section-title {
-    color: var(--text-primary-color, #232423);
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: 500;
     line-height: 24px;
 }
 
 .section-sub-title {
-    color: var(--text-secondary-color, #555755);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;

@@ -20,19 +20,6 @@
                     [label]="!isCollapsed() ? 'Quick Add Item' : ''" type="primary-outlined" [active]="q.isOpen()" />
 
                 <div dropdown-content class="quickadd-dropdown">
-                    <div class="quickadd-header">
-                        <div class="title-group">
-                            <h1 class="modal-title">
-                                Quick Add Items
-                            </h1>
-                            <h3 class="modal-sub-title">
-                                Create items faster using a simplified and efficient entry process.
-                            </h3>
-                        </div>
-
-                        <img (click)="q.close()" style="cursor: pointer;" src="../../../svg/close.svg" alt="">
-
-                    </div>
 
                     <div class="quickadd-container">
                         @for (quickItem of quickAddItems; track quickItem.name) {
@@ -68,18 +55,18 @@
                 <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
                     [matTooltipDisabled]="!isCollapsed()" href="javascript:void(0)" (click)="toggleSubMenu(item)"
                     class="link-item">
-                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
+                    <app-icon [name]="item.icon"></app-icon>
 
                     <span>{{ item.label }}</span>
 
-                    <img class="caret" src="../../../svg/caret.svg" alt="">
+                    <app-icon size="14px" name="caret"></app-icon>
                 </a>
                 }
                 @else if (hasPermission(item.permission)) {
                 <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
                     [matTooltipDisabled]="!isCollapsed()" (click)="updateBreadCrumb(item.label, item.link)"
                     [routerLink]="item.link" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
-                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
+                    <app-icon [name]="item.icon"></app-icon>
                     <span>{{ item.label }}</span>
                 </a>
                 }
@@ -91,7 +78,7 @@
             @else {
             <div [class.animate-in]="showSubMenuAnimation()" class="link-group cursor-pointer submenu-container">
                 <div (click)="clearSubMenu()" class="group-title sub">
-                    <img class="caret rotate-180" src="../../../svg/caret.svg" alt="">
+                    <app-icon class="rotate-180" size="14px" name="caret"></app-icon>
                     <span>
                         {{activeSubMenu().label | uppercase }}
                     </span>
@@ -104,7 +91,7 @@
                     (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     @if (item.icon) {
-                    <app-icon [strokeWidth]="2" [name]="item.icon"></app-icon>
+                    <app-icon [name]="item.icon"></app-icon>
                     }
                     <span>{{ item.label }}</span>
                 </a>
@@ -117,7 +104,7 @@
         <div class="bottom-links">
             <a [matTooltipClass]="'right'" [matTooltip]="'User Manual'" [matTooltipDisabled]="true"
                 [routerLink]="'help'" routerLinkActive="active" #rla="routerLinkActive" class="link-item">
-                <app-icon [strokeWidth]="2" name="user-plus"></app-icon>
+                <app-icon name="user-plus"></app-icon>
                 <span>User Manual</span>
             </a>
         </div>

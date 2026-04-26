@@ -15,7 +15,7 @@
         flex: 1;
 
         .breadcrumb-title {
-            color: var(--text-primary-color);
+            color: var(--text-primary);
             font-size: 18px;
             font-weight: 600;
             line-height: 28px;
@@ -23,7 +23,7 @@
         }
 
         .breadcrumb-sub-title {
-            color: var(--text-secondary-color);
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 400;
             line-height: 20px;
@@ -31,7 +31,7 @@
 
             &.active {
                 cursor: pointer;
-                color: var(--primary-color);
+                color: var(--accent);
             }
         }
     }
@@ -60,7 +60,7 @@
         align-items: flex-start;
         gap: 8px;
         align-self: stretch;
-        border-bottom: 1px solid var(--separator-color);
+        border-bottom: 1px solid var(--separator);
     }
 
     .profile-desc {
@@ -69,14 +69,14 @@
         text-overflow: ellipsis;
 
         .profile-name {
-            color: var(--text-primary-color);
+            color: var(--text-primary);
             font-size: 14px;
             font-weight: 500;
             line-height: 20px;
         }
 
         .profile-role {
-            color: var(--text-quaternary-color);
+            color: var(--text-quaternary);
             font-size: 12px;
             font-weight: 400;
             line-height: 16px;
@@ -89,7 +89,7 @@
         box-shadow: 3px 9px 32px 0px #0000001A;
         overflow: hidden;
         width: 260px;
-        background-color: var(--background-light-color);
+        background: var(--background-light);
 
         .profile-content {
             padding: 12px;
@@ -104,7 +104,7 @@
                 cursor: pointer;
 
                 span {
-                    color: var(--text-secondary-color);
+                    color: var(--text-secondary);
                     font-size: 14px;
                     font-weight: 400;
                     line-height: 20px;
@@ -112,7 +112,7 @@
                 }
 
                 &:hover {
-                    background-color: var(--bg-semi-light-color);
+                    background: var(--bg-semi-light);
                 }
             }
         }
@@ -166,14 +166,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--primary-color);
+            color: var(--accent);
             cursor: pointer;
         }
     }
 
     .notification-item {
         padding: 24px 16px;
-        border-top: 1px solid var(--separator-color);
+        border-top: 1px solid var(--separator);
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -190,7 +190,7 @@
     }
 
     .notification-message {
-        color: var(--text-quaternary-color);
+        color: var(--text-quaternary);
         font-size: 14px;
         font-weight: 400;
         line-height: 20px;
@@ -205,6 +205,6 @@
         gap: 10px;
         aspect-ratio: 1/1;
         border-radius: 60px;
-        background: var(--info-bg-color);
+        background: var(--info-bg);
     }
 }
