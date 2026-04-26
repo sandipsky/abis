@@ -205,4 +205,8 @@ export class Products implements OnInit {
   exportExcel(data: any[]) {
     this.excelService.exportExcel("Products", this.tableHeaders(), data);
   }
+
+  printPage() {
+    window.print();
+  }
 }

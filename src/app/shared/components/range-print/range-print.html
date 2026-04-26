@@ -287,13 +287,9 @@
 
     <div class="modal-footer">
 
-        <button (click)="closeDialog()" class="btn btn-secondary btn-transparent">
-            Cancel
-        </button>
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
 
-        <button (click)="onSubmit()" class="btn btn-primary">
-            Print
-        </button>
+        <app-button (click)="onSubmit()" type="primary" label="Print" />
 
     </div>
 

@@ -7,22 +7,16 @@
     </filter-section>
 
     <div class="section-header-btn-group">
-      <button onclick="window.print()" class="btn btn-secondary">
-        <img src="../../../svg/print.svg" alt="">
-        Print
-      </button>
-      
-      <button (click)="getMasterList(true)" class="btn btn-secondary">
-        <img src="../../../svg/download.svg" alt="excel icon">
-        Export
-      </button>
+      <app-button (click)="printPage()" type="secondary" icon="print" label="Print" />
 
-      <button 
-        *ngIf="operationList().includes(createMasterPermissionName()) || true" 
+      <app-button (click)="getMasterList(true)" type="secondary" icon="download" label="Export" />
+
+      <app-button
+        *ngIf="operationList().includes(createMasterPermissionName()) || true"
         (click)="openAddModal()"
-        class="btn btn-primary">
-        + Add {{ masterName() }}
-      </button>
+        type="primary"
+        icon="add"
+        [label]="'Add ' + masterName()" />
     </div>
   </div>
 

@@ -23,6 +23,8 @@ import { ToastrService } from 'ngx-toastr';
 // import { DropdownsService } from 'src/app/services/dropdowns.service';
 // import { PrintService } from 'src/app/services/print.service';
 
+import { Button } from '../ui/button/button';
+
 @Component({
   selector: 'app-range-print',
   templateUrl: './range-print.html',
@@ -31,7 +33,8 @@ import { ToastrService } from 'ngx-toastr';
     CommonModule,
     ReactiveFormsModule,
     NgSelectModule,
-    NepaliDatepickerModule
+    NepaliDatepickerModule,
+    Button
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

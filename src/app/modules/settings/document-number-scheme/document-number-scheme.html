@@ -46,9 +46,7 @@
           {{formTitle}} Document Numbering Scheme
         </h1>
       </div>
-      <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
-        <img src="../../../../assets/svg/close.svg" alt="">
-      </button>
+      <app-button (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
     </div>
     <div class="modal-body">
       <div class="row gy-2">

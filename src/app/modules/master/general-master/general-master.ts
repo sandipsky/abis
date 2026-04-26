@@ -169,4 +169,8 @@ export class GeneralMaster implements OnInit {
   exportExcel(masterList: MasterItem[]) {
     this._excelService.exportExcel(this.masterName(), this.tableHeaders(), masterList);
   }
+
+  printPage() {
+    window.print();
+  }
 }

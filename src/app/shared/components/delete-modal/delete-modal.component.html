@@ -14,11 +14,7 @@
         Are You Sure You want to delete?
     </div>
     <div class="modal-footer">
-        <button (click)="closeDialog()" type="button" class="btn btn-secondary">
-            Cancel
-        </button>
-        <button (click)="deleteItem()" type="button" class="btn btn-primary">
-            Delete
-        </button>
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+        <app-button (click)="deleteItem()" type="primary" label="Delete" />
     </div>
 </div>

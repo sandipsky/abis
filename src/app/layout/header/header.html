@@ -85,9 +85,7 @@
                             {{notification.message || 'Your Account Has been Locked'}}
                         </span>
 
-                        <button (click)="clearNotification(notification.id)" class="btn btn-outlined">
-                            Clear
-                        </button>
+                        <app-button (click)="clearNotification(notification.id)" type="outlined" label="Clear" />
                     </div>
                 </div>
 

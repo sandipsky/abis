@@ -9,11 +9,12 @@ import { SortEvent } from '../../models/sort.model';
 import { ConfigurationService } from '../../services/configuration.service';
 import { DateService } from '../../services/date.service';
 import { AmountPipe } from "../../pipes/amount-pipe";
+import { Button } from '../ui/button/button';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, Menu, MatTooltipModule, AmountPipe],
+  imports: [CommonModule, FormsModule, Menu, MatTooltipModule, AmountPipe, Button],
   templateUrl: './table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

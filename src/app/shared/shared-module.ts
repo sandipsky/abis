@@ -3,6 +3,7 @@ import { Filter } from './components/filter/filter';
 import { Paginator } from './components/pagination/pagination';
 import { Table } from './components/table/table';
 import { Menu } from './components/menu/menu';
+import { Button } from './components/ui/button/button';
 
 @NgModule({
   declarations: [],
@@ -10,13 +11,15 @@ import { Menu } from './components/menu/menu';
     Filter,
     Paginator,
     Table,
-    Menu
+    Menu,
+    Button
   ],
   exports: [
     Filter,
     Paginator,
     Table,
-    Menu
+    Menu,
+    Button
   ]
 })
 export class SharedModule { }

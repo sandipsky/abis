@@ -1,9 +1,11 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Button } from '../ui/button/button';
 
 @Component({
   selector: 'app-delete-modal',
   templateUrl: './delete-modal.component.html',
+  imports: [Button],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteModalComponent {

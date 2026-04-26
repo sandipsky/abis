@@ -7,10 +7,11 @@ import { NotificationService } from '../../shared/services/websocket.service';
 import { Calculator } from '../../shared/components/calculator/calculator';
 import { MatDialog } from '@angular/material/dialog';
 import { RangePrintComponent } from '../../shared/components/range-print/range-print';
+import { Button } from '../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, Menu],
+  imports: [RouterModule, Menu, Button],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

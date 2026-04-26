@@ -6,12 +6,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
 import { SpinnerService } from '../../../../shared/services/spinner.service';
+import { Button } from '../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-add-master-modal',
   templateUrl: './add-master-modal.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, Button],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MastersInlineModalComponent {

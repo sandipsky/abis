@@ -45,9 +45,7 @@
   </div>
 
   <div class="modal-footer">
-    <button (click)="closeDialog()" type="button" class="btn btn-secondary">Cancel</button>
-    <button (click)="save()" type="submit" class="btn btn-primary">
-      {{ mode() }} {{ title() }}
-    </button>
+    <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+    <app-button (click)="save()" type="primary" [label]="mode() + ' ' + title()" />
   </div>
 </form>

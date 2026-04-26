@@ -5,13 +5,14 @@ import { ToastrService } from 'ngx-toastr';
 import packageJson from '../../../../package.json';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
+import { Button } from '../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-login',
   standalone: true, // Ensuring standalone mode
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, Button],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
