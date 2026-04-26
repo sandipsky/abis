@@ -30,11 +30,15 @@ export class GeneralMaster implements OnInit {
 
   endPoint = input.required<string>();
   masterName = input.required<string>();
+
   createMasterPermissionName = input<string>('');
   editMasterPermissionName = input<string>('');
   deleteMasterPermissionName = input<string>('');
   exportMasterPermissionName = input<string>('');
   printMasterPermissionName = input<string>('');
+
+  tableHeaders = input<any[]>([]);
+  filterColumns = input<any[]>([]);
 
   masterList = signal<any[]>([]);
   totalElements = signal<number>(0);
@@ -49,28 +53,6 @@ export class GeneralMaster implements OnInit {
   });
 
   @ViewChild('view', { static: true }) view!: TemplateRef<any>;
-
-  // Computed Properties (Reactive derivation)
-  tableHeaders = computed(() => [
-    { name: 'SN', property: 'sn', sort: false },
-    { name: this.masterName(), property: 'name', sortBy: 'name', sort: true },
-    ...(this.masterName() === 'Tax Type'
-      ? [{ name: 'Tax Rate', property: 'tax_rate', sortBy: 'tax_rate', sort: true }]
-      : []),
-    { name: 'Status', property: 'status', sort: false, status: true }
-  ]);
-
-  filterColumns = computed(() => [
-    ...(this.masterName() === 'Tax Type'
-      ? [{ name: "Tax Rate", type: "text", formcontrolName: "tax_rate" }]
-      : []),
-    {
-      name: "Status",
-      type: "select",
-      formcontrolName: "status",
-      data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }]
-    }
-  ]);
 
   ngOnInit(): void {
     this.operationList.set(this._authService.userPermissionList());
@@ -185,18 +167,6 @@ export class GeneralMaster implements OnInit {
   }
 
   exportExcel(masterList: MasterItem[]) {
-    // Note: Use signal accessors masterName() and internal logic
-    const headers = ['SN', this.masterName()];
-    if (this.masterName() === 'Tax Type') headers.push('Tax Rate(%)');
-    headers.push('Status');
-
-    const exportData = masterList.map((item, index) => {
-      const row = [index + 1, item.name];
-      if (this.masterName() === 'Tax Type') row.push(item.tax_rate || '-');
-      row.push(item.status ? 'Active' : 'Inactive');
-      return row;
-    });
-
-    // this.excelService.exportExcel(this.masterName(), headers, exportData);
+    this._excelService.exportExcel(this.masterName(), this.tableHeaders(), masterList);
   }
 }

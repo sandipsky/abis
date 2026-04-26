@@ -24,7 +24,6 @@ import { AddProducts } from './add-products/add-products';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Products implements OnInit {
-  // Services (Modern Inject Pattern)
   private masterService = inject(MasterService);
   private toastr = inject(ToastrService);
   private authService = inject(AuthService);
@@ -49,8 +48,8 @@ export class Products implements OnInit {
     sortDirection: '',
   });
 
-  // Dropdown Signals
   readonly filterColumns = signal<any[]>([]);
+
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
     { name: 'Product Name', property: 'name', sortBy: 'name', sort: true },
@@ -72,9 +71,8 @@ export class Products implements OnInit {
     this.loadDropdowns();
   }
 
-  // Helper for Template Permissions
   hasPermission(perm: string): boolean {
-    return this.operationList().includes(perm) || true; // Keeping your '|| true' logic
+    return this.operationList().includes(perm) || true;
   }
 
   loadDropdowns(): void {
@@ -205,6 +203,6 @@ export class Products implements OnInit {
   }
 
   exportExcel(data: any[]) {
-    // excel logic here
+    this.excelService.exportExcel("Products", this.tableHeaders(), data);
   }
 }
