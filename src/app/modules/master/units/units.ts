@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GeneralMaster } from '../general-master/general-master';
 
 @Component({
@@ -6,6 +6,7 @@ import { GeneralMaster } from '../general-master/general-master';
   standalone: true,
   imports: [GeneralMaster],
   template: `<app-general-master [tableHeaders]="tableHeaders" [filterColumns]="filterColumns" endPoint="units" masterName="Unit" createMasterPermissionName="CreateUnits" editMasterPermissionName="EditUnits" deleteMasterPermissionName="DeleteUnits" exportMasterPermissionName="ExportUnits"></app-general-master>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class Units {

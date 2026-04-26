@@ -4,6 +4,10 @@ import { authGuard } from './auth/auth.guard';
 import { loginGuard } from './auth/login.guard';
 import { masterRoutes } from './modules/master/master.routes';
 import { settingsRoutes } from './modules/settings/settings.routes';
+import { purchaseRoutes } from './modules/purchase/purchase.routes';
+import { salesRoutes } from './modules/sales/sales.routes';
+import { inventoryRoutes } from './modules/inventory/inventory.routes';
+import { accountingRoutes } from './modules/accounting/accounting.routes';
 
 export const routes: Routes = [
     {
@@ -24,8 +28,24 @@ export const routes: Routes = [
                 path: 'products',
                 loadComponent: () => import('./modules/products/products').then(m => m.Products),
             },
-           ...masterRoutes,
-           ...settingsRoutes,
+            {
+                path: 'reports',
+                loadComponent: () => import('./modules/reports/reports').then(m => m.Reports),
+            },
+            {
+                path: 'user',
+                loadComponent: () => import('./modules/user/user').then(m => m.User),
+            },
+            {
+                path: 'roles-permissions',
+                loadComponent: () => import('./modules/roles-permission/roles-permission').then(m => m.RolesPermission),
+            },
+            ...masterRoutes,
+            ...settingsRoutes,
+            ...purchaseRoutes,
+            ...salesRoutes,
+            ...inventoryRoutes,
+            ...accountingRoutes,
         ]
     },
     {

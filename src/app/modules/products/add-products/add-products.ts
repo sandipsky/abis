@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -18,7 +18,8 @@ import { AmountPipe } from "../../../shared/pipes/amount-pipe";
   selector: 'app-transaction',
   imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, NgSelectModule, AmountPipe],
   templateUrl: './add-products.html',
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProducts {
   modalForm: FormGroup;

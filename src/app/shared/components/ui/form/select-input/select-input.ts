@@ -1,4 +1,4 @@
-import { Component, inject, model, signal, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal, output, ViewEncapsulation } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -13,7 +13,8 @@ import { Icon } from '../../icon/icon';
   standalone: true,
   imports: [NgSelectModule, Icon],
   templateUrl: './select-input.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectInput implements ControlValueAccessor {
 

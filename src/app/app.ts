@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoadingSpinner } from './shared/components/loading-spinner/loading-spinner';
 import { ConfigurationService } from './shared/services/configuration.service';
@@ -7,6 +7,7 @@ import { ConfigurationService } from './shared/services/configuration.service';
   selector: 'app-root',
   imports: [RouterOutlet, LoadingSpinner],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
   private _configurationService = inject(ConfigurationService);

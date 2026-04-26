@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GeneralMaster } from '../general-master/general-master';
 
 @Component({
   selector: 'app-product-category',
   template: `<app-general-master [tableHeaders]="tableHeaders" [filterColumns]="filterColumns" endPoint="tax_types" masterName="Tax Type" createMasterPermissionName="CreateTaxType" editMasterPermissionName="EditTaxType" deleteMasterPermissionName="DeleteTaxType" exportMasterPermissionName="ExportTaxType"></app-general-master>`,
   imports: [GeneralMaster],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaxTypes {
   tableHeaders = [

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,8 @@ import { CommonModule } from '@angular/common';
   standalone: true, // Ensuring standalone mode
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
   private fb = inject(FormBuilder);

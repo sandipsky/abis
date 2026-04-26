@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Optional, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, Optional, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -15,6 +15,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
     SharedModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentNumberScheme {
   formTitle = '';

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GeneralMaster } from '../general-master/general-master';
 
 
@@ -6,7 +6,8 @@ import { GeneralMaster } from '../general-master/general-master';
   selector: 'app-product-category',
   template: `<app-general-master [tableHeaders]="tableHeaders" [filterColumns]="filterColumns" endPoint="categories" masterName="Category" createMasterPermissionName="CreateProductCategories" editMasterPermissionName="EditProductCategories" deleteMasterPermissionName="DeleteProductCategories" exportMasterPermissionName="ExportProductCategories"></app-general-master>`,
   imports: [GeneralMaster],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Category {
   tableHeaders = [

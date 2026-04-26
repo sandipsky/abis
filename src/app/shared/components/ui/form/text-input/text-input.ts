@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, model, signal, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, inject, model, signal, output } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -11,6 +11,7 @@ import { Icon } from '../../icon/icon';
   selector: 'text-input',
   imports: [Icon],
   templateUrl: './text-input.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextInput implements ControlValueAccessor {
   label = model<string>('');

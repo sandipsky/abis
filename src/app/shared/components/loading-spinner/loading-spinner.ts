@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SpinnerService } from '../../services/spinner.service';
 
@@ -8,6 +8,7 @@ import { SpinnerService } from '../../services/spinner.service';
   templateUrl: './loading-spinner.html',
   styleUrl: './loading-spinner.scss',
   encapsulation: ViewEncapsulation.ShadowDom,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingSpinner {
   private _spinnerService = inject(SpinnerService);

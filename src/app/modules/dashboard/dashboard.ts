@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SharedModule } from '../../shared/shared-module';
 
 @Component({
@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared-module';
   imports: [SharedModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Dashboard {
 
