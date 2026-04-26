@@ -72,10 +72,13 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Product Name</label>
-                            <input type="text" class="form-control" placeholder="Enter Product Name"
+                            <input [useValidation]="true" type="text" class="form-control" placeholder="Enter Product Name"
                                 formControlName="name" />
                         </div>
                     </div>
+
+                    <button (click)="remove()">Remove</button>
+                    <button (click)="add()">Add</button>
 
                     <div class="col-md-3">
                         <div class="form-group">

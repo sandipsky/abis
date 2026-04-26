@@ -14,10 +14,11 @@ import { AuthService } from '../../../auth/auth.service';
 import { MastersInlineModalComponent } from '../../master/general-master/add-master-modal/add-master-modal';
 import { AmountPipe } from "../../../shared/pipes/amount-pipe";
 import { Button } from '../../../shared/components/button/button';
+import { FormValidation } from '../../../shared/directives/form-validation';
 
 @Component({
   selector: 'app-transaction',
-  imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, NgSelectModule, AmountPipe, Button],
+  imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, NgSelectModule, AmountPipe, Button, FormValidation],
   templateUrl: './add-products.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -97,6 +98,16 @@ export class AddProducts {
     }
 
 
+  }
+
+  remove() {
+    this.modalForm.get('name')?.removeValidators(Validators.required);
+    this.modalForm.get('name')?.updateValueAndValidity()
+  }
+
+  add() {
+    this.modalForm.get('name')?.addValidators(Validators.required);
+    this.modalForm.get('name')?.updateValueAndValidity()
   }
 
   ngOnInit() {
