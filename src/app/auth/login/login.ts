@@ -46,10 +46,6 @@ export class Login {
   }
 
   login() {
-    localStorage.setItem('token', 'test');
-    this.router.navigate(['dashboard']);
-    return;
-
     if (this.loginForm.invalid) {
       this.toastr.error("Please Enter both Username and Password", 'Error', { closeButton: true });
       return;
@@ -59,7 +55,7 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res?.authorization?.token || '');
+        localStorage.setItem('token', res?.token);
 
         this.isLoading.set(false);
         this.toastr.success("Logged In Successfully.", "Success");

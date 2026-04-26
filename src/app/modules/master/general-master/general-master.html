@@ -25,6 +25,7 @@
       [actions]="['edit', 'delete']" 
       [tableHeaders]="tableHeaders()" 
       [tableData]="masterList()"
+      (sortChange)="onSort($event)"
       (onEdit)="openAddModal($event)"
       (onDelete)="openDelete($event)">
     </app-table>

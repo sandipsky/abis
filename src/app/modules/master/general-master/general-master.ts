@@ -74,11 +74,11 @@ export class GeneralMaster implements OnInit {
     this.getMasterList();
   }
 
-  onSort({ column, direction }: any) {
+  onSort(e: any) {
     this.filterForm.update(f => ({
       ...f,
-      sortBy: column,
-      sortDirection: direction
+      sortBy: e.column,
+      sortDirection: e.direction
     }));
     this.getMasterList();
   }
@@ -91,8 +91,8 @@ export class GeneralMaster implements OnInit {
         pageSize: isExport ? (this.totalElements() || 999999) : this.filterForm().pageSize,
       },
       sortDTO: [{
-        field: this.filterForm().sortBy,
-        orderType: this.filterForm().sortDirection,
+        field: this.filterForm().sortBy || 'name',
+        orderType: this.filterForm().sortDirection || 'asc',
       }],
     };
 

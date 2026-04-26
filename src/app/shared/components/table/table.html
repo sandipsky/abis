@@ -3,13 +3,16 @@
     <thead>
       <tr>
         @for (item of tableHeaders(); track item.property) {
-        <th [style.width]="item.property === 'sn' ? '100px' : null" [class.text-end]="item.align === 'right'">
-          @if (item.sort) {
-          <a class="sort-by" (click)="onSort(item)">{{ item.name }}</a>
-          } @else {
-          {{ item.name }}
-          }
+        @if (item.sort) {
+        <th [sortable]="item.sortBy" (sort)="onSort($event)" [style.width]="item.property === 'sn' ? '100px' : null"
+          [class.text-end]="item.align === 'right'">
+          <a class="sort-by">{{ item.name }}</a>
         </th>
+        } @else {
+          <th>
+            {{ item.name }}
+          </th>
+        }
         }
 
         @if (actions().length > 0) {

@@ -6,23 +6,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Menu } from '../menu/menu';
 import { SortEvent } from '../../models/sort.model';
-import { ConfigurationService } from '../../services/configuration.service';
-import { DateService } from '../../services/date.service';
 import { AmountPipe } from "../../pipes/amount-pipe";
 import { Button } from '../button/button';
+import { SortableHeaderDirective } from '../../directives/sortable';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, Menu, MatTooltipModule, AmountPipe, Button],
+  imports: [CommonModule, FormsModule, Menu, MatTooltipModule, AmountPipe, Button, SortableHeaderDirective],
   templateUrl: './table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Table {
-  // Services
-  private configService = inject(ConfigurationService);
-  private dateService = inject(DateService);
-
   // Inputs as Signals
   tableHeaders = input<any[]>([]);
   tableData = input<any[]>([]);
@@ -54,13 +49,6 @@ export class Table {
   onSales = output<any>();
   onHold = output<any>();
   onPending = output<any>();
-
-  // Derived State / Reactive Config
-  // Converts the Observable configuration to a Signal automatically
-  // private configData = toSignal(this.configService.configuration$);
-  
-  // Computed property that updates whenever the config signal changes
-  // dateType = computed(() => this.configData()?.dateType ?? 'BS');
 
   onSort(event: any) {
     this.sortChange.emit(event);

@@ -35,7 +35,7 @@ export class MastersInlineModalComponent {
     this.modalForm = this._fb.nonNullable.group({
       id: [],
       name: [, Validators.required],
-      status: [true, Validators.required],
+      is_active: [true, Validators.required],
     });
     this.initializeDynamicFields();
   }
