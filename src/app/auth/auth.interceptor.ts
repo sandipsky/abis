@@ -1,16 +1,36 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
+
+let sessionExpiredHandled = false;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
+  const authService = inject(AuthService);
+  const toastr = inject(ToastrService);
 
-  if (token) {
-    const authReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
+  const authReq = token
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : req;
+
+  return next(authReq).pipe(
+    catchError((err: HttpErrorResponse) => {
+      const body = err.error;
+      const isExpired =
+        body?.errorCode === 403 &&
+        typeof body?.message === 'string' &&
+        body.message.toLowerCase().includes('jwt token has expired');
+
+      if (isExpired && !sessionExpiredHandled) {
+        sessionExpiredHandled = true;
+        toastr.error('Session expired. Please log in again.');
+        authService.logout();
+        setTimeout(() => (sessionExpiredHandled = false), 0);
       }
-    });
-    return next(authReq);
-  }
 
-  return next(req);
+      return throwError(() => err);
+    })
+  );
 };

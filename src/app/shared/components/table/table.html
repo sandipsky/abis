@@ -66,6 +66,14 @@
           <span>{{ data[header.property] | amount }}</span>
           }
 
+          @else if (header.chip) {
+          <div class="d-flex flex-wrap gap-sm">
+            @for (chip of data[header.property]; track $index; let i = $index) {
+            <span class="status" [ngClass]="chipClass(i)">{{ chip }}</span>
+            }
+          </div>
+          }
+
           @else {
           {{ data[header.property]}}
           }
@@ -83,13 +91,13 @@
               <div dropdown-content>
                 @if (actions().includes('view')) {
                 <div (click)="onView.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/eye.svg" alt="" /> View Details
+                  <img src="../../../svg/eye.svg" alt="" /> View
                 </div>
                 }
 
                 @if (actions().includes('edit') && hasEditPermission()) {
                 <div (click)="onEdit.emit(data)" class="dropdown-item" dropdown-item>
-                  <img src="../../../svg/edit.svg" alt="" /> Edit Details
+                  <img src="../../../svg/edit.svg" alt="" /> Edit
                 </div>
                 }
 

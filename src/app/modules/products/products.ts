@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed, inject, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
 // Services
@@ -17,6 +17,10 @@ import { DeleteModalComponent } from '../../shared/components/delete-modal/delet
 import { AddProducts } from './add-products/add-products';
 import { Product } from './product.model';
 import { FilterColumn, FilterItem } from '../../shared/models/filter.model';
+import { PaginatedResponse } from '../../shared/models/paginated-response.model';
+import { SortEvent } from '../../shared/models/sort.model';
+import { ApiResponse } from '../../shared/models/api-response.model';
+import { SpinnerService } from '../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-products',
@@ -26,45 +30,45 @@ import { FilterColumn, FilterItem } from '../../shared/models/filter.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Products implements OnInit {
-  private masterService = inject(MasterService);
-  private toastr = inject(ToastrService);
-  private authService = inject(AuthService);
-  private dialog = inject(MatDialog);
-  private configService = inject(ConfigurationService);
-  private dropdown = inject(DropdownsService);
-  private excelService = inject(ExcelService);
+  private _masterService = inject(MasterService);
+  private _toastr = inject(ToastrService);
+  private _authService = inject(AuthService);
+  private _dialog = inject(MatDialog);
+  private _configService = inject(ConfigurationService);
+  private _dropdown = inject(DropdownsService);
+  private _excelService = inject(ExcelService);
+  private _spinnerService = inject(SpinnerService);
 
   // State Signals
   readonly endPoint = 'products';
-  readonly masterList = signal<Product[]>([]);
-  readonly length = signal(0);
-  readonly isLoading = signal(false);
-  readonly operationList = signal<string[]>([]);
-  readonly filterList = signal<FilterItem[]>([]);
+  masterList = signal<Product[]>([]);
+  length = signal(0);
+  operationList = signal<string[]>([]);
+  filterList = signal<FilterItem[]>([]);
 
-  readonly filterForm = signal({
+  filterForm = signal({
     pageIndex: 0,
     pageSize: 25,
     sortBy: '',
     sortDirection: '',
   });
 
-  readonly filterColumns = signal<FilterColumn[]>([]);
+  filterColumns = signal<FilterColumn[]>([]);
 
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
     { name: 'Product Name', property: 'name', sortBy: 'name', sort: true },
-    { name: 'Code', property: 'product_code', sortBy: 'productCode', sort: true },
+    { name: 'Code', property: 'code', sortBy: 'productCode', sort: true },
     { name: 'Category', property: 'category_name', sortBy: 'productCategoriesString', sort: true },
-    { name: 'Product Type', property: 'product_type', sortBy: 'productType', sort: true },
-    { name: 'Primary Unit', property: 'primary_unit_name', sortBy: 'primaryUnit_name', sort: true },
-    { name: 'Packing', property: 'packing', sortBy: 'packing.name', sort: true },
+    { name: 'Product Type', property: 'product_types', chip: true, sortBy: 'productType', sort: true },
+    { name: 'Primary Unit', property: 'unit_name', sortBy: 'primaryUnit_name', sort: true },
+    { name: 'Packing', property: 'packing_name', sortBy: 'packing.name', sort: true },
     { name: 'Tax Type', property: 'tax_type_name', sortBy: 'taxType.name', sort: true },
     { name: 'Status', property: 'is_active', sort: false, status: true, editStatus: false }
   ]);
 
   ngOnInit(): void {
-    this.operationList.set(this.authService.userPermissionList());
+    this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();
     this.loadDropdowns();
   }
@@ -99,25 +103,25 @@ export class Products implements OnInit {
       }],
     };
 
-    this.isLoading.set(true);
-    this.masterService.getMasterList(payload, this.endPoint).subscribe({
-      next: (res: any) => {
+    this._spinnerService.setSpinner(true);
+    this._masterService.getMasterList(payload, this.endPoint).subscribe({
+      next: (res: PaginatedResponse<Product>) => {
         if (isExport) {
           this.exportExcel(res?.content);
         } else {
           this.masterList.set(res?.content || []);
           this.length.set(res?.totalElements || 0);
         }
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
       error: (err) => {
-        this.toastr.error(err);
-        this.isLoading.set(false);
+        this._toastr.error(err);
+        this._spinnerService.setSpinner(false);
       }
     });
   }
 
-  applyFilter(filters: any[]) {
+  applyFilter(filters: FilterItem[]) {
     this.filterList.set(filters);
     this.filterForm.update(prev => ({ ...prev, pageIndex: 0 }));
     this.getMasterList();
@@ -132,7 +136,7 @@ export class Products implements OnInit {
     this.getMasterList();
   }
 
-  onSort({ column, direction }: any) {
+  onSort({ column, direction }: SortEvent) {
     this.filterForm.update(prev => ({
       ...prev,
       sortBy: column,
@@ -141,8 +145,8 @@ export class Products implements OnInit {
     this.getMasterList();
   }
 
-  showForm(data?: any, isView = false) {
-    const dialogRef = this.dialog.open(AddProducts, {
+  showForm(data?: Product, isView = false) {
+    const dialogRef = this._dialog.open(AddProducts, {
       panelClass: ['drawer-top', 'slide-up'],
       disableClose: true,
       data: { formData: data, isView }
@@ -162,8 +166,8 @@ export class Products implements OnInit {
     });
   }
 
-  deleteItem(data: any) {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
+  deleteItem(data: Product) {
+    const dialogRef = this._dialog.open(DeleteModalComponent, {
       data: { name: data.name },
       disableClose: true
     });
@@ -179,23 +183,24 @@ export class Products implements OnInit {
 
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        this.isLoading.set(true);
-        this.masterService.deleteMaster(data.id, this.endPoint).subscribe({
-          next: (res: any) => {
-            res.messages?.forEach((m: any) => this.toastr.success(m.message));
+        this._spinnerService.setSpinner(true);
+        this._masterService.deleteMaster(data.id, this.endPoint).subscribe({
+          next: (res: ApiResponse) => {
+            this._toastr.success(res.message);
             this.getMasterList();
+            this._spinnerService.setSpinner(false);
           },
           error: (err) => {
-            this.isLoading.set(false);
-            err.error?.messages?.forEach((m: any) => this.toastr.error(m.message));
+            this._spinnerService.setSpinner(false);
+            this._toastr.success(err.message);
           }
         });
       }
     });
   }
 
-  exportExcel(data: any[]) {
-    this.excelService.exportExcel("Products", this.tableHeaders(), data);
+  exportExcel(data: Product[]) {
+    this._excelService.exportExcel("Products", this.tableHeaders(), data);
   }
 
   printPage() {

@@ -10,4 +10,5 @@ export interface TableHeader {
   date?: boolean;
   amount?: boolean;
   linkUrl?: boolean;
+  chip?: boolean;
 }
