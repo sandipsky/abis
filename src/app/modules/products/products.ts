@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
 // Services
-import { MasterService } from '../master/master.service';
 import { AuthService } from '../../auth/auth.service';
+import { ProductService } from './product.service';
 import { DropdownsService } from '../../shared/services/dropdown.service';
 import { ConfigurationService } from '../../shared/services/configuration.service';
 import { ExcelService } from '../../shared/services/excel.service';
@@ -30,7 +30,7 @@ import { SpinnerService } from '../../shared/services/spinner.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Products implements OnInit {
-  private _masterService = inject(MasterService);
+  private _productService = inject(ProductService);
   private _toastr = inject(ToastrService);
   private _authService = inject(AuthService);
   private _dialog = inject(MatDialog);
@@ -40,7 +40,6 @@ export class Products implements OnInit {
   private _spinnerService = inject(SpinnerService);
 
   // State Signals
-  readonly endPoint = 'products';
   masterList = signal<Product[]>([]);
   length = signal(0);
   operationList = signal<string[]>([]);
@@ -58,10 +57,10 @@ export class Products implements OnInit {
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
     { name: 'Product Name', property: 'name', sortBy: 'name', sort: true },
-    { name: 'Code', property: 'code', sortBy: 'productCode', sort: true },
-    { name: 'Category', property: 'category_name', sortBy: 'productCategoriesString', sort: true },
-    { name: 'Product Type', property: 'product_types', chip: true, sortBy: 'productType', sort: true },
-    { name: 'Primary Unit', property: 'unit_name', sortBy: 'primaryUnit_name', sort: true },
+    { name: 'Code', property: 'code', sortBy: 'code', sort: true },
+    { name: 'Category', property: 'category_name', sortBy: 'category.name', sort: true },
+    { name: 'Product Type', property: 'product_types', chip: true },
+    { name: 'Primary Unit', property: 'unit_name', sortBy: 'unit.name', sort: true },
     { name: 'Packing', property: 'packing_name', sortBy: 'packing.name', sort: true },
     { name: 'Tax Type', property: 'tax_type_name', sortBy: 'taxType.name', sort: true },
     { name: 'Status', property: 'is_active', sort: false, status: true, editStatus: false }
@@ -91,7 +90,7 @@ export class Products implements OnInit {
   }
 
   getMasterList(isExport = false): void {
-    const payload = {
+    const formData = {
       filter: this.filterList(),
       pagination: {
         pageIndex: isExport ? 0 : this.filterForm().pageIndex,
@@ -104,7 +103,7 @@ export class Products implements OnInit {
     };
 
     this._spinnerService.setSpinner(true);
-    this._masterService.getMasterList(payload, this.endPoint).subscribe({
+    this._productService.getProductList(formData).subscribe({
       next: (res: PaginatedResponse<Product>) => {
         if (isExport) {
           this.exportExcel(res?.content);
@@ -115,7 +114,8 @@ export class Products implements OnInit {
         this._spinnerService.setSpinner(false);
       },
       error: (err) => {
-        this._toastr.error(err);
+        console.log(err)
+        this._toastr.error(err.error.message, 'Error');
         this._spinnerService.setSpinner(false);
       }
     });
@@ -184,15 +184,15 @@ export class Products implements OnInit {
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
         this._spinnerService.setSpinner(true);
-        this._masterService.deleteMaster(data.id, this.endPoint).subscribe({
+        this._productService.deleteProduct(data.id).subscribe({
           next: (res: ApiResponse) => {
-            this._toastr.success(res.message);
-            this.getMasterList();
+            this._toastr.success(res.message, 'Success');
             this._spinnerService.setSpinner(false);
+            this.getMasterList();
           },
           error: (err) => {
             this._spinnerService.setSpinner(false);
-            this._toastr.success(err.message);
+            this._toastr.success(err.error.message, 'Error');
           }
         });
       }

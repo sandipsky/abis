@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
 import { SpinnerService } from '../../../../shared/services/spinner.service';
 import { Button } from '../../../../shared/components/button/button';
+import { ApiResponse } from '../../../../shared/models/api-response.model';
 
 @Component({
   selector: 'app-add-master-modal',
@@ -54,11 +55,16 @@ export class MastersInlineModalComponent {
     this.modalForm.markAllAsTouched();
     if (this.modalForm.invalid) return;
 
-    const payload = this.modalForm.value;
+    const formData = this.modalForm.value;
 
     this._spinnerService.setSpinner(true);
-    this._masterService.addUnitMaster(this.endPoint(), payload).subscribe({
-      next: (res: any) => {
+
+    const request$ = formData.id
+      ? this._masterService.updateMaster(formData, this.endPoint())
+      : this._masterService.createMaster(formData, this.endPoint());
+
+    request$.subscribe({
+      next: (res: ApiResponse) => {
         this._toastr.success(res.message, 'Success', { closeButton: true });
         this.closeDialog(res);
         this._spinnerService.setSpinner(false);
@@ -70,14 +76,14 @@ export class MastersInlineModalComponent {
     });
   }
 
-  public closeDialog(res?: any) {
+  public closeDialog(res?: ApiResponse) {
     this._dialogRef.removePanelClass('slide-left');
     this._dialogRef.addPanelClass('slide-left-close');
 
     setTimeout(() => {
       if (res) {
         this._dialogRef.close({
-          id: res.postdata_id,
+          id: res.post_data_id,
           name: this.modalForm.value.name,
         });
       } else {

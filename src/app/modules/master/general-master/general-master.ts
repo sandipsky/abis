@@ -16,6 +16,8 @@ import { SortEvent } from '../../../shared/models/sort.model';
 import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
 import { FilterColumn, FilterItem } from '../../../shared/models/filter.model';
 import { TableHeader } from '../../../shared/models/table-header.model';
+import { PaginatedRequest } from '../../../shared/models/paginated-request.model';
+import { ApiResponse } from '../../../shared/models/api-response.model';
 
 @Component({
   selector: 'app-general-master',
@@ -88,7 +90,7 @@ export class GeneralMaster implements OnInit {
   }
 
   getMasterList(isExport?: boolean): void {
-    let filter = {
+    let filter: PaginatedRequest = {
       filter: this.filterList() || [],
       pagination: {
         pageIndex: isExport ? 0 : this.filterForm().pageIndex,
@@ -112,7 +114,7 @@ export class GeneralMaster implements OnInit {
         }
       },
       error: (err) => {
-        this._toastr.error(err);
+        this._toastr.error(err.error.message, 'Error');
         this._spinnerService.setSpinner(false);
       },
     });
@@ -147,7 +149,7 @@ export class GeneralMaster implements OnInit {
     });
   }
 
-  openDelete(master?: MasterItem): void {
+  openDelete(master: MasterItem): void {
     const dialogRef = this._dialog.open(DeleteModalComponent, {
       panelClass: 'slide-up',
       disableClose: true,
@@ -166,7 +168,20 @@ export class GeneralMaster implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) this.getMasterList();
+      if (result) {
+        this._spinnerService.setSpinner(true);
+        this._masterService.deleteMaster(master.id, this.endPoint()).subscribe({
+          next: (res: ApiResponse) => {
+            this._toastr.success(res.message, 'Success');
+            this._spinnerService.setSpinner(false);
+            this.getMasterList();
+          },
+          error: (err) => {
+            this._toastr.error(err.error.message, 'Error');
+            this._spinnerService.setSpinner(false);
+          },
+        })
+      };
     });
   }
 

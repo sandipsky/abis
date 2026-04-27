@@ -156,9 +156,9 @@ export class AddProducts {
       )
     }
     else {
-      this.masterService.getMasterCode('products').subscribe((res: string) => {
-        this.f['product_code'].setValue(res || null);
-      });
+      // this.masterService.getMasterCode('products').subscribe((res: string) => {
+      //   this.f['product_code'].setValue(res || null);
+      // });
       this.addBonus();
     }
   }
@@ -278,7 +278,7 @@ export class AddProducts {
         bonus_quantity: info.bonus_quantity ?? 0
       }));
 
-    let finalData = new FormData();
+    let finalData: any = new FormData();
     let jsonPayload = JSON.stringify(formData);
 
     if (this.selectedProfileImage != null) {
@@ -288,7 +288,7 @@ export class AddProducts {
     finalData.append('product', new Blob([jsonPayload], { type: "application/json" }));
 
     const request$ = formData.id
-      ? this.masterService.updateMaster(finalData, formData.id, this.endPoint)
+      ? this.masterService.updateMaster(finalData, this.endPoint)
       : this.masterService.createMaster(finalData, this.endPoint);
 
     request$.subscribe({

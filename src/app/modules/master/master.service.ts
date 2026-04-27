@@ -1,179 +1,36 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-// import { masterModel, taxTypes } from './master.model';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { MasterItem } from './master.model';
+import { ApiResponse } from '../../shared/models/api-response.model';
+import { PaginatedRequest } from '../../shared/models/paginated-request.model';
+import { PaginatedResponse } from '../../shared/models/paginated-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MasterService {
-  sharedValue$ = new Subject();
-  apiUnitMasterAdd = environment.apiUrl + '/master/';
-  apiURLDivisionList = environment.apiUrl + '/dropdown/divisions';
-  apiUrl = environment.apiUrl + '/master';
+  readonly apiUrl = environment.apiUrl + '/master';
+  private _http = inject(HttpClient);
 
-  constructor(
-    private _http: HttpClient,
-  ) {
-
+  getMasterList(filters: PaginatedRequest, endPoint: string,): Observable<PaginatedResponse<MasterItem>> {
+    return this._http.post<PaginatedResponse<MasterItem>>(`${this.apiUrl}/${endPoint}/view`, filters);
   }
 
-  public addUnitMaster(endPoint: string, unitMaster: any) {
-    if (unitMaster.id) {
-      return this._http.put(this.apiUnitMasterAdd + endPoint + '/' + unitMaster.id, unitMaster);
-    }
-    else {
-      return this._http.post(this.apiUnitMasterAdd + endPoint, unitMaster);
-    }
+  getMasterDetail(id: number, endPoint: string): Observable<MasterItem> {
+    return this._http.get<MasterItem>(`${this.apiUrl}/${endPoint}/${id}`);
   }
 
-  public addCustomerMaster(endPoint: string, unitMaster: any, id: any) {
-    if (id != null) {
-      return this._http.put(this.apiUnitMasterAdd + endPoint + '/' + id, unitMaster);
-    }
-    else {
-      return this._http.post(this.apiUnitMasterAdd + endPoint, unitMaster);
-    }
+  createMaster(masterData: MasterItem, endPoint: string): Observable<ApiResponse> {
+    return this._http.post<ApiResponse>(`${this.apiUrl}/${endPoint}`, masterData);
   }
 
-  getMRHQDIV(id: number) {
-    return this._http.get(environment.apiUrl + `/master/marketers/${id}`)
+  updateMaster(masterData: MasterItem, endPoint: string): Observable<ApiResponse> {
+    return this._http.put<ApiResponse>(`${this.apiUrl}/${endPoint}/${masterData.id}`, masterData);
   }
 
-  getFile(fileUrl: string) {
-    return this._http.get(fileUrl, { responseType: 'blob' as 'json' })
+  deleteMaster(id: number, endPoint: string): Observable<ApiResponse> {
+    return this._http.delete<ApiResponse>(`${this.apiUrl}/${endPoint}/${id}`);
   }
-
-  public addProductUnitMaster(file: any, endPoint: string, unitMaster: any) {
-    let formData = new FormData();
-    let jsonPayload = JSON.stringify(unitMaster);
-
-    if (file != null) {
-      formData.append('file', file);
-    }
-    formData.append('product', new Blob([jsonPayload], { type: "application/json" }));
-
-    if (unitMaster.id) {
-      return this._http.put(this.apiUnitMasterAdd + endPoint + '/' + unitMaster.id, formData);
-    }
-    else {
-      return this._http.post(this.apiUnitMasterAdd + endPoint, formData);
-    }
-  }
-
-  public getAllUnitMaster(endPoint: string) {
-    return this._http.get<any>(this.apiUnitMasterAdd + endPoint);
-  }
-
-  // public getMasterList(endPoint: string, data: any) {
-  //   return this._http.post<masterModel>(this.apiUnitMasterAdd + endPoint + '/view', data);
-  // }
-
-  unlockUser(id: number) {
-    return this._http.get(environment.apiUrl + `/master/users/unlock/${id}`)
-  }
-
-  getUserDetail(id: number) {
-    return this._http.get<any>(environment.apiUrl + '/master/postSave/view' + '/' + id);
-  }
-
-  public getMasterList(data: any, endPoint: string,) {
-    return this._http.post<any>(this.apiUnitMasterAdd + endPoint + '/view', data);
-  }
-
-  public deleteUnit(endPoint: string, id: Array<number>) {
-    return this._http.delete(this.apiUnitMasterAdd + endPoint + '/' + id);
-  }
-
-  createMaster(formData: any, endPoint: string): Observable<any> {
-    return this._http.post<any>(`${this.apiUrl}/${endPoint}`, formData);
-  }
-
-  updateMaster(formData: any, id: number, endPoint: string): Observable<any> {
-    return this._http.put<any>(`${this.apiUrl}/${endPoint}/${id}`, formData);
-  }
-
-  getMasterCode(type: string): Observable<any> {
-    return this._http.get(environment.apiUrl + `/master/${type}/getSystemGeneratedNumber`, { responseType: 'text' });
-  }
-
-  getAccountCode() {
-    return this._http.get(environment.apiUrl + `/accountMaster/getSystemGeneratedNumber`, { responseType: 'text' });
-  }
-
-  deleteMaster(id: number, endPoint: string): Observable<any> {
-    return this._http.delete<any>(`${this.apiUrl}/${endPoint}/${id}`);
-  }
-
-  getMasterDetail(id: number, endPoint: string): Observable<any> {
-    return this._http.get<any>(`${this.apiUrl}/${endPoint}/${id}`);
-  }
-
-
-
-  public masterDetail(endPoint: string, id: number) {
-    return this._http.get<any>(this.apiUnitMasterAdd + endPoint + '/' + id);
-  }
-
-
-
-  public getDivision(id: number) {
-    return this._http.get<any>(this.apiURLDivisionList + '/' + id)
-  }
-
-  public getPDF(name?: string): Observable<Blob> {
-    let headers = new HttpHeaders();
-    headers = headers.set('Accept', 'application/pdf');
-    return this._http.get<Blob>(environment.apiUrl + `/master/${name}/export/pdf`, { headers: headers, responseType: 'blob' as 'json' });
-  }
-
-  getProductList(data: any): Observable<any> {
-    return this._http.post(environment.apiUrl + '/master/products/view', data)
-  }
-
-  getProductCode() {
-    return this._http.get(environment.apiUrl + `/master/products/getSystemGeneratedNumber`, { responseType: 'text' });
-  }
-
-  getCustomerList(data: any): Observable<any> {
-    return this._http.post(environment.apiUrl + '/master/customers/view', data)
-  }
-
-  getVendorList(data: any): Observable<any> {
-    return this._http.post(environment.apiUrl + '/master/vendors/view', data)
-  }
-
-  getSubAccountList(data: any): Observable<any> {
-    return this._http.post(environment.apiUrl + '/master/subAccounts/view', data)
-  }
-
-  sortList(data: any, active: any, direction: any) {
-    return data.sort((a: any, b: any) => {
-      const valueA =
-        typeof a[active] === 'string' ? a[active].toLowerCase() : a[active];
-      const valueB =
-        typeof b[active] === 'string' ? b[active].toLowerCase() : b[active];
-
-      if (typeof a[active] === 'number' && typeof b[active] === 'number') {
-        if (direction === 'asc') {
-          return a[active] - b[active];
-        } else {
-          return b[active] - a[active];
-        }
-      } else {
-        // Handle string comparison
-        if (direction === 'asc') {
-          return valueA?.localeCompare(valueB);
-        } else {
-          return valueB?.localeCompare(valueA);
-        }
-      }
-    });
-  }
-
-  getProductsInfo() {
-    return this._http.get(environment.apiUrl + '/master/products/info');
-  }
-
 }

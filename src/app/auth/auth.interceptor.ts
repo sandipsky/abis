@@ -4,8 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 
-let sessionExpiredHandled = false;
-
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
   const authService = inject(AuthService);
@@ -20,14 +18,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       const body = err.error;
       const isExpired =
         body?.errorCode === 403 &&
-        typeof body?.message === 'string' &&
         body.message.toLowerCase().includes('jwt token has expired');
 
-      if (isExpired && !sessionExpiredHandled) {
-        sessionExpiredHandled = true;
-        toastr.error('Session expired. Please log in again.');
+      if (isExpired) {
+        toastr.error('Session expired. Please log in again.', 'Error');
         authService.logout();
-        setTimeout(() => (sessionExpiredHandled = false), 0);
       }
 
       return throwError(() => err);
