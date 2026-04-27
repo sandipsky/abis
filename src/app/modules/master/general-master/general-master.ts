@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, signal, computed, inject, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, signal, inject, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,10 @@ import { ExcelService } from '../../../shared/services/excel.service';
 import { MasterItem } from '../master.model';
 import { input } from '@angular/core';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { SortEvent } from '../../../shared/models/sort.model';
+import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
+import { FilterColumn, FilterItem } from '../../../shared/models/filter.model';
+import { TableHeader } from '../../../shared/models/table-header.model';
 
 @Component({
   selector: 'app-general-master',
@@ -37,12 +41,12 @@ export class GeneralMaster implements OnInit {
   exportMasterPermissionName = input<string>('');
   printMasterPermissionName = input<string>('');
 
-  tableHeaders = input<any[]>([]);
-  filterColumns = input<any[]>([]);
+  tableHeaders = input<TableHeader[]>([]);
+  filterColumns = input<FilterColumn[]>([]);
 
-  masterList = signal<any[]>([]);
+  masterList = signal<MasterItem[]>([]);
   totalElements = signal<number>(0);
-  filterList = signal<any[]>([]);
+  filterList = signal<FilterItem[]>([]);
   operationList = signal<string[]>([]);
 
   filterForm = signal({
@@ -59,7 +63,7 @@ export class GeneralMaster implements OnInit {
     this.getMasterList();
   }
 
-  applyFilter(filters: any[]) {
+  applyFilter(filters: FilterItem[]) {
     this.filterList.set(filters);
     this.filterForm.update(f => ({ ...f, pageIndex: 0 }));
     this.getMasterList();
@@ -74,7 +78,7 @@ export class GeneralMaster implements OnInit {
     this.getMasterList();
   }
 
-  onSort(e: any) {
+  onSort(e: SortEvent) {
     this.filterForm.update(f => ({
       ...f,
       sortBy: e.column,
@@ -98,7 +102,7 @@ export class GeneralMaster implements OnInit {
 
     this._spinnerService.setSpinner(true);
     this._masterService.getMasterList(filter, this.endPoint()).subscribe({
-      next: (res: any) => {
+      next: (res: PaginatedResponse<MasterItem>) => {
         if (isExport) {
           this.exportExcel(res?.content);
         } else {

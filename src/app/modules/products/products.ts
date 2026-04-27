@@ -15,6 +15,8 @@ import { ExcelService } from '../../shared/services/excel.service';
 import { SharedModule } from '../../shared/shared-module';
 import { DeleteModalComponent } from '../../shared/components/delete-modal/delete-modal.component';
 import { AddProducts } from './add-products/add-products';
+import { Product } from './product.model';
+import { FilterColumn, FilterItem } from '../../shared/models/filter.model';
 
 @Component({
   selector: 'app-products',
@@ -34,12 +36,11 @@ export class Products implements OnInit {
 
   // State Signals
   readonly endPoint = 'products';
-  readonly masterList = signal<any[]>([]);
+  readonly masterList = signal<Product[]>([]);
   readonly length = signal(0);
   readonly isLoading = signal(false);
   readonly operationList = signal<string[]>([]);
-  readonly companyDetails = signal<any>(null);
-  readonly filterList = signal<any[]>([]);
+  readonly filterList = signal<FilterItem[]>([]);
 
   readonly filterForm = signal({
     pageIndex: 0,
@@ -48,7 +49,7 @@ export class Products implements OnInit {
     sortDirection: '',
   });
 
-  readonly filterColumns = signal<any[]>([]);
+  readonly filterColumns = signal<FilterColumn[]>([]);
 
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
@@ -59,11 +60,8 @@ export class Products implements OnInit {
     { name: 'Primary Unit', property: 'primary_unit_name', sortBy: 'primaryUnit_name', sort: true },
     { name: 'Packing', property: 'packing', sortBy: 'packing.name', sort: true },
     { name: 'Tax Type', property: 'tax_type_name', sortBy: 'taxType.name', sort: true },
-    { name: 'Status', property: 'status', sort: false, status: true, editStatus: false }
+    { name: 'Status', property: 'is_active', sort: false, status: true, editStatus: false }
   ]);
-
-  @ViewChild('view', { static: true }) view!: TemplateRef<any>;
-  private dialogRef?: MatDialogRef<any>;
 
   ngOnInit(): void {
     this.operationList.set(this.authService.userPermissionList());
@@ -71,39 +69,33 @@ export class Products implements OnInit {
     this.loadDropdowns();
   }
 
-  hasPermission(perm: string): boolean {
-    return this.operationList().includes(perm) || true;
+  hasPermission(permission: string): boolean {
+    return this.operationList().includes(permission) || true;
   }
 
   loadDropdowns(): void {
-    this.dropdown.getAllProductDropdownInfo().subscribe((info: any) => {
-      this.filterColumns.set([
-        { name: "Product", formcontrolName: "name", type: "text" },
-        { name: "Product Code", formcontrolName: "productCode", type: "text" },
-        { name: "Product Category", formcontrolName: "productCategory.id", type: "select", data: info.categories },
-        { name: "Product Group", formcontrolName: "productGroup_id", type: "select", data: info.product_groups },
-        { name: "Unit", type: "select", formcontrolName: "primaryUnit_id", data: info.units },
-        { name: "Packing", type: "select", formcontrolName: "packing_id", data: info.packings },
-        { name: "Tax Type", type: "select", formcontrolName: "taxType_id", data: info.tax_types },
-        { name: "Division", type: "select", formcontrolName: "division.id", data: info.divisions },
-        { name: "Type", type: "select", formcontrolName: "type", data: [{ name: "Purchasable", id: "purchasable" }, { name: "Sellable", id: "sellable" }] },
-        { name: "Status", type: "select", formcontrolName: "status", data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }] }
-      ]);
-    });
+    this.filterColumns.set([
+      { name: "Product", formcontrolName: "name", type: "text" },
+      { name: "Product Code", formcontrolName: "productCode", type: "text" },
+      // { name: "Product Category", formcontrolName: "productCategory.id", type: "select", data: info.categories },
+      // { name: "Unit", type: "select", formcontrolName: "primaryUnit_id", data: info.units },
+      // { name: "Packing", type: "select", formcontrolName: "packing_id", data: info.packings },
+      // { name: "Tax Type", type: "select", formcontrolName: "taxType_id", data: info.tax_types },
+      { name: "Type", type: "select", formcontrolName: "type", data: [{ name: "Purchasable", id: "purchasable" }, { name: "Sellable", id: "sellable" }] },
+      { name: "Status", type: "select", formcontrolName: "isActive", data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }] }
+    ]);
   }
 
   getMasterList(isExport = false): void {
-    const currentFilterForm = this.filterForm();
-
     const payload = {
       filter: this.filterList(),
       pagination: {
-        pageIndex: isExport ? 0 : currentFilterForm.pageIndex,
-        pageSize: isExport ? 999999 : currentFilterForm.pageSize,
+        pageIndex: isExport ? 0 : this.filterForm().pageIndex,
+        pageSize: isExport ? 999999 : this.filterForm().pageSize,
       },
       sortDTO: [{
-        field: currentFilterForm.sortBy || 'id',
-        orderType: currentFilterForm.sortDirection || 'desc',
+        field: this.filterForm().sortBy || 'id',
+        orderType: this.filterForm().sortDirection || 'desc',
       }],
     };
 
@@ -150,42 +142,42 @@ export class Products implements OnInit {
   }
 
   showForm(data?: any, isView = false) {
-    this.dialogRef = this.dialog.open(AddProducts, {
+    const dialogRef = this.dialog.open(AddProducts, {
       panelClass: ['drawer-top', 'slide-up'],
       disableClose: true,
       data: { formData: data, isView }
     });
 
-    this.dialogRef.backdropClick().subscribe(() => {
-      this.dialogRef?.removePanelClass('slide-up');
-      this.dialogRef?.addPanelClass('slide-up-close');
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef?.removePanelClass('slide-up');
+      dialogRef?.addPanelClass('slide-up-close');
 
       setTimeout(() => {
-        this.dialogRef?.close();
+        dialogRef?.close();
       }, 400);
     });
 
-    this.dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) this.getMasterList();
     });
   }
 
   deleteItem(data: any) {
-    const ref = this.dialog.open(DeleteModalComponent, {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
       data: { name: data.name },
       disableClose: true
     });
 
-    this.dialogRef?.backdropClick().subscribe(() => {
-      this.dialogRef?.removePanelClass('slide-up');
-      this.dialogRef?.addPanelClass('slide-up-close');
+    dialogRef?.backdropClick().subscribe(() => {
+      dialogRef?.removePanelClass('slide-up');
+      dialogRef?.addPanelClass('slide-up-close');
 
       setTimeout(() => {
-        this.dialogRef?.close();
+        dialogRef?.close();
       }, 400);
     });
 
-    ref.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
         this.isLoading.set(true);
         this.masterService.deleteMaster(data.id, this.endPoint).subscribe({
