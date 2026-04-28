@@ -143,15 +143,7 @@ export class AddProducts {
                   };
                 });
             }
-          },
-          error: (err) => {
-            err?.error?.messages?.forEach((message: any) => {
-              this.toastr.error(message.message, 'Error', {
-                closeButton: true,
-              });
-            });
-          },
-
+          }
         }
       )
     }
@@ -312,12 +304,7 @@ export class AddProducts {
           this.isLoading = false;
         }
       },
-      error: (err) => {
-        err?.error?.messages?.forEach((message: any) => {
-          this.toastr.error(message.message, 'Error', {
-            closeButton: true,
-          });
-        });
+      error: () => {
         this.isLoading = false;
       },
     })

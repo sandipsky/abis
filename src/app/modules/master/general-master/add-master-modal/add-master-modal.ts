@@ -68,11 +68,7 @@ export class MastersInlineModalComponent {
         this._toastr.success(res.message, 'Success', { closeButton: true });
         this.closeDialog(res);
         this._spinnerService.setSpinner(false);
-      },
-      error: (err) => {
-        this._toastr.error(err.message, 'Error', { closeButton: true });
-        this._spinnerService.setSpinner(false);
-      },
+      }
     });
   }
 

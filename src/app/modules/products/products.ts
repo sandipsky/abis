@@ -112,11 +112,6 @@ export class Products implements OnInit {
           this.length.set(res?.totalElements || 0);
         }
         this._spinnerService.setSpinner(false);
-      },
-      error: (err) => {
-        console.log(err)
-        this._toastr.error(err.error.message, 'Error');
-        this._spinnerService.setSpinner(false);
       }
     });
   }
@@ -189,10 +184,6 @@ export class Products implements OnInit {
             this._toastr.success(res.message, 'Success');
             this._spinnerService.setSpinner(false);
             this.getMasterList();
-          },
-          error: (err) => {
-            this._spinnerService.setSpinner(false);
-            this._toastr.success(err.error.message, 'Error');
           }
         });
       }

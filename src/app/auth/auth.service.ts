@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SKIP_ERROR_TOAST } from '../shared/interceptors/error.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +32,9 @@ export class AuthService {
       'Fiscalyear': "2082-83",
       'Iscurrent': 'Yes'
     });
+    const context = new HttpContext().set(SKIP_ERROR_TOAST, true);
     return this._http
-      .post<any>(environment.apiUrl + '/login', loginData, { headers });
+      .post<any>(environment.apiUrl + '/login', loginData, { headers, context });
   }
 
   logout() {

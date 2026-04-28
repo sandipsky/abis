@@ -112,11 +112,7 @@ export class GeneralMaster implements OnInit {
           this.totalElements.set(res?.totalElements || 0);
           this._spinnerService.setSpinner(false);
         }
-      },
-      error: (err) => {
-        this._toastr.error(err.error.message, 'Error');
-        this._spinnerService.setSpinner(false);
-      },
+      }
     });
   }
 
@@ -175,11 +171,7 @@ export class GeneralMaster implements OnInit {
             this._toastr.success(res.message, 'Success');
             this._spinnerService.setSpinner(false);
             this.getMasterList();
-          },
-          error: (err) => {
-            this._toastr.error(err.error.message, 'Error');
-            this._spinnerService.setSpinner(false);
-          },
+          }
         })
       };
     });
