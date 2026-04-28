@@ -19,3 +19,5 @@ export interface Product {
   sellable: boolean;
   service_item: boolean;
 }
+
+

@@ -59,8 +59,8 @@ export class Products implements OnInit {
     { name: 'Product Name', property: 'name', sortBy: 'name', sort: true },
     { name: 'Code', property: 'code', sortBy: 'code', sort: true },
     { name: 'Category', property: 'category_name', sortBy: 'category.name', sort: true },
-    { name: 'Product Type', property: 'product_types', chip: true },
-    { name: 'Primary Unit', property: 'unit_name', sortBy: 'unit.name', sort: true },
+    { name: 'Type', property: 'product_types', chip: true },
+    { name: 'Unit', property: 'unit_name', sortBy: 'unit.name', sort: true },
     { name: 'Packing', property: 'packing_name', sortBy: 'packing.name', sort: true },
     { name: 'Tax Type', property: 'tax_type_name', sortBy: 'taxType.name', sort: true },
     { name: 'Status', property: 'is_active', sort: false, status: true, editStatus: false }

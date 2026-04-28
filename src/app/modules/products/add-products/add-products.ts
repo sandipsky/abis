@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { MasterService } from '../../master/master.service';
 import { DropdownsService } from '../../../shared/services/dropdown.service';
 import { ConfigurationService } from '../../../shared/services/configuration.service';
-import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../auth/auth.service';
 import { MastersInlineModalComponent } from '../../master/general-master/add-master-modal/add-master-modal';
@@ -110,7 +109,6 @@ export class AddProducts {
   ngOnInit() {
     this.operationList = this.authService.userPermissionList();
     if (this.data.isView != true) {
-      this.getAllProducts();
     }
 
     if (this.data?.formData?.id) {
@@ -170,16 +168,6 @@ export class AddProducts {
 
   removeBonus(index: number) {
     this.bonus_infos.removeAt(index);
-  }
-
-  public getAllProducts(): void {
-    this.dropdown.getAllProductDropdownInfo()
-      .subscribe((productInfo: any) => {
-        this.allCatrgories = productInfo.categories;
-        this.allPackings = productInfo.packings;
-        this.allTaxTypes = productInfo.tax_types;
-        this.allUnits = productInfo.units;
-      })
   }
 
   isRequiredInvalid(fieldName: string): boolean {
