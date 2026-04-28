@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GeneralMaster } from '../general-master/general-master';
-import { FilterColumn } from '../../../shared/models/filter.model';
-import { TableHeader } from '../../../shared/models/table-header.model';
+import { IFilterColumn } from '../../../shared/models/filter.model';
+import { ITableHeader } from '../../../shared/models/table-header.model';
 
 @Component({
   selector: 'app-unit-master',
@@ -12,13 +12,13 @@ import { TableHeader } from '../../../shared/models/table-header.model';
 })
 
 export class Units {
-  tableHeaders: TableHeader[] = [
+  tableHeaders: ITableHeader[] = [
     { name: 'SN', property: 'sn', sort: false },
     { name: 'Unit', property: 'name', sortBy: 'name', sort: true },
     { name: 'Status', property: 'is_active', sort: false, status: true }
   ];
 
-  filterColumns: FilterColumn[] = [
+  filterColumns: IFilterColumn[] = [
     {
       name: "Status",
       type: "select",

@@ -1,4 +1,4 @@
-export interface SortEvent {
+export interface ISortEvent {
     column: string,
     direction: string
 }

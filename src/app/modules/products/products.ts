@@ -16,10 +16,10 @@ import { SharedModule } from '../../shared/shared-module';
 import { DeleteModalComponent } from '../../shared/components/delete-modal/delete-modal.component';
 import { AddProducts } from './add-products/add-products';
 import { Product } from './product.model';
-import { FilterColumn, FilterItem } from '../../shared/models/filter.model';
-import { PaginatedResponse } from '../../shared/models/paginated-response.model';
-import { SortEvent } from '../../shared/models/sort.model';
-import { ApiResponse } from '../../shared/models/api-response.model';
+import { IFilterColumn, IFilterItem } from '../../shared/models/filter.model';
+import { IPaginatedResponse } from '../../shared/models/paginated-response.model';
+import { ISortEvent } from '../../shared/models/sort.model';
+import { IApiResponse } from '../../shared/models/api-response.model';
 import { SpinnerService } from '../../shared/services/spinner.service';
 
 @Component({
@@ -43,7 +43,7 @@ export class Products implements OnInit {
   masterList = signal<Product[]>([]);
   length = signal(0);
   operationList = signal<string[]>([]);
-  filterList = signal<FilterItem[]>([]);
+  filterList = signal<IFilterItem[]>([]);
 
   filterForm = signal({
     pageIndex: 0,
@@ -52,7 +52,7 @@ export class Products implements OnInit {
     sortDirection: '',
   });
 
-  filterColumns = signal<FilterColumn[]>([]);
+  filterColumns = signal<IFilterColumn[]>([]);
 
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
@@ -104,7 +104,7 @@ export class Products implements OnInit {
 
     this._spinnerService.setSpinner(true);
     this._productService.getProductList(formData).subscribe({
-      next: (res: PaginatedResponse<Product>) => {
+      next: (res: IPaginatedResponse<Product>) => {
         if (isExport) {
           this.exportExcel(res?.content);
         } else {
@@ -121,7 +121,7 @@ export class Products implements OnInit {
     });
   }
 
-  applyFilter(filters: FilterItem[]) {
+  applyFilter(filters: IFilterItem[]) {
     this.filterList.set(filters);
     this.filterForm.update(prev => ({ ...prev, pageIndex: 0 }));
     this.getMasterList();
@@ -136,7 +136,7 @@ export class Products implements OnInit {
     this.getMasterList();
   }
 
-  onSort({ column, direction }: SortEvent) {
+  onSort({ column, direction }: ISortEvent) {
     this.filterForm.update(prev => ({
       ...prev,
       sortBy: column,
@@ -185,7 +185,7 @@ export class Products implements OnInit {
       if (confirmed) {
         this._spinnerService.setSpinner(true);
         this._productService.deleteProduct(data.id).subscribe({
-          next: (res: ApiResponse) => {
+          next: (res: IApiResponse) => {
             this._toastr.success(res.message, 'Success');
             this._spinnerService.setSpinner(false);
             this.getMasterList();

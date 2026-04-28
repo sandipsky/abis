@@ -1,7 +1,7 @@
-import { FilterItem } from "./filter.model";
+import { IFilterItem } from "./filter.model";
 
-export interface PaginatedRequest {
-  filter: FilterItem[],
+export interface IPaginatedRequest {
+  filter: IFilterItem[],
   pagination: {pageIndex: number, pageSize: number },
   sortDTO: {field: string, orderType: string}[]
 }

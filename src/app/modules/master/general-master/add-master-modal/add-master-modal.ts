@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MasterService } from '../../master.service';
 import { SpinnerService } from '../../../../shared/services/spinner.service';
 import { Button } from '../../../../shared/components/button/button';
-import { ApiResponse } from '../../../../shared/models/api-response.model';
+import { IApiResponse } from '../../../../shared/models/api-response.model';
 
 @Component({
   selector: 'app-add-master-modal',
@@ -64,7 +64,7 @@ export class MastersInlineModalComponent {
       : this._masterService.createMaster(formData, this.endPoint());
 
     request$.subscribe({
-      next: (res: ApiResponse) => {
+      next: (res: IApiResponse) => {
         this._toastr.success(res.message, 'Success', { closeButton: true });
         this.closeDialog(res);
         this._spinnerService.setSpinner(false);
@@ -76,7 +76,7 @@ export class MastersInlineModalComponent {
     });
   }
 
-  public closeDialog(res?: ApiResponse) {
+  public closeDialog(res?: IApiResponse) {
     this._dialogRef.removePanelClass('slide-left');
     this._dialogRef.addPanelClass('slide-left-close');
 

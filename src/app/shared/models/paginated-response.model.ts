@@ -1,27 +1,27 @@
-export interface PaginatedResponse<T> {
+export interface IPaginatedResponse<T> {
   content: T[];
   empty: boolean;
   first: boolean;
   last: boolean;
   number: number;
   numberOfElements: number;
-  pageable: Pageable;
+  pageable: IPageable;
   size: number;
-  sort: Sort;
+  sort: ISort;
   totalElements: number;
   totalPages: number;
 }
 
-export interface Pageable {
+export interface IPageable {
   pageNumber: number;
   pageSize: number;
-  sort: Sort;
+  sort: ISort;
   offset: number;
   paged: boolean;
   unpaged: boolean;
 }
 
-export interface Sort {
+export interface ISort {
   empty: boolean;
   sorted: boolean;
   unsorted: boolean;

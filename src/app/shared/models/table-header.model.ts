@@ -1,4 +1,4 @@
-export interface TableHeader {
+export interface ITableHeader {
   name: string;
   property: string;
   sort: boolean;

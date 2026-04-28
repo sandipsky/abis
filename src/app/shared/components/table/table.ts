@@ -1,11 +1,10 @@
-import { Component, computed, inject, input, output, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Menu } from '../menu/menu';
-import { SortEvent } from '../../models/sort.model';
+import { ISortEvent } from '../../models/sort.model';
 import { AmountPipe } from "../../pipes/amount-pipe";
 import { Button } from '../button/button';
 import { SortableHeaderDirective } from '../../directives/sortable';
@@ -35,7 +34,7 @@ export class Table {
   hasPendingPermission = input(true);
 
   // Outputs
-  sortChange = output<SortEvent>();
+  sortChange = output<ISortEvent>();
   onEdit = output<any>();
   onChange = output<any>();
   onCopy = output<any>();

@@ -1,20 +1,20 @@
-export interface FilterItem {
+export interface IFilterItem {
   field: string;
   value: string;
   displayValue: string;
 }
 
-export type FilterColumnType = 'text' | 'select' | 'search-select' | 'date';
+export type IFilterColumnType = 'text' | 'select' | 'search-select' | 'date';
 
-export interface FilterColumnOption {
+export interface IFilterColumnOption {
   id: string | number;
   name: string;
 }
 
-export interface FilterColumn {
+export interface IFilterColumn {
   name: string;
   formcontrolName: string;
-  type: FilterColumnType;
-  data?: FilterColumnOption[];
+  type: IFilterColumnType;
+  data?: IFilterColumnOption[];
   value?: string | number | null;
 }

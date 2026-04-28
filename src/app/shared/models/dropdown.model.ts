@@ -1,4 +1,4 @@
-export interface DropdownItem {
+export interface IDropdownItem {
     id: number,
     name: string
 }
