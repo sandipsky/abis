@@ -22,12 +22,18 @@ export class ProductService {
     return this._http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  createProduct(productData: Product): Observable<IApiResponse> {
+  getProductImage(imageName: string): Observable<Blob> {
+    return this._http.get(`${environment.apiUrl}/master/products/image/${imageName}`, {
+      responseType: 'blob',
+    });
+  }
+
+  createProduct(productData: FormData): Observable<IApiResponse> {
     return this._http.post<IApiResponse>(`${this.apiUrl}`, productData);
   }
 
-  updateProduct(productData: Product): Observable<IApiResponse> {
-    return this._http.put<IApiResponse>(`${this.apiUrl}/${productData.id}`, productData);
+  updateProduct(productData: FormData, id: number): Observable<IApiResponse> {
+    return this._http.put<IApiResponse>(`${this.apiUrl}/${id}`, productData);
   }
 
   deleteProduct(id: number): Observable<IApiResponse> {

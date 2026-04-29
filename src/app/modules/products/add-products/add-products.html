@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label>Product Code</label>
                             <input type="text" class="form-control" placeholder="Enter Product Code"
-                                formControlName="product_code" />
+                                formControlName="code" />
                         </div>
                     </div>
 
@@ -76,9 +76,6 @@
                                 formControlName="name" />
                         </div>
                     </div>
-
-                    <button (click)="remove()">Remove</button>
-                    <button (click)="add()">Add</button>
 
                     <div class="col-md-3">
                         <div class="form-group">
@@ -122,7 +119,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Tax Type</label>
-                            <ng-select [addTag]="operationList.includes('CreateTaxType')" [items]="allTaxTypes"
+                            <ng-select [addTag]="operationList().includes('CreateTaxType')" [items]="taxTypeList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Tax Type"
                                 formControlName="tax_type_id">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
@@ -173,7 +170,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Packing</label>
-                            <ng-select [addTag]="operationList.includes('CreatePackings')" [items]="allPackings"
+                            <ng-select [addTag]="operationList().includes('CreatePackings')" [items]="packingList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Packing"
                                 formControlName="packing_id">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
@@ -186,71 +183,16 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Primary Unit</label>
-                            <ng-select [addTag]="operationList.includes('CreateUnits')" [items]="allUnits"
+                            <label>Unit</label>
+                            <ng-select [addTag]="operationList().includes('CreateUnits')" [items]="unitList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Primary Unit"
-                                formControlName="primary_unit_id"
-                                [class.is-invalid]="f['primary_unit_id'].invalid && (f['primary_unit_id'].dirty ||f['primary_unit_id'].touched)">
+                                formControlName="unit_id"
+                                [class.is-invalid]="f['unit_id'].invalid && (f['unit_id'].dirty ||f['unit_id'].touched)">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
                                     <div>+ Add
                                         "{{search}}"</div>
                                 </ng-template>
                             </ng-select>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Primary Qty</label>
-                            <input appPositiveNumbers type="number" class="form-control"
-                                formControlName="primary_quantity" placeholder="Enter Primary Qty" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Secondary Unit </label>
-                            <label class="switch">
-                                <input formControlName="has_secondary_unit" (change)="resetSecondaryUnit()"
-                                    type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-section">
-                            <div class="form-group">
-                                <label>Secondary Unit <span *ngIf="f['has_secondary_unit'].value == true"
-                                        class="text-danger">*</span></label>
-                                <ng-select [class.readonly]="f['has_secondary_unit'].value != true"
-                                    [readonly]="f['has_secondary_unit'].value != true"
-                                    [addTag]="operationList.includes('CreateUnits')" [items]="allUnits" bindLabel="name"
-                                    bindValue="id" placeholder="Select Secondary Unit"
-                                    formControlName="secondary_unit_id"
-                                    [class.is-invalid]="f['secondary_unit_id'].invalid && (f['secondary_unit_id'].dirty ||f['secondary_unit_id'].touched)">
-                                    <ng-template ng-tag-tmp let-search="searchTerm">
-                                        <div>+ Add
-                                            "{{search}}"</div>
-                                    </ng-template>
-                                </ng-select>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-section">
-                            <div class="form-group">
-                                <label>Secondary Qty</label>
-                                <input [class.readonly]="f['has_secondary_unit'].value != true"
-                                    [readonly]="f['has_secondary_unit'].value != true" appPositiveNumbers type="number"
-                                    class="form-control" formControlName="secondary_quantity"
-                                    placeholder="Enter Secondary Qty" />
-                            </div>
                         </div>
                     </div>
 
@@ -409,63 +351,63 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Product Code</label>
-                            <span>{{selectedProduct?.product_code || 'N/A'}}</span>
+                            <span>{{selectedProduct()?.code || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Product Name</label>
-                            <span>{{selectedProduct?.name || 'N/A'}}</span>
+                            <span>{{selectedProduct()?.name || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Bar Code</label>
-                            <span>{{selectedProduct?.barcode || 'N/A'}}</span>
+                            <span>{{selectedProduct()?.barcode || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Active Status </label>
-                            <div>{{selectedProduct?.status ? 'Active': 'Inactive' }}</div>
+                            <div>{{selectedProduct()?.status ? 'Active': 'Inactive' }}</div>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Product Type</label>
-                            <span>{{ selectedProduct?.product_type || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.product_type || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Tax Type</label>
-                            <span>{{ selectedProduct?.tax_type_name || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.tax_type_name || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Purchasable</label>
-                            <span>{{ selectedProduct.includes('purchasable') == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.includes('purchasable') == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Sellable</label>
-                            <span>{{ selectedProduct.includes('sellable') ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.includes('sellable') ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group view">
                             <label>Remarks</label>
-                            <span>{{ selectedProduct?.remarks || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.remarks || 'N/A'}}</span>
                         </div>
                     </div>
                 </div>
@@ -478,14 +420,14 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Packing</label>
-                            <span>{{ selectedProduct?.packing_name || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.packing_name || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Primary Unit</label>
-                            <span>{{ selectedProduct?.primary_unit_name || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.primary_unit_name || 'N/A'}}</span>
                         </div>
                     </div>
 
@@ -493,14 +435,14 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Primary Qty</label>
-                            <span>{{ selectedProduct?.primary_quantity || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.primary_quantity || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Secondary Unit </label>
-                            <span>{{ selectedProduct?.has_secondary_unit == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.has_secondary_unit == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
@@ -508,7 +450,7 @@
                         <div class="form-section">
                             <div class="form-group view">
                                 <label>Secondary Unit</label>
-                                <span>{{ selectedProduct?.secondary_unit_name || 'N/A'}}</span>
+                                <span>{{ selectedProduct()?.secondary_unit_name || 'N/A'}}</span>
                             </div>
 
                         </div>
@@ -518,7 +460,7 @@
                         <div class="form-section">
                             <div class="form-group view">
                                 <label>Secondary Qty</label>
-                                <span>{{ selectedProduct?.secondary_quantity || 'N/A'}}</span>
+                                <span>{{ selectedProduct()?.secondary_quantity || 'N/A'}}</span>
                             </div>
                         </div>
                     </div>
@@ -533,21 +475,21 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Cost Price</label>
-                            <span>{{ selectedProduct?.cost_price || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.cost_price || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Selling Price</label>
-                            <span>{{ selectedProduct?.selling_price || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.selling_price || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>MRP</label>
-                            <span>{{ selectedProduct?.mrp || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.mrp || 'N/A'}}</span>
                         </div>
                     </div>
                 </div>
@@ -560,42 +502,42 @@
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Max Stock</label>
-                            <span>{{ selectedProduct?.max_stock || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.max_stock || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Min Stock</label>
-                            <span>{{ selectedProduct?.min_stock || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.min_stock || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Valuation Method</label>
-                            <span>{{ selectedProduct?.valuation_method || 'N/A'}}</span>
+                            <span>{{ selectedProduct()?.valuation_method || 'N/A'}}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Enable Batch Lot</label>
-                            <span>{{ selectedProduct?.is_batch_available == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.is_batch_available == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Enable Expiry Date</label>
-                            <span>{{ selectedProduct?.has_expiry_date == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.has_expiry_date == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group view">
                             <label>Enable Manufacturing Date</label>
-                            <span>{{ selectedProduct?.has_manufacturing_date == true ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.has_manufacturing_date == true ? 'Yes' : 'No' }}</span>
                         </div>
                     </div>
 
@@ -615,7 +557,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (entry of selectedProduct?.bonus_infos; track $index) {
+                        @for (entry of selectedProduct()?.bonus_infos; track $index) {
                         <tr>
                             <td>
                                 {{entry?.min_quantity | amount}}

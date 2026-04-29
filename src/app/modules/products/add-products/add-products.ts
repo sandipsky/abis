@@ -1,19 +1,18 @@
-import { ChangeDetectionStrategy, Component, Inject, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { MasterService } from '../../master/master.service';
 import { DropdownsService } from '../../../shared/services/dropdown.service';
 import { ConfigurationService } from '../../../shared/services/configuration.service';
-import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../auth/auth.service';
 import { MastersInlineModalComponent } from '../../master/general-master/add-master-modal/add-master-modal';
-import { AmountPipe } from "../../../shared/pipes/amount-pipe";
+import { AmountPipe } from '../../../shared/pipes/amount-pipe';
 import { Button } from '../../../shared/components/button/button';
 import { FormValidation } from '../../../shared/directives/form-validation';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-transaction',
@@ -23,136 +22,111 @@ import { FormValidation } from '../../../shared/directives/form-validation';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProducts {
-  modalForm: FormGroup;
-  endPoint = 'products';
-  isLoading = false;
-  selectedProduct: any;
-  selectedProfileImage: any = null;
-  deleteImage: boolean = false;
+  private productService = inject(ProductService);
+  private toastr = inject(ToastrService);
+  private dialog = inject(MatDialog);
+  private dialogRef = inject<MatDialogRef<AddProducts>>(MatDialogRef);
+  private dropdown = inject(DropdownsService);
+  private configService = inject(ConfigurationService);
+  private fb = inject(FormBuilder);
+  authService = inject(AuthService);
+  data: any = inject(MAT_DIALOG_DATA);
 
-  public operationList: any = [];
-  public allCatrgories: Array<any> = [];
-  public allPackings: Array<any> = [];
-  public allTaxTypes: Array<any> = [];
-  public allUnits: Array<any> = [];
+  endPoint = 'products';
+
+  isLoading = signal(false);
+  selectedProduct = signal<any>(null);
+  selectedProfileImage = signal<any>(null);
+  deleteImage = signal(false);
+
+  operationList = signal<any[]>([]);
+  categoryList = signal<any[]>([]);
+  packingList = signal<any[]>([]);
+  taxTypeList = signal<any[]>([]);
+  unitList = signal<any[]>([]);
 
   valuationMethodList = [
-    {
-      id: "FIFO",
-      name: "FIFO"
-    },
-    {
-      id: "LIFO",
-      name: "LIFO"
-    },
-    {
-      id: "FEFO",
-      name: "FEFO"
-    },
-
+    { id: 'FIFO', name: 'FIFO' },
+    { id: 'LIFO', name: 'LIFO' },
+    { id: 'FEFO', name: 'FEFO' },
   ];
 
-  constructor(
-    private masterService: MasterService,
-    private toastr: ToastrService,
-    private dialog: MatDialog,
-    private dialogRef: MatDialogRef<any>,
-    private dropdown: DropdownsService,
-    private configService: ConfigurationService,
-    private fb: FormBuilder,
-    public authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.modalForm = this.fb.nonNullable.group({
-      id: [],
-      name: [, Validators.required],
-      code: [],
-      barcode: [],
-      unit_id: [, Validators.required],
-      category_id: [],
-      product_type: [, Validators.required],
-      packing_id: [],
-      tax_type_id: [],
-      remarks: [],
-      status: [true],
+  modalForm: FormGroup = this.fb.nonNullable.group({
+    id: [],
+    name: [, Validators.required],
+    code: [],
+    barcode: [],
+    unit_id: [, Validators.required],
+    category_id: [],
+    product_type: [, Validators.required],
+    packing_id: [],
+    tax_type_id: [],
+    remarks: [],
+    status: [true],
 
-      cost_price: [],
-      mrp: [],
-      selling_price: [],
-      max_stock: [],
-      min_stock: [],
+    cost_price: [],
+    mrp: [],
+    selling_price: [],
+    max_stock: [],
+    min_stock: [],
 
-      valuation_method: [, Validators.required],
-      is_batch_available: [false],
-      has_expiry_date: [false],
-      has_manufacturing_date: [false],
-      bonus_infos: new FormArray([])
-    });
+    valuation_method: [, Validators.required],
+    is_batch_available: [false],
+    has_expiry_date: [false],
+    has_manufacturing_date: [false],
+    bonus_infos: new FormArray([])
+  });
 
-    if (data?.formData) {
-      this.modalForm.patchValue(data?.formData);
+  constructor() {
+    if (this.data?.formData) {
+      this.modalForm.patchValue(this.data.formData);
     }
-
-
-  }
-
-  remove() {
-    this.modalForm.get('name')?.removeValidators(Validators.required);
-    this.modalForm.get('name')?.updateValueAndValidity()
-  }
-
-  add() {
-    this.modalForm.get('name')?.addValidators(Validators.required);
-    this.modalForm.get('name')?.updateValueAndValidity()
   }
 
   ngOnInit() {
-    this.operationList = this.authService.userPermissionList();
-    if (this.data.isView != true) {
-    }
+    this.operationList.set(this.authService.userPermissionList());
 
-    if (this.data?.formData?.id) {
-      this.bonus_infos.clear();
-      this.masterService.getMasterDetail(this.data?.formData?.id, this.endPoint).subscribe(
-        {
-          next: (res: any) => {
-
-            this.selectedProduct = res;
-            for (let i = 0; i < this.selectedProduct?.bonus_infos?.length || 1; i++) {
-              this.addBonus();
-            }
-
-            this.modalForm.patchValue(this.selectedProduct);
-
-            if (res.image_name != null) {
-              fetch(`${environment.apiUrl}/master/products/image/${res.image_name}`, {
-                headers: { Authorization: `Bearer ${this.authService.getToken()}` }
-              })
-                .then(resp => resp.blob())
-                .then(blob => {
-                  this.selectedProfileImage = {
-                    file: null,
-                    url: URL.createObjectURL(blob),
-                    name: res.image_name,
-                    size: this.formatFileSize(blob.size)
-                  };
-                });
-            }
-          }
-        }
-      )
-    }
-    else {
-      // this.masterService.getMasterCode('products').subscribe((res: string) => {
-      //   this.f['product_code'].setValue(res || null);
-      // });
+    const editId = this.data?.formData?.id;
+    if (!editId) {
       this.addBonus();
+      return;
     }
+
+    this.loadProductDetail(editId);
+  }
+
+  private loadProductDetail(id: number) {
+    this.bonus_infos.clear();
+    this.productService.getProductDetail(id).subscribe((res: any) => {
+      this.selectedProduct.set(res);
+
+      const bonusCount = res?.bonus_infos?.length || 1;
+      for (let i = 0; i < bonusCount; i++) {
+        this.addBonus();
+      }
+
+      this.modalForm.patchValue(res);
+
+      if (res?.image_name) {
+        this.loadProductImage(res.image_name);
+      }
+    });
+  }
+
+  private loadProductImage(imageName: string) {
+    this.productService.getProductImage(imageName).subscribe(blob => {
+      this.selectedProfileImage.set({
+        file: null,
+        url: URL.createObjectURL(blob),
+        name: imageName,
+        size: this.formatFileSize(blob.size),
+      });
+    });
   }
 
   get f() { return this.modalForm.controls; }
 
-  get bonus_infos(): any {
+  get bonus_infos(): FormArray {
     return this.modalForm.get('bonus_infos') as FormArray;
   }
 
@@ -170,23 +144,13 @@ export class AddProducts {
     this.bonus_infos.removeAt(index);
   }
 
-  isRequiredInvalid(fieldName: string): boolean {
-    const field = this.modalForm.get(fieldName);
-    return !!(
-      field &&
-      field.invalid &&
-      (field.dirty || field.touched) &&
-      field.errors?.['required']
-    );
-  }
-
   onSelectProfileImage(event: any) {
     if (!event.target.files) {
-      this.selectedProfileImage = null;
+      this.selectedProfileImage.set(null);
       return;
     }
 
-    let file = event.target.files[0];
+    const file = event.target.files[0];
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
     if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
@@ -199,40 +163,27 @@ export class AddProducts {
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      this.toastr.error("File size exceeds 5MB limit", 'Error', { closeButton: true });
-      this.selectedProfileImage = null;
+      this.toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
+      this.selectedProfileImage.set(null);
       return;
     }
 
-    this.selectedProfileImage = {
-      file: file,
+    this.selectedProfileImage.set({
+      file,
       url: URL.createObjectURL(file),
       name: file.name,
       size: this.formatFileSize(file.size)
-    };
-    this.deleteImage = true;
+    });
+    this.deleteImage.set(true);
   }
 
   formatFileSize(size: number): string {
     const kb = size / 1024;
     if (kb < 1024) {
-      return kb.toFixed(1) + " KB";
+      return kb.toFixed(1) + ' KB';
     }
     const mb = kb / 1024;
-    return mb.toFixed(1) + " MB";
-  }
-
-  resetSecondaryUnit() {
-    this.modalForm.get('secondary_unit_id')?.setValue(null);
-    this.modalForm.get('secondary_quantity')?.setValue(null);
-    if (this.f['has_secondary_unit'].value == true) {
-      this.modalForm.get('secondary_unit_id')?.addValidators(Validators.required);
-      this.modalForm.get('secondary_unit_id')?.updateValueAndValidity();
-    }
-    else {
-      this.modalForm.get('secondary_unit_id')?.removeValidators(Validators.required);
-      this.modalForm.get('secondary_unit_id')?.updateValueAndValidity();
-    }
+    return mb.toFixed(1) + ' MB';
   }
 
   saveForm() {
@@ -241,7 +192,7 @@ export class AddProducts {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
     const formData = this.modalForm.value;
     Object.keys(formData).forEach(key => {
       if (formData[key] === '') {
@@ -255,47 +206,42 @@ export class AddProducts {
         bonus_quantity: info.bonus_quantity ?? 0
       }));
 
-    let finalData: any = new FormData();
-    let jsonPayload = JSON.stringify(formData);
+    const finalData = new FormData();
+    const jsonPayload = JSON.stringify(formData);
 
-    if (this.selectedProfileImage != null) {
-      finalData.append('file', this.selectedProfileImage.file);
+    const profileImage = this.selectedProfileImage();
+    if (profileImage != null) {
+      finalData.append('file', profileImage.file);
     }
 
-    finalData.append('product', new Blob([jsonPayload], { type: "application/json" }));
+    finalData.append('product', new Blob([jsonPayload], { type: 'application/json' }));
 
     const request$ = formData.id
-      ? this.masterService.updateMaster(finalData, this.endPoint)
-      : this.masterService.createMaster(finalData, this.endPoint);
+      ? this.productService.updateProduct(finalData, formData.id)
+      : this.productService.createProduct(finalData);
 
     request$.subscribe({
       next: (res: any) => {
         if (res?.success == true) {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this.closeDialog(res);
           res?.messages?.forEach((message: any) => {
-            this.toastr.success(message.message, 'Success', {
-              closeButton: true,
-            });
+            this.toastr.success(message.message, 'Success', { closeButton: true });
           });
-
-        }
-        else {
+        } else {
           res?.messages?.forEach((message: any) => {
-            this.toastr.error(message.message, 'Error', {
-              closeButton: true,
-            });
+            this.toastr.error(message.message, 'Error', { closeButton: true });
           });
-          this.isLoading = false;
+          this.isLoading.set(false);
         }
       },
       error: () => {
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
-    })
+    });
   }
 
-  public closeDialog(data?: any) {
+  closeDialog(data?: any) {
     this.dialogRef.removePanelClass('slide-up');
     this.dialogRef.addPanelClass('slide-up-close');
 
@@ -305,11 +251,9 @@ export class AddProducts {
           ...this.modalForm.value,
           id: data.post_data_id,
         });
-      }
-      else {
+      } else {
         this.dialogRef.close();
       }
-
     }, 400);
   }
 }
