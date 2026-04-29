@@ -15,7 +15,7 @@ import { ExcelService } from '../../shared/services/excel.service';
 import { SharedModule } from '../../shared/shared-module';
 import { DeleteModalComponent } from '../../shared/components/delete-modal/delete-modal.component';
 import { AddProducts } from './add-products/add-products';
-import { Product } from './product.model';
+import { IProduct } from './product.model';
 import { IFilterColumn, IFilterItem } from '../../shared/models/filter.model';
 import { IPaginatedResponse } from '../../shared/models/paginated-response.model';
 import { ISortEvent } from '../../shared/models/sort.model';
@@ -40,7 +40,7 @@ export class Products implements OnInit {
   private _spinnerService = inject(SpinnerService);
 
   // State Signals
-  masterList = signal<Product[]>([]);
+  masterList = signal<IProduct[]>([]);
   length = signal(0);
   operationList = signal<string[]>([]);
   filterList = signal<IFilterItem[]>([]);
@@ -104,7 +104,7 @@ export class Products implements OnInit {
 
     this._spinnerService.setSpinner(true);
     this._productService.getProductList(formData).subscribe({
-      next: (res: IPaginatedResponse<Product>) => {
+      next: (res: IPaginatedResponse<IProduct>) => {
         if (isExport) {
           this.exportExcel(res?.content);
         } else {
@@ -140,7 +140,7 @@ export class Products implements OnInit {
     this.getMasterList();
   }
 
-  showForm(data?: Product, isView = false) {
+  showForm(data?: IProduct, isView = false) {
     const dialogRef = this._dialog.open(AddProducts, {
       panelClass: ['drawer-top', 'slide-up'],
       disableClose: true,
@@ -161,7 +161,7 @@ export class Products implements OnInit {
     });
   }
 
-  deleteItem(data: Product) {
+  deleteItem(data: IProduct) {
     const dialogRef = this._dialog.open(DeleteModalComponent, {
       data: { name: data.name },
       disableClose: true
@@ -190,7 +190,7 @@ export class Products implements OnInit {
     });
   }
 
-  exportExcel(data: Product[]) {
+  exportExcel(data: IProduct[]) {
     this._excelService.exportExcel("Products", this.tableHeaders(), data);
   }
 

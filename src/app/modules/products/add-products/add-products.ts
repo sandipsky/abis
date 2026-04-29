@@ -58,7 +58,6 @@ export class AddProducts {
     barcode: [],
     unit_id: [, Validators.required],
     category_id: [],
-    product_type: [, Validators.required],
     packing_id: [],
     tax_type_id: [],
     remarks: [],
@@ -123,22 +122,22 @@ export class AddProducts {
 
       this.modalForm.patchValue(res);
 
-      if (res?.image_name) {
-        this.loadProductImage(res.image_name);
-      }
+      // if (res?.image_name) {
+      //   this.loadProductImage(res.image_name);
+      // }
     });
   }
 
-  private loadProductImage(imageName: string) {
-    this.productService.getProductImage(imageName).subscribe(blob => {
-      this.selectedProfileImage.set({
-        file: null,
-        url: URL.createObjectURL(blob),
-        name: imageName,
-        size: this.formatFileSize(blob.size),
-      });
-    });
-  }
+  // private loadProductImage(imageName: string) {
+  //   this.productService.getProductImage(imageName).subscribe(blob => {
+  //     this.selectedProfileImage.set({
+  //       file: null,
+  //       url: URL.createObjectURL(blob),
+  //       name: imageName,
+  //       size: this.formatFileSize(blob.size),
+  //     });
+  //   });
+  // }
 
   get f() { return this.modalForm.controls; }
 
@@ -160,47 +159,47 @@ export class AddProducts {
     this.bonus_infos.removeAt(index);
   }
 
-  onSelectProfileImage(event: any) {
-    if (!event.target.files) {
-      this.selectedProfileImage.set(null);
-      return;
-    }
+  // onSelectProfileImage(event: any) {
+  //   if (!event.target.files) {
+  //     this.selectedProfileImage.set(null);
+  //     return;
+  //   }
 
-    const file = event.target.files[0];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+  //   const file = event.target.files[0];
+  //   const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
-    if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
-      this.toastr.error(
-        'Please upload only jpg, jpeg, png or pdf files',
-        'Error',
-        { closeButton: true }
-      );
-      return;
-    }
+  //   if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
+  //     this.toastr.error(
+  //       'Please upload only jpg, jpeg, png or pdf files',
+  //       'Error',
+  //       { closeButton: true }
+  //     );
+  //     return;
+  //   }
 
-    if (file.size > 5 * 1024 * 1024) {
-      this.toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
-      this.selectedProfileImage.set(null);
-      return;
-    }
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     this.toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
+  //     this.selectedProfileImage.set(null);
+  //     return;
+  //   }
 
-    this.selectedProfileImage.set({
-      file,
-      url: URL.createObjectURL(file),
-      name: file.name,
-      size: this.formatFileSize(file.size)
-    });
-    this.deleteImage.set(true);
-  }
+  //   this.selectedProfileImage.set({
+  //     file,
+  //     url: URL.createObjectURL(file),
+  //     name: file.name,
+  //     size: this.formatFileSize(file.size)
+  //   });
+  //   this.deleteImage.set(true);
+  // }
 
-  formatFileSize(size: number): string {
-    const kb = size / 1024;
-    if (kb < 1024) {
-      return kb.toFixed(1) + ' KB';
-    }
-    const mb = kb / 1024;
-    return mb.toFixed(1) + ' MB';
-  }
+  // formatFileSize(size: number): string {
+  //   const kb = size / 1024;
+  //   if (kb < 1024) {
+  //     return kb.toFixed(1) + ' KB';
+  //   }
+  //   const mb = kb / 1024;
+  //   return mb.toFixed(1) + ' MB';
+  // }
 
   saveForm() {
     this.modalForm.markAllAsTouched();
@@ -210,11 +209,6 @@ export class AddProducts {
 
     this.isLoading.set(true);
     const formData = this.modalForm.value;
-    Object.keys(formData).forEach(key => {
-      if (formData[key] === '') {
-        formData[key] = null;
-      }
-    });
 
     formData.bonus_infos = formData.bonus_infos?.filter((info: any) => info.min_quantity !== null)
       .map((info: any) => ({
@@ -222,19 +216,19 @@ export class AddProducts {
         bonus_quantity: info.bonus_quantity ?? 0
       }));
 
-    const finalData = new FormData();
-    const jsonPayload = JSON.stringify(formData);
+    // const finalData = new FormData();
+    // const jsonPayload = JSON.stringify(formData);
 
-    const profileImage = this.selectedProfileImage();
-    if (profileImage != null) {
-      finalData.append('file', profileImage.file);
-    }
+    // const profileImage = this.selectedProfileImage();
+    // if (profileImage != null) {
+    //   finalData.append('file', profileImage.file);
+    // }
 
-    finalData.append('product', new Blob([jsonPayload], { type: 'application/json' }));
+    // finalData.append('product', new Blob([jsonPayload], { type: 'application/json' }));
 
     const request$ = formData.id
-      ? this.productService.updateProduct(finalData, formData.id)
-      : this.productService.createProduct(finalData);
+      ? this.productService.updateProduct(formData, formData.id)
+      : this.productService.createProduct(formData);
 
     request$.subscribe({
       next: (res: any) => {
