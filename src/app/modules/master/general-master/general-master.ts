@@ -58,8 +58,6 @@ export class GeneralMaster implements OnInit {
     sortDirection: 'asc',
   });
 
-  @ViewChild('view', { static: true }) view!: TemplateRef<any>;
-
   ngOnInit(): void {
     this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();

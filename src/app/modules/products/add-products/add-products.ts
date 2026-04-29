@@ -13,6 +13,10 @@ import { AmountPipe } from '../../../shared/pipes/amount-pipe';
 import { Button } from '../../../shared/components/button/button';
 import { FormValidation } from '../../../shared/directives/form-validation';
 import { ProductService } from '../product.service';
+import { IApiResponse } from '../../../shared/models/api-response.model';
+import { IProduct, IProductBonusInfo } from '../product.model';
+import { IDropdownItem } from '../../../shared/models/dropdown.model';
+import { IDialogData, IFile } from '../../../shared/models/common.model';
 
 @Component({
   selector: 'app-transaction',
@@ -30,20 +34,20 @@ export class AddProducts {
   private configService = inject(ConfigurationService);
   private fb = inject(FormBuilder);
   authService = inject(AuthService);
-  data: any = inject(MAT_DIALOG_DATA);
+  data = inject<IDialogData<IProduct>>(MAT_DIALOG_DATA);
 
   endPoint = 'products';
 
   isLoading = signal(false);
-  selectedProduct = signal<any>(null);
-  selectedProfileImage = signal<any>(null);
+  selectedProduct = signal<IProduct | null>(null);
+  selectedProfileImage = signal<IFile | null>(null);
   deleteImage = signal(false);
 
-  operationList = signal<any[]>([]);
-  categoryList = signal<any[]>([]);
-  packingList = signal<any[]>([]);
-  taxTypeList = signal<any[]>([]);
-  unitList = signal<any[]>([]);
+  operationList = signal<string[]>([]);
+  categoryList = signal<IDropdownItem[]>([]);
+  packingList = signal<IDropdownItem[]>([]);
+  taxTypeList = signal<IDropdownItem[]>([]);
+  unitList = signal<IDropdownItem[]>([]);
 
   valuationMethodList = [
     { id: 'FIFO', name: 'FIFO' },
@@ -80,11 +84,7 @@ export class AddProducts {
     bonus_infos: new FormArray([])
   });
 
-  constructor() {
-    if (this.data?.formData) {
-      this.modalForm.patchValue(this.data.formData);
-    }
-  }
+  constructor() {}
 
   ngOnInit() {
     this.operationList.set(this.authService.userPermissionList());
@@ -112,7 +112,7 @@ export class AddProducts {
 
   private loadProductDetail(id: number) {
     this.bonus_infos.clear();
-    this.productService.getProductDetail(id).subscribe((res: any) => {
+    this.productService.getProductDetail(id).subscribe((res: IProduct) => {
       this.selectedProduct.set(res);
 
       const bonusCount = res?.bonus_infos?.length || 1;
@@ -210,8 +210,8 @@ export class AddProducts {
     this.isLoading.set(true);
     const formData = this.modalForm.value;
 
-    formData.bonus_infos = formData.bonus_infos?.filter((info: any) => info.min_quantity !== null)
-      .map((info: any) => ({
+    formData.bonus_infos = formData.bonus_infos?.filter((info: IProductBonusInfo) => info.min_quantity !== null)
+      .map((info: IProductBonusInfo) => ({
         ...info,
         bonus_quantity: info.bonus_quantity ?? 0
       }));
@@ -231,17 +231,13 @@ export class AddProducts {
       : this.productService.createProduct(formData);
 
     request$.subscribe({
-      next: (res: any) => {
+      next: (res: IApiResponse) => {
         if (res?.success == true) {
           this.isLoading.set(false);
           this.closeDialog(res);
-          res?.messages?.forEach((message: any) => {
-            this.toastr.success(message.message, 'Success', { closeButton: true });
-          });
+          this.toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          res?.messages?.forEach((message: any) => {
-            this.toastr.error(message.message, 'Error', { closeButton: true });
-          });
+          this.toastr.error(res.message, 'Error', { closeButton: true });
           this.isLoading.set(false);
         }
       },
@@ -251,7 +247,7 @@ export class AddProducts {
     });
   }
 
-  closeDialog(data?: any) {
+  closeDialog(data?: IApiResponse) {
     this.dialogRef.removePanelClass('slide-up');
     this.dialogRef.addPanelClass('slide-up-close');
 

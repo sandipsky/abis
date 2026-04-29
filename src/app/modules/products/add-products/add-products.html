@@ -2,7 +2,7 @@
     <div class="modal-header">
         <div class="modal-title-group">
             <h1 class="modal-title">
-                {{ data?.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} Product
+                {{ data.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} Product
             </h1>
             <h2 class="modal-sub-title">
                 Provide required information to add Product.
@@ -112,20 +112,6 @@
 
                     <div class="col-md-3">
                         <div class="form-group" [class.view]="data.isView">
-                            <label>Service Item</label>
-                            @if (data.isView) {
-                            <span>{{ selectedProduct()?.service_item ? 'Yes' : 'No' }}</span>
-                            } @else {
-                            <label class="switch">
-                                <input formControlName="service_item" type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
-                            }
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group" [class.view]="data.isView">
                             <label>Category</label>
                             @if (data.isView) {
                             <span>{{ selectedProduct()?.category_name || 'N/A' }}</span>
@@ -155,28 +141,44 @@
                         </div>
                     </div>
 
-                    <div class="col-md-1-5">
+                    <div class="col-md-3">
                         <div class="form-group" [class.view]="data.isView">
-                            <label>Purchasable </label>
+                            <label>Type</label>
                             @if (data.isView) {
-                            <span>{{ selectedProduct()?.purchasable ? 'Yes' : 'No' }}</span>
+                            <span>
+                                @if (selectedProduct()?.purchasable && selectedProduct()?.sellable) {
+                                Purchasable, Sellable
+                                } @else if (selectedProduct()?.purchasable) {
+                                Purchasable
+                                } @else if (selectedProduct()?.sellable) {
+                                Sellable
+                                } @else {
+                                N/A
+                                }
+                            </span>
                             } @else {
-                            <label class="switch">
-                                <input formControlName="purchasable" type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
+                            <div class="d-flex gap-3">
+                                <label class="checkbox">
+                                    <input type="checkbox" formControlName="purchasable">
+                                    <span>Purchasable</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" formControlName="sellable">
+                                    <span>Sellable</span>
+                                </label>
+                            </div>
                             }
                         </div>
                     </div>
 
-                    <div class="col-md-1-5">
+                    <div class="col-md-3">
                         <div class="form-group" [class.view]="data.isView">
-                            <label>Sellable </label>
+                            <label>Service Item</label>
                             @if (data.isView) {
-                            <span>{{ selectedProduct()?.sellable ? 'Yes' : 'No' }}</span>
+                            <span>{{ selectedProduct()?.service_item ? 'Yes' : 'No' }}</span>
                             } @else {
                             <label class="switch">
-                                <input formControlName="sellable" type="checkbox">
+                                <input formControlName="service_item" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
                             }
