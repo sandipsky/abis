@@ -9,10 +9,9 @@
             </h2>
         </div>
 
-        <app-button (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
     </div>
     <div class="modal-body">
-        @if (data.isView != true) {
         <form class="modal-content" [formGroup]="modalForm">
             <!-- <input #profileImageInput type="file" id="uploadProfileImage" accept="image/*"
                 (change)="onSelectProfileImage($event)" hidden />
@@ -62,63 +61,88 @@
                 <h1 class="section-title">Product Details</h1>
                 <div class="row g-2">
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Product Code</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.code || 'N/A' }}</span>
+                            } @else {
                             <input type="text" class="form-control" placeholder="Enter Product Code"
                                 formControlName="code" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Product Name</label>
-                            <input [useValidation]="true" type="text" class="form-control" placeholder="Enter Product Name"
-                                formControlName="name" />
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.name || 'N/A' }}</span>
+                            } @else {
+                            <input [useValidation]="true" type="text" class="form-control"
+                                placeholder="Enter Product Name" formControlName="name" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Bar Code </label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.barcode || 'N/A' }}</span>
+                            } @else {
                             <input type="text" class="form-control" formControlName="barcode"
                                 placeholder="Enter Bar Code" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Active Status </label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.is_active ? 'Active' : 'Inactive' }}</span>
+                            } @else {
                             <label class="switch">
-                                <input formControlName="status" type="checkbox">
+                                <input formControlName="is_active" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Product Type</label>
-                            <ng-select [items]="[]" bindLabel="name" bindValue="id" formControlName="product_type"
-                                placeholder="Select Product Type"
-                                [class.is-invalid]="f['product_type'].invalid && (f['product_type'].dirty ||f['product_type'].touched)">
+                        <div class="form-group" [class.view]="data.isView">
+                            <label>Service Item</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.service_item ? 'Yes' : 'No' }}</span>
+                            } @else {
+                            <label class="switch">
+                                <input formControlName="service_item" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group" [class.view]="data.isView">
+                            <label>Category</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.category_name || 'N/A' }}</span>
+                            } @else {
+                            <ng-select [items]="[]" bindLabel="name" bindValue="id" formControlName="category_id"
+                                placeholder="Select Product Type">
                             </ng-select>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Product Category</label>
-                            <ng-select [items]="[]" bindLabel="name" bindValue="id" formControlName="product_type"
-                                placeholder="Select Product Type"
-                                [class.is-invalid]="f['product_type'].invalid && (f['product_type'].dirty ||f['product_type'].touched)">
-                            </ng-select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Tax Type</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.tax_type_name || 'N/A' }}</span>
+                            } @else {
                             <ng-select [addTag]="operationList().includes('CreateTaxType')" [items]="taxTypeList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Tax Type"
                                 formControlName="tax_type_id">
@@ -127,36 +151,47 @@
                                         "{{search}}"</div>
                                 </ng-template>
                             </ng-select>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-1-5">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Purchasable </label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.purchasable ? 'Yes' : 'No' }}</span>
+                            } @else {
                             <label class="switch">
-                                <input type="checkbox">
+                                <input formControlName="purchasable" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-1-5">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Sellable </label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.sellable ? 'Yes' : 'No' }}</span>
+                            } @else {
                             <label class="switch">
-                                <input type="checkbox">
+                                <input formControlName="sellable" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Remarks</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.remarks || 'N/A' }}</span>
+                            } @else {
                             <textarea placeholder="Enter Remarks" class="form-control" formControlName="remarks"
                                 rows="1"></textarea>
+                            }
                         </div>
                     </div>
                 </div>
@@ -166,10 +201,12 @@
                 <h1 class="section-title">Unit of Measurement</h1>
 
                 <div class="row g-2">
-
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Packing</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.packing_name || 'N/A' }}</span>
+                            } @else {
                             <ng-select [addTag]="operationList().includes('CreatePackings')" [items]="packingList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Packing"
                                 formControlName="packing_id">
@@ -178,21 +215,25 @@
                                         "{{search}}"</div>
                                 </ng-template>
                             </ng-select>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Unit</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.unit_name || 'N/A' }}</span>
+                            } @else {
                             <ng-select [addTag]="operationList().includes('CreateUnits')" [items]="unitList()"
                                 bindLabel="name" bindValue="id" placeholder="Select Primary Unit"
-                                formControlName="unit_id"
-                                [class.is-invalid]="f['unit_id'].invalid && (f['unit_id'].dirty ||f['unit_id'].touched)">
+                                formControlName="unit_id">
                                 <ng-template ng-tag-tmp let-search="searchTerm">
                                     <div>+ Add
                                         "{{search}}"</div>
                                 </ng-template>
                             </ng-select>
+                            }
                         </div>
                     </div>
 
@@ -205,26 +246,38 @@
                 <div class="row g-2">
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Cost Price</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.cost_price || 'N/A' }}</span>
+                            } @else {
                             <input appPositiveNumbers type="number" class="form-control" formControlName="cost_price"
                                 placeholder="Enter Cost Price" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Selling Price</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.selling_price || 'N/A' }}</span>
+                            } @else {
                             <input appPositiveNumbers type="number" class="form-control" formControlName="selling_price"
                                 placeholder="Enter Selling Price" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>MRP</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.mrp || 'N/A' }}</span>
+                            } @else {
                             <input appPositiveNumbers type="number" class="form-control" formControlName="mrp"
                                 placeholder="Enter MRP" />
+                            }
                         </div>
                     </div>
 
@@ -236,61 +289,81 @@
 
                 <div class="row g-2">
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Max Stock</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.max_stock || 'N/A' }}</span>
+                            } @else {
                             <input appPositiveNumbers type="number" class="form-control" formControlName="max_stock"
                                 placeholder="Enter Max Stock" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Min Stock</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.min_stock || 'N/A' }}</span>
+                            } @else {
                             <input appPositiveNumbers type="number" class="form-control" formControlName="min_stock"
                                 placeholder="Enter Min Stock" />
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Valuation Method</label>
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.valuation_method || 'N/A' }}</span>
+                            } @else {
                             <ng-select [items]="valuationMethodList" bindLabel="name" bindValue="id"
-                                placeholder="Select" formControlName="valuation_method"
-                                [class.is-invalid]="f['valuation_method'].invalid && (f['valuation_method'].dirty ||f['valuation_method'].touched)">
+                                placeholder="Select" formControlName="valuation_method">
                             </ng-select>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label> Enable Batch Lot</label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.is_batch_available ? 'Yes' : 'No' }}</span>
+                            } @else {
                             <label class="switch">
                                 <input formControlName="is_batch_available" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label>Enable Expiry Date</label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.has_expiry_date ? 'Yes' : 'No' }}</span>
+                            } @else {
                             <label class="switch">
                                 <input formControlName="has_expiry_date" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group" [class.view]="data.isView">
                             <label> Enable Manufacturing Date</label>
-
+                            @if (data.isView) {
+                            <span>{{ selectedProduct()?.has_manufacturing_date ? 'Yes' : 'No' }}</span>
+                            } @else {
                             <label class="switch">
                                 <input formControlName="has_manufacturing_date" type="checkbox">
                                 <span class="slider round"></span>
                             </label>
+                            }
                         </div>
                     </div>
                 </div>
@@ -299,7 +372,9 @@
             <div class="section group">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="section-title">Bonus/Free Information</h1>
+                    @if (!data.isView) {
                     <app-button type="primary-outlined" icon="add" label="Add Entry" (click)="addBonus()" />
+                    }
                 </div>
 
                 <table class="table">
@@ -307,284 +382,60 @@
                         <tr>
                             <th>Qty (Greater than or Equal)</th>
                             <th>Bonus Qty</th>
+                            @if (!data.isView) {
                             <th style="width: 50px;">Action</th>
+                            }
                         </tr>
                     </thead>
-                    <tbody formArrayName="bonus_infos">
-                        <tr *ngFor="let entry of bonus_infos.controls; index as i">
-                            <ng-container [formGroupName]="i">
-
-                                <td>
-                                    <div class="form-group">
-                                        <input appPositiveNumbers type="number" class="form-control"
-                                            formControlName="min_quantity" placeholder="Enter Quantity">
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="form-group">
-                                        <input appPositiveNumbers type="number" class="form-control"
-                                            formControlName="bonus_quantity" placeholder="Enter Bonus Quantity">
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="text-danger">
-                                        <app-button type="outlined" size="sm" icon="trash" (click)="removeBonus(i)" />
-                                    </div>
-                                </td>
-                            </ng-container>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-            </div>
-        </form>
-        }
-        @else {
-        <div class="modal-content">
-            <div class="section group">
-                <h1 class="section-title">Product Details</h1>
-
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Product Code</label>
-                            <span>{{selectedProduct()?.code || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Product Name</label>
-                            <span>{{selectedProduct()?.name || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Bar Code</label>
-                            <span>{{selectedProduct()?.barcode || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Active Status </label>
-                            <div>{{selectedProduct()?.status ? 'Active': 'Inactive' }}</div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Product Type</label>
-                            <span>{{ selectedProduct()?.product_type || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Tax Type</label>
-                            <span>{{ selectedProduct()?.tax_type_name || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Purchasable</label>
-                            <span>{{ selectedProduct()?.includes('purchasable') == true ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Sellable</label>
-                            <span>{{ selectedProduct()?.includes('sellable') ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group view">
-                            <label>Remarks</label>
-                            <span>{{ selectedProduct()?.remarks || 'N/A'}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section group">
-                <h1 class="section-title">Unit of Measurement</h1>
-
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Packing</label>
-                            <span>{{ selectedProduct()?.packing_name || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Primary Unit</label>
-                            <span>{{ selectedProduct()?.primary_unit_name || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Primary Qty</label>
-                            <span>{{ selectedProduct()?.primary_quantity || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Secondary Unit </label>
-                            <span>{{ selectedProduct()?.has_secondary_unit == true ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-section">
-                            <div class="form-group view">
-                                <label>Secondary Unit</label>
-                                <span>{{ selectedProduct()?.secondary_unit_name || 'N/A'}}</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-section">
-                            <div class="form-group view">
-                                <label>Secondary Qty</label>
-                                <span>{{ selectedProduct()?.secondary_quantity || 'N/A'}}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="section group">
-                <h1 class="section-title">Pricing</h1>
-
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Cost Price</label>
-                            <span>{{ selectedProduct()?.cost_price || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Selling Price</label>
-                            <span>{{ selectedProduct()?.selling_price || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>MRP</label>
-                            <span>{{ selectedProduct()?.mrp || 'N/A'}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section group">
-                <h1 class="section-title">Stock Information</h1>
-
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Max Stock</label>
-                            <span>{{ selectedProduct()?.max_stock || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Min Stock</label>
-                            <span>{{ selectedProduct()?.min_stock || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Valuation Method</label>
-                            <span>{{ selectedProduct()?.valuation_method || 'N/A'}}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Enable Batch Lot</label>
-                            <span>{{ selectedProduct()?.is_batch_available == true ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Enable Expiry Date</label>
-                            <span>{{ selectedProduct()?.has_expiry_date == true ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group view">
-                            <label>Enable Manufacturing Date</label>
-                            <span>{{ selectedProduct()?.has_manufacturing_date == true ? 'Yes' : 'No' }}</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="section group">
-                <div class="d-flex justify-content-between">
-                    <h1 class="section-title">Bonus/Free Information</h1>
-                </div>
-
-                <table class="table">
-                    <thead class="sticky-top">
-                        <tr>
-                            <th>Qty (Greater than or Equal)</th>
-                            <th>Bonus Qty</th>
-                        </tr>
-                    </thead>
+                    @if (data.isView) {
                     <tbody>
                         @for (entry of selectedProduct()?.bonus_infos; track $index) {
                         <tr>
-                            <td>
-                                {{entry?.min_quantity | amount}}
-                            </td>
-                            <td>
-                                {{entry?.bonus_quantity | amount}}
-                            </td>
+                            <td>{{ entry?.min_quantity | amount }}</td>
+                            <td>{{ entry?.bonus_quantity | amount }}</td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="2">No Bonus/Free Information Found.</td>
                         </tr>
                         }
-                        @empty{
-                        <tr>
-                            <td colspan="2">
-                                No Bonus/Free Information Found.
+                    </tbody>
+                    } @else {
+                    <tbody formArrayName="bonus_infos">
+                        @for (entry of bonus_infos.controls; track $index; let i = $index) {
+                        <tr [formGroupName]="i">
+                            <td>
+                                <div class="form-group">
+                                    <input appPositiveNumbers type="number" class="form-control"
+                                        formControlName="min_quantity" placeholder="Enter Quantity">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input appPositiveNumbers type="number" class="form-control"
+                                        formControlName="bonus_quantity" placeholder="Enter Bonus Quantity">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-danger">
+                                    <app-button type="outlined" size="sm" icon="trash" (click)="removeBonus(i)" />
+                                </div>
                             </td>
                         </tr>
                         }
                     </tbody>
+                    }
                 </table>
             </div>
-        </div>
-        }
+        </form>
     </div>
 
-    <div *ngIf="data.isView != true" class="modal-footer">
+    @if (!data.isView) {
+    <div class="modal-footer">
         <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
 
         <app-button (click)="saveForm()" type="primary"
             [label]="(modalForm.value.id ? 'Update' : 'Add') + ' Product'" />
     </div>
+    }
 </div>

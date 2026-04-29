@@ -26,7 +26,7 @@ export class AddProducts {
   private toastr = inject(ToastrService);
   private dialog = inject(MatDialog);
   private dialogRef = inject<MatDialogRef<AddProducts>>(MatDialogRef);
-  private dropdown = inject(DropdownsService);
+  private dropdownService = inject(DropdownsService);
   private configService = inject(ConfigurationService);
   private fb = inject(FormBuilder);
   authService = inject(AuthService);
@@ -62,7 +62,11 @@ export class AddProducts {
     packing_id: [],
     tax_type_id: [],
     remarks: [],
-    status: [true],
+    is_active: [true],
+
+    service_item: [false],
+    purchasable: [false],
+    sellable: [false],
 
     cost_price: [],
     mrp: [],
@@ -86,13 +90,25 @@ export class AddProducts {
   ngOnInit() {
     this.operationList.set(this.authService.userPermissionList());
 
-    const editId = this.data?.formData?.id;
-    if (!editId) {
+    if (!this.data?.isView) {
+      this.loadDropdowns();
+    }
+
+    const productId = this.data?.formData?.id;
+    if (!productId) {
       this.addBonus();
       return;
     }
+    else {
+      this.loadProductDetail(productId);
+    }
+  }
 
-    this.loadProductDetail(editId);
+  private loadDropdowns() {
+    this.dropdownService.getMasterDropdown('category').subscribe(res => this.categoryList.set(res));
+    this.dropdownService.getMasterDropdown('units').subscribe(res => this.unitList.set(res));
+    this.dropdownService.getMasterDropdown('taxtypes').subscribe(res => this.taxTypeList.set(res));
+    this.dropdownService.getMasterDropdown('packings').subscribe(res => this.packingList.set(res));
   }
 
   private loadProductDetail(id: number) {
