@@ -7,7 +7,7 @@
   'small': size() == 'sm',
   'active' : active(),
   'full': fullWidth()
-  }" [disabled]="disabled()">
+  }" [style.height.px]="height()" [disabled]="disabled()">
 
   @if (icon()) {
   <app-icon [size]="iconSize() || '18px'" [name]="icon()"></app-icon>

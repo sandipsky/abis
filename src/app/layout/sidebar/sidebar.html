@@ -16,7 +16,7 @@
             @if (!activeSubMenu()) {
             <app-menu #q [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false">
 
-                <app-button [fullWidth]="true" dropdown-display icon="add" [iconStrokeWidth]="2"
+                <app-button height="32" [fullWidth]="true" dropdown-display icon="add" [iconStrokeWidth]="2"
                     [label]="!isCollapsed() ? 'Quick Add Item' : ''" type="primary-outlined" [active]="q.isOpen()" />
 
                 <div dropdown-content class="quickadd-dropdown">

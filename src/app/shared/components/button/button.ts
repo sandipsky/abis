@@ -21,4 +21,5 @@ export class Button {
   hoverable = model<boolean>(true);
   size = model<'sm' | 'md' | 'lg'>('md');
   label = model<string>();
+  height = model<string>();
 }
