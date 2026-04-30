@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { forkJoin } from 'rxjs';
 
 // Services
 import { AuthService } from '../../auth/auth.service';
@@ -35,7 +36,7 @@ export class Products implements OnInit {
   private _authService = inject(AuthService);
   private _dialog = inject(MatDialog);
   private _configService = inject(ConfigurationService);
-  private _dropdown = inject(DropdownsService);
+  private _dropdownService = inject(DropdownsService);
   private _excelService = inject(ExcelService);
   private _spinnerService = inject(SpinnerService);
 
@@ -69,24 +70,31 @@ export class Products implements OnInit {
   ngOnInit(): void {
     this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();
-    this.loadDropdowns();
+    this.loadFilters();
   }
 
   hasPermission(permission: string): boolean {
     return this.operationList().includes(permission) || true;
   }
 
-  loadDropdowns(): void {
-    this.filterColumns.set([
-      { name: "Product", formcontrolName: "name", type: "text" },
-      { name: "Product Code", formcontrolName: "productCode", type: "text" },
-      // { name: "Product Category", formcontrolName: "productCategory.id", type: "select", data: info.categories },
-      // { name: "Unit", type: "select", formcontrolName: "primaryUnit_id", data: info.units },
-      // { name: "Packing", type: "select", formcontrolName: "packing_id", data: info.packings },
-      // { name: "Tax Type", type: "select", formcontrolName: "taxType_id", data: info.tax_types },
-      { name: "Type", type: "select", formcontrolName: "type", data: [{ name: "Purchasable", id: "purchasable" }, { name: "Sellable", id: "sellable" }] },
-      { name: "Status", type: "select", formcontrolName: "isActive", data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }] }
-    ]);
+  loadFilters(): void {
+    forkJoin({
+      categories: this._dropdownService.getMasterDropdown('category'),
+      units: this._dropdownService.getMasterDropdown('units'),
+      packings: this._dropdownService.getMasterDropdown('packings'),
+      taxTypes: this._dropdownService.getMasterDropdown('taxtypes'),
+    }).subscribe(({ categories, units, packings, taxTypes }) => {
+      this.filterColumns.set([
+        { name: "Product", formcontrolName: "name", type: "text" },
+        { name: "Product Code", formcontrolName: "code", type: "text" },
+        { name: "Product Category", formcontrolName: "category.id", type: "select", data: categories },
+        { name: "Unit", type: "select", formcontrolName: "unit.id", data: units },
+        { name: "Packing", type: "select", formcontrolName: "packing.id", data: packings },
+        { name: "Tax Type", type: "select", formcontrolName: "taxType.id", data: taxTypes },
+        { name: "Type", type: "select", formcontrolName: "productType", data: [{ name: "Purchasable", id: "purchasable" }, { name: "Sellable", id: "sellable" }] },
+        { name: "Status", type: "select", formcontrolName: "isActive", data: [{ name: "Active", id: "1" }, { name: "Inactive", id: "0" }] }
+      ]);
+    });
   }
 
   getMasterList(isExport = false): void {
