@@ -1,0 +1,114 @@
+<div class="modal full">
+    <div class="modal-header">
+        <div class="modal-title-group">
+            <h1 class="modal-title">
+                {{ data.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} Customer
+            </h1>
+            <h2 class="modal-sub-title">
+                Provide required information to add Customer.
+            </h2>
+        </div>
+
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
+    </div>
+    <div class="modal-body">
+        <form class="modal-content" [formGroup]="modalForm">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Name</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.name || 'N/A' }}</span>
+                        } @else {
+                        <input [useValidation]="true" type="text" class="form-control"
+                            placeholder="Enter Name" formControlName="name" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Registration Number</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.registration_number || 'N/A' }}</span>
+                        } @else {
+                        <input type="text" class="form-control" placeholder="Enter Registration Number"
+                            formControlName="registration_number" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Contact</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.contact || 'N/A' }}</span>
+                        } @else {
+                        <input type="text" class="form-control" placeholder="Enter Contact"
+                            formControlName="contact" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Email</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.email || 'N/A' }}</span>
+                        } @else {
+                        <input [useValidation]="true" type="email" class="form-control"
+                            placeholder="Enter Email" formControlName="email" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Active Status</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.is_active ? 'Active' : 'Inactive' }}</span>
+                        } @else {
+                        <label class="switch">
+                            <input formControlName="is_active" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Address</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.address || 'N/A' }}</span>
+                        } @else {
+                        <input type="text" class="form-control" placeholder="Enter Address"
+                            formControlName="address" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Remarks</label>
+                        @if (data.isView) {
+                        <span>{{ selectedCustomer()?.remarks || 'N/A' }}</span>
+                        } @else {
+                        <textarea placeholder="Enter Remarks" class="form-control" formControlName="remarks"
+                            rows="1"></textarea>
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (!data.isView) {
+    <div class="modal-footer">
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+
+        <app-button (click)="saveForm()" type="primary"
+            [label]="(modalForm.value.id ? 'Update' : 'Add') + ' Customer'" />
+    </div>
+    }
+</div>
