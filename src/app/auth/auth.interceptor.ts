@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY, catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
-import { SpinnerService } from '../shared/services/spinner.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 
 let sessionExpiredHandled = false;
 

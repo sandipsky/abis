@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { Menu } from '../menu/menu';
-import { ISortEvent } from '../../models/sort.model';
-import { AmountPipe } from "../../pipes/amount-pipe";
-import { Button } from '../button/button';
-import { SortableHeaderDirective } from '../../directives/sortable';
+import { Menu } from '@/shared/components/menu/menu';
+import { ISortEvent } from '@/shared/models/sort.model';
+import { AmountPipe } from "@/shared/pipes/amount-pipe";
+import { Button } from '@/shared/components/button/button';
+import { SortableHeaderDirective } from '@/shared/directives/sortable';
 
 @Component({
   selector: 'app-table',

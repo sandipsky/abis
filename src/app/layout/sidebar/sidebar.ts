@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angu
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
+import { BreadcrumbService } from '@/shared/services/breadcrumb.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { Menu } from '../../shared/components/menu/menu';
-import { Button } from '../../shared/components/button/button';
-import { Icon } from '../../shared/components/icon/icon';
+import { Menu } from '@/shared/components/menu/menu';
+import { Button } from '@/shared/components/button/button';
+import { Icon } from '@/shared/components/icon/icon';
 import sidebarData from './sidebar.data';
 
 @Component({

@@ -23,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 // import { DropdownsService } from 'src/app/services/dropdowns.service';
 // import { PrintService } from 'src/app/services/print.service';
 
-import { Button } from '../button/button';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-range-print',

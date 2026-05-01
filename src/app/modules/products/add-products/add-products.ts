@@ -5,18 +5,18 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { DropdownsService } from '../../../shared/services/dropdown.service';
-import { ConfigurationService } from '../../../shared/services/configuration.service';
-import { AuthService } from '../../../auth/auth.service';
-import { MastersInlineModalComponent } from '../../master/general-master/add-master-modal/add-master-modal';
-import { AmountPipe } from '../../../shared/pipes/amount-pipe';
-import { Button } from '../../../shared/components/button/button';
-import { FormValidation } from '../../../shared/directives/form-validation';
-import { ProductService } from '../product.service';
-import { IApiResponse } from '../../../shared/models/api-response.model';
-import { IProduct, IProductBonusInfo } from '../product.model';
-import { IDropdownItem } from '../../../shared/models/dropdown.model';
-import { IDialogData, IFile } from '../../../shared/models/common.model';
+import { DropdownsService } from '@/shared/services/dropdown.service';
+import { ConfigurationService } from '@/shared/services/configuration.service';
+import { AuthService } from '@/auth/auth.service';
+import { MastersInlineModalComponent } from '@/modules/master/general-master/add-master-modal/add-master-modal';
+import { AmountPipe } from '@/shared/pipes/amount-pipe';
+import { Button } from '@/shared/components/button/button';
+import { FormValidation } from '@/shared/directives/form-validation';
+import { ProductService } from '@/modules/products/product.service';
+import { IApiResponse } from '@/shared/models/api-response.model';
+import { IProduct, IProductBonusInfo } from '@/modules/products/product.model';
+import { IDropdownItem } from '@/shared/models/dropdown.model';
+import { IDialogData, IFile } from '@/shared/models/common.model';
 
 @Component({
   selector: 'app-transaction',

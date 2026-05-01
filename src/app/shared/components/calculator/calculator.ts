@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { Button } from '../button/button';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-calculator',

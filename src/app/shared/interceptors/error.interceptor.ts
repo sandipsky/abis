@@ -7,7 +7,7 @@ import {
 import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
-import { SpinnerService } from '../services/spinner.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 
 export const SKIP_ERROR_TOAST = new HttpContextToken<boolean>(() => false);
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { SpinnerService } from '../../services/spinner.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 
 @Component({
   selector: 'app-loading-spinner',

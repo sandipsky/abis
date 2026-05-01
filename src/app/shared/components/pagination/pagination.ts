@@ -1,7 +1,7 @@
 import { Component, input, output, computed, model, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Menu } from '../menu/menu';
-import { Icon } from '../icon/icon';
+import { Menu } from '@/shared/components/menu/menu';
+import { Icon } from '@/shared/components/icon/icon';
 
 @Component({
   selector: 'app-paginator',

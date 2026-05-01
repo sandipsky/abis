@@ -6,22 +6,22 @@ import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 
 // Services
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '@/auth/auth.service';
 import { ProductService } from './product.service';
-import { DropdownsService } from '../../shared/services/dropdown.service';
-import { ConfigurationService } from '../../shared/services/configuration.service';
-import { ExcelService } from '../../shared/services/excel.service';
+import { DropdownsService } from '@/shared/services/dropdown.service';
+import { ConfigurationService } from '@/shared/services/configuration.service';
+import { ExcelService } from '@/shared/services/excel.service';
 
 // Modules & Components
-import { SharedModule } from '../../shared/shared-module';
-import { DeleteModalComponent } from '../../shared/components/delete-modal/delete-modal.component';
+import { SharedModule } from '@/shared/shared-module';
+import { DeleteModalComponent } from '@/shared/components/delete-modal/delete-modal.component';
 import { AddProducts } from './add-products/add-products';
 import { IProduct } from './product.model';
-import { IFilterColumn, IFilterItem } from '../../shared/models/filter.model';
-import { IPaginatedResponse } from '../../shared/models/paginated-response.model';
-import { ISortEvent } from '../../shared/models/sort.model';
-import { IApiResponse } from '../../shared/models/api-response.model';
-import { SpinnerService } from '../../shared/services/spinner.service';
+import { IFilterColumn, IFilterItem } from '@/shared/models/filter.model';
+import { IPaginatedResponse } from '@/shared/models/paginated-response.model';
+import { ISortEvent } from '@/shared/models/sort.model';
+import { IApiResponse } from '@/shared/models/api-response.model';
+import { SpinnerService } from '@/shared/services/spinner.service';
 
 @Component({
   selector: 'app-products',

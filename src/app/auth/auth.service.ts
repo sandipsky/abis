@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { SKIP_ERROR_TOAST } from '../shared/interceptors/error.interceptor';
+import { SKIP_ERROR_TOAST } from '@/shared/interceptors/error.interceptor';
 
 @Injectable({
   providedIn: 'root',

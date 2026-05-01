@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../../shared/shared-module';
+import { SharedModule } from '@/shared/shared-module';
 import { environment } from '../../../../environments/environment';
 
 @Component({

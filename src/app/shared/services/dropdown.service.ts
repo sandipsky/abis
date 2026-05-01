@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { IDropdownItem } from '../models/dropdown.model';
+import { IDropdownItem } from '@/shared/models/dropdown.model';
 import { Observable } from 'rxjs';
 
 export type IStatusType = 'active' | 'all';

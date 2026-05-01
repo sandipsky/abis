@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import packageJson from '../../../../package.json';
-import { AuthService } from '../auth.service';
+import { AuthService } from '@/auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { Button } from '../../shared/components/button/button';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-login',

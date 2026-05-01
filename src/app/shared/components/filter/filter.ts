@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NepaliDatepickerModule } from 'np-datepicker-angular';
-import { Menu } from '../menu/menu';
-import { Button } from '../button/button';
+import { Menu } from '@/shared/components/menu/menu';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'filter-section',

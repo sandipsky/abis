@@ -3,21 +3,21 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
-import { SharedModule } from '../../../shared/shared-module';
+import { SharedModule } from '@/shared/shared-module';
 import { MastersInlineModalComponent } from './add-master-modal/add-master-modal';
-import { MasterService } from '../master.service';
-import { AuthService } from '../../../auth/auth.service';
-import { DeleteModalComponent } from '../../../shared/components/delete-modal/delete-modal.component';
-import { ExcelService } from '../../../shared/services/excel.service';
-import { MasterItem } from '../master.model';
+import { MasterService } from '@/modules/master/master.service';
+import { AuthService } from '@/auth/auth.service';
+import { DeleteModalComponent } from '@/shared/components/delete-modal/delete-modal.component';
+import { ExcelService } from '@/shared/services/excel.service';
+import { MasterItem } from '@/modules/master/master.model';
 import { input } from '@angular/core';
-import { SpinnerService } from '../../../shared/services/spinner.service';
-import { ISortEvent } from '../../../shared/models/sort.model';
-import { IPaginatedResponse } from '../../../shared/models/paginated-response.model';
-import { IFilterColumn, IFilterItem } from '../../../shared/models/filter.model';
-import { ITableHeader } from '../../../shared/models/table-header.model';
-import { IPaginatedRequest } from '../../../shared/models/paginated-request.model';
-import { IApiResponse } from '../../../shared/models/api-response.model';
+import { SpinnerService } from '@/shared/services/spinner.service';
+import { ISortEvent } from '@/shared/models/sort.model';
+import { IPaginatedResponse } from '@/shared/models/paginated-response.model';
+import { IFilterColumn, IFilterItem } from '@/shared/models/filter.model';
+import { ITableHeader } from '@/shared/models/table-header.model';
+import { IPaginatedRequest } from '@/shared/models/paginated-request.model';
+import { IApiResponse } from '@/shared/models/api-response.model';
 
 @Component({
   selector: 'app-general-master',

@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
-import { BreadcrumbService } from '../../shared/services/breadcrumb.service';
+import { BreadcrumbService } from '@/shared/services/breadcrumb.service';
 import { Router, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Menu } from '../../shared/components/menu/menu';
-import { NotificationService } from '../../shared/services/websocket.service';
-import { Calculator } from '../../shared/components/calculator/calculator';
+import { Menu } from '@/shared/components/menu/menu';
+import { NotificationService } from '@/shared/services/websocket.service';
+import { Calculator } from '@/shared/components/calculator/calculator';
 import { MatDialog } from '@angular/material/dialog';
-import { RangePrintComponent } from '../../shared/components/range-print/range-print';
-import { Button } from '../../shared/components/button/button';
+import { RangePrintComponent } from '@/shared/components/range-print/range-print';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-header',

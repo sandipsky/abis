@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GeneralMaster } from '../general-master/general-master';
-import { IFilterColumn } from '../../../shared/models/filter.model';
-import { ITableHeader } from '../../../shared/models/table-header.model';
+import { GeneralMaster } from '@/modules/master/general-master/general-master';
+import { IFilterColumn } from '@/shared/models/filter.model';
+import { ITableHeader } from '@/shared/models/table-header.model';
 
 @Component({
   selector: 'app-product-category',

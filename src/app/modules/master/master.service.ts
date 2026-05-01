@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MasterItem } from './master.model';
-import { IApiResponse } from '../../shared/models/api-response.model';
-import { IPaginatedRequest } from '../../shared/models/paginated-request.model';
-import { IPaginatedResponse } from '../../shared/models/paginated-response.model';
+import { IApiResponse } from '@/shared/models/api-response.model';
+import { IPaginatedRequest } from '@/shared/models/paginated-request.model';
+import { IPaginatedResponse } from '@/shared/models/paginated-response.model';
 
 @Injectable({
   providedIn: 'root'

@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-import { MasterService } from '../../master.service';
-import { SpinnerService } from '../../../../shared/services/spinner.service';
-import { Button } from '../../../../shared/components/button/button';
-import { IApiResponse } from '../../../../shared/models/api-response.model';
+import { MasterService } from '@/modules/master/master.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
+import { Button } from '@/shared/components/button/button';
+import { IApiResponse } from '@/shared/models/api-response.model';
 
 @Component({
   selector: 'app-add-master-modal',
