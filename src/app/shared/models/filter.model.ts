@@ -17,4 +17,5 @@ export interface IFilterColumn {
   type: IFilterColumnType;
   data?: IFilterColumnOption[];
   value?: string | number | null;
+  groupBy?: string;
 }

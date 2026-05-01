@@ -1,0 +1,106 @@
+<div class="modal">
+    <div class="modal-header">
+        <div class="modal-title-group">
+            <h1 class="modal-title">
+                {{ data.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} Account
+            </h1>
+            <h2 class="modal-sub-title">
+                Provide required information to add Account.
+            </h2>
+        </div>
+
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
+    </div>
+    <div class="modal-body">
+        <form class="modal-content" [formGroup]="modalForm">
+            <div class="row g-2">
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Code</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.account_code || 'N/A' }}</span>
+                        } @else {
+                        <input type="text" class="form-control" placeholder="Enter Code"
+                            formControlName="account_code" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Name</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.account_name || 'N/A' }}</span>
+                        } @else {
+                        <input [useValidation]="true" type="text" class="form-control"
+                            placeholder="Enter Name" formControlName="account_name" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Account Type</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.account_type || 'N/A' }}</span>
+                        } @else {
+                        <ng-select [items]="accountTypeList()" bindLabel="name" bindValue="id" groupBy="group"
+                            placeholder="Select Account Type" formControlName="account_type"
+                            [useValidation]="true">
+                        </ng-select>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Parent Account</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.parent_account_name || 'Root' }}</span>
+                        } @else {
+                        <ng-select [items]="parentAccountList()" bindLabel="name" bindValue="id"
+                            placeholder="Select Parent Account" formControlName="parent_id"
+                            (change)="onParentChange($event)">
+                        </ng-select>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Active Status</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.is_active ? 'Active' : 'Inactive' }}</span>
+                        } @else {
+                        <label class="switch">
+                            <input formControlName="is_active" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Remarks</label>
+                        @if (data.isView) {
+                        <span>{{ selectedAccount()?.remarks || 'N/A' }}</span>
+                        } @else {
+                        <textarea placeholder="Enter Remarks" class="form-control" formControlName="remarks"
+                            rows="1"></textarea>
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (!data.isView) {
+    <div class="modal-footer">
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+
+        <app-button (click)="saveForm()" type="primary"
+            [label]="(modalForm.value.id ? 'Update' : 'Add') + ' Account'" />
+    </div>
+    }
+</div>

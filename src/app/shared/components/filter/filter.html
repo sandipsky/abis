@@ -29,7 +29,7 @@
 
                     @if (filter.type === 'select') {
                     <ng-select [appendTo]="'body'" bindLabel="name" bindValue="id" [(ngModel)]="filter.value"
-                        [items]="filter.data" [placeholder]="'Select'">
+                        [items]="filter.data" [groupBy]="filter.groupBy" [placeholder]="'Select'">
                     </ng-select>
                     }
                 </div>
