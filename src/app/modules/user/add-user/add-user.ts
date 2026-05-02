@@ -53,7 +53,8 @@ export class AddUser {
       contact_number: [],
       gender: [],
       remarks: [],
-      user_name: [, [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      email: [, [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      username: [, Validators.required],
       password: [, [
         Validators.required,
         Validators.minLength(8),

@@ -56,7 +56,6 @@ export class Login {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res?.token);
-
         this.isLoading.set(false);
         this.toastr.success("Logged In Successfully.", "Success");
         this.router.navigate(['dashboard']);
@@ -70,8 +69,6 @@ export class Login {
         );
       },
     });
-
-
   }
 
   logout() {

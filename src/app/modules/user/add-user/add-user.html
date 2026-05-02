@@ -39,12 +39,12 @@
                         </div>
 
                         @if (!data.isView) {
-                            @if (selectedProfileImage()) {
-                            <app-button (click)="profileImageInput.click()" type="secondary" label="Replace Image" />
-                            <app-button (click)="selectedProfileImage.set(null)" type="secondary" label="Delete Image" />
-                            } @else {
-                            <app-button (click)="profileImageInput.click()" type="secondary" label="Add Image" />
-                            }
+                        @if (selectedProfileImage()) {
+                        <app-button (click)="profileImageInput.click()" type="secondary" label="Replace Image" />
+                        <app-button (click)="selectedProfileImage.set(null)" type="secondary" label="Delete Image" />
+                        } @else {
+                        <app-button (click)="profileImageInput.click()" type="secondary" label="Add Image" />
+                        }
                         }
                     </div>
                 </div>
@@ -55,8 +55,8 @@
                         @if (data.isView) {
                         <span>{{ selectedUser()?.name || 'N/A' }}</span>
                         } @else {
-                        <input [useValidation]="true" type="text" class="form-control"
-                            placeholder="Enter Full Name" formControlName="name" />
+                        <input [useValidation]="true" type="text" class="form-control" placeholder="Enter Full Name"
+                            formControlName="name" />
                         }
                     </div>
                 </div>
@@ -65,10 +65,25 @@
                     <div class="form-group" [class.view]="data.isView">
                         <label>Contact No.</label>
                         @if (data.isView) {
-                        <span>{{ selectedUser()?.contact_number || 'N/A' }}</span>
+                        <span>{{ selectedUser()?.contact || 'N/A' }}</span>
                         } @else {
                         <input type="text" class="form-control" placeholder="Enter Contact No."
                             formControlName="contact_number" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Email</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.email || 'N/A' }}</span>
+                        } @else {
+                        <input [useValidation]="true" type="email" formControlName="email" class="form-control"
+                            placeholder="Enter Email" />
+                        @if (f['email'].errors?.['email'] && (f['email'].dirty || f['email'].touched)) {
+                        <div class="alert error">Email must be a valid email address</div>
+                        }
                         }
                     </div>
                 </div>
@@ -79,8 +94,8 @@
                         @if (data.isView) {
                         <span>{{ selectedUser()?.role_name || 'N/A' }}</span>
                         } @else {
-                        <ng-select [items]="roleList()" bindLabel="name" bindValue="id"
-                            placeholder="Select Role" formControlName="role_id" [useValidation]="true">
+                        <ng-select [items]="roleList()" bindLabel="name" bindValue="id" placeholder="Select Role"
+                            formControlName="role_id" [useValidation]="true">
                         </ng-select>
                         }
                     </div>
@@ -92,18 +107,21 @@
                         @if (data.isView) {
                         <span>{{ selectedUser()?.gender || 'N/A' }}</span>
                         } @else {
-                        <div class="d-flex gap-md">
-                            <input class="form-check-input" type="radio" name="gender" value="Male"
-                                formControlName="gender" />
-                            <label class="form-check-label">Male</label>
+                        <div class="d-flex gap-md align-items-center">
+                            <label>
+                                <input class="form-check-input" type="radio" name="gender" value="Male"
+                                    formControlName="gender" />Male</label>
 
-                            <input class="form-check-input" type="radio" name="gender" value="Female"
-                                formControlName="gender" />
-                            <label class="form-check-label">Female</label>
+                            <label>
+                                <input class="form-check-input" type="radio" name="gender" value="Female"
+                                    formControlName="gender" />
+                                Female
+                            </label>
 
-                            <input class="form-check-input" type="radio" name="gender" value="Other"
-                                formControlName="gender" />
-                            <label class="form-check-label">Other</label>
+                            <label>
+                                <input class="form-check-input" type="radio" name="gender" value="Other"
+                                    formControlName="gender" />
+                                Other</label>
                         </div>
                         }
                     </div>
@@ -158,18 +176,15 @@
 
                             <div class="col-md-12">
                                 <div class="form-group" [class.view]="data.isView">
-                                    <label>Email</label>
+                                    <label>Username</label>
                                     @if (data.isView) {
-                                    <span>{{ selectedUser()?.user_name || 'N/A' }}</span>
+                                    <span>{{ selectedUser()?.username || 'N/A' }}</span>
                                     } @else {
                                     <div class="input-wrapper">
-                                        <app-icon class="left-icon" name="sms" />
-                                        <input [useValidation]="true" type="email" formControlName="user_name"
-                                            class="form-control" placeholder="Enter Email" />
+                                        <app-icon class="left-icon" name="user" />
+                                        <input [useValidation]="true" type="text" formControlName="username"
+                                            class="form-control" placeholder="Enter Username" />
                                     </div>
-                                    @if (f['user_name'].errors?.['email'] && (f['user_name'].dirty || f['user_name'].touched)) {
-                                    <div class="alert error">Email must be a valid email address</div>
-                                    }
                                     }
                                 </div>
                             </div>
@@ -183,8 +198,7 @@
                                         <input [useValidation]="true" [type]="hide() ? 'password' : 'text'"
                                             class="form-control" placeholder="Enter Password"
                                             formControlName="password" />
-                                        <app-icon class="right-icon clickable"
-                                            (click)="hide.set(!hide())"
+                                        <app-icon class="right-icon clickable" (click)="hide.set(!hide())"
                                             [name]="hide() ? 'eye-slash' : 'eye-login'" />
                                     </div>
                                 </div>
@@ -217,12 +231,12 @@
                                         <input [useValidation]="true" [type]="confirmHide() ? 'password' : 'text'"
                                             class="form-control" placeholder="Confirm Password"
                                             formControlName="confirmpassword" />
-                                        <app-icon class="right-icon clickable"
-                                            (click)="confirmHide.set(!confirmHide())"
+                                        <app-icon class="right-icon clickable" (click)="confirmHide.set(!confirmHide())"
                                             [name]="confirmHide() ? 'eye-slash' : 'eye-login'" />
                                     </div>
 
-                                    @if (modalForm.errors?.['passwordMismatch'] && (f['confirmpassword'].dirty || f['confirmpassword'].touched)) {
+                                    @if (modalForm.errors?.['passwordMismatch'] && (f['confirmpassword'].dirty ||
+                                    f['confirmpassword'].touched)) {
                                     <div class="alert error">
                                         Password and Confirm Password must match.
                                     </div>
@@ -247,8 +261,7 @@
     @if (!data.isView) {
     <div class="modal-footer">
         <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
-        <app-button (click)="saveForm()" type="primary"
-            [label]="(modalForm.value.id ? 'Update' : 'Add') + ' User'" />
+        <app-button (click)="saveForm()" type="primary" [label]="(modalForm.value.id ? 'Update' : 'Add') + ' User'" />
     </div>
     }
 </div>
@@ -260,7 +273,8 @@
                 <h1 class="modal-title">Confirmation</h1>
             </div>
 
-            <app-button class="close-btn" (click)="closeAlert()" type="outlined" [rounded]="true" size="sm" icon="close" />
+            <app-button class="close-btn" (click)="closeAlert()" type="outlined" [rounded]="true" size="sm"
+                icon="close" />
         </div>
 
         <div class="modal-body">
