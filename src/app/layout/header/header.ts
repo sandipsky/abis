@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { BreadcrumbService } from '@/shared/services/breadcrumb.service';
 import { Router, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -8,6 +8,7 @@ import { Calculator } from '@/shared/components/calculator/calculator';
 import { MatDialog } from '@angular/material/dialog';
 import { RangePrintComponent } from '@/shared/components/range-print/range-print';
 import { Button } from '@/shared/components/button/button';
+import { AuthService } from '@/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -21,12 +22,13 @@ export class Header {
   private _router = inject(Router);
   private _notificationService = inject(NotificationService);
   private _dialog = inject(MatDialog);
+  private _authService = inject(AuthService);
 
   breadcrumbs = toSignal(this._breadcrumbService.breadcrumbs$);
 
-  userName = signal<string>(localStorage.getItem('userName') ?? 'Guest');
-  role = signal<string>(localStorage.getItem('role') ?? 'User');
-  fiscalYear = signal<string>(localStorage.getItem('fiscalYear') ?? '2082-83');
+  private currentUser = toSignal(this._authService.currentUser$);
+  userName = computed(() => this.currentUser()?.name ?? 'Guest');
+  role = computed(() => this.currentUser()?.role_name ?? 'User');
   notifications = signal<any[]>([]);
 
   // private _newNotification = toSignal(this._notificationService.getNotifications());
@@ -75,5 +77,9 @@ export class Header {
         dialogRef.close();
       }, 400);
     });
+  }
+
+  logout() {
+    this._authService.logout();
   }
 }
