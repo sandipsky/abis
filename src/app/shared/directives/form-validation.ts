@@ -47,6 +47,10 @@ export class FormValidation implements OnInit, OnDestroy {
     this.removeAsterisk();
   }
 
+  private get errorTarget(): HTMLElement {
+    return (this.host.nativeElement.closest('.input-wrapper') as HTMLElement) || this.host.nativeElement;
+  }
+
   private refresh(): void {
     const control = this.ngControl?.control;
     if (!control) return;
@@ -54,12 +58,18 @@ export class FormValidation implements OnInit, OnDestroy {
     if (this.hasRequiredValidator()) this.addAsterisk();
     else this.removeAsterisk();
 
-    const showError = control.invalid && (control.touched || control.dirty);
+    const target = this.errorTarget;
+    const host = this.host.nativeElement;
+    const requiredFailed = !!(control.errors?.['required'] || control.errors?.['requiredTrue']);
+    const showError = requiredFailed && (control.touched || control.dirty);
+
     if (showError) {
-      this.renderer.addClass(this.host.nativeElement, 'error');
+      this.renderer.addClass(target, 'error');
+      if (target !== host) this.renderer.addClass(host, 'error');
       this.showError();
     } else {
-      this.renderer.removeClass(this.host.nativeElement, 'error');
+      this.renderer.removeClass(target, 'error');
+      if (target !== host) this.renderer.removeClass(host, 'error');
       this.removeError();
     }
   }
@@ -100,8 +110,8 @@ export class FormValidation implements OnInit, OnDestroy {
 
   private showError(): void {
     if (this.errorEl) return;
-    const host = this.host.nativeElement;
-    const parent = host.parentNode;
+    const anchor = this.errorTarget;
+    const parent = anchor.parentNode;
     if (!parent) return;
 
     const div = this.renderer.createElement('div');
@@ -109,7 +119,7 @@ export class FormValidation implements OnInit, OnDestroy {
     this.renderer.addClass(div, 'error');
     this.renderer.appendChild(div, this.renderer.createText('This field is required.'));
 
-    this.renderer.insertBefore(parent, div, host.nextSibling);
+    this.renderer.insertBefore(parent, div, anchor.nextSibling);
     this.errorEl = div;
   }
 

@@ -1,0 +1,275 @@
+<div class="modal">
+    <div class="modal-header">
+        <div class="modal-title-group">
+            <h1 class="modal-title">
+                {{ data.isView == true ? 'View' : modalForm.value.id ? 'Update' : 'Add'}} User
+            </h1>
+            <h2 class="modal-sub-title">
+                Provide required information to add User.
+            </h2>
+        </div>
+
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
+    </div>
+    <div class="modal-body">
+        <form class="modal-content" [formGroup]="modalForm">
+            <div class="row g-2">
+                <div class="col-md-12">
+                    <input #profileImageInput type="file" id="uploadProfileImage" accept="image/*"
+                        (change)="onSelectProfileImage($event)" hidden />
+                    <div class="upload-section">
+                        <div class="image-container">
+                            @if (selectedProfileImage(); as profile) {
+                            <img [src]="profile.url" alt="" />
+                            } @else {
+                            <svg width="120" height="120" viewBox="0 0 120 120" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="120" height="120" rx="60" fill="#EBEDEB" />
+                                <path
+                                    d="M82.5 25.25C89.2655 25.25 94.75 30.7345 94.75 37.5V82.5C94.75 89.2655 89.2655 94.75 82.5 94.75H37.5C35.1653 94.75 32.9806 94.0954 31.1221 92.96C30.2901 92.4516 29.5232 91.8475 28.8379 91.1621C26.6222 88.9464 25.25 85.8825 25.25 82.5V37.5C25.25 30.7345 30.7345 25.25 37.5 25.25H82.5ZM37.5 27.25C31.8391 27.25 27.25 31.8391 27.25 37.5V82.5C27.25 85.3307 28.396 87.8921 30.252 89.748C30.8261 90.3222 31.4679 90.8285 32.1641 91.2539C33.7176 92.2031 35.5435 92.75 37.5 92.75H82.5C88.1609 92.75 92.75 88.1609 92.75 82.5V37.5C92.75 31.8391 88.1609 27.25 82.5 27.25H37.5ZM63.6406 56.8115C65.9915 54.3509 69.929 54.878 71.6201 57.8281L79.3232 71.2666C80.4828 73.2894 79.1376 76 76.7051 76H43.2949C40.7949 76 39.4682 73.1576 40.7529 71.1406L44.8037 64.7812C46.2148 62.5658 49.0155 61.7671 51.334 62.9805L53.6445 64.1895C54.8138 64.8011 56.2301 64.5687 57.1709 63.584L63.6406 56.8115ZM69.8848 58.8223C68.8425 57.0044 66.4926 56.7221 65.0869 58.1934L58.6162 64.9658C57.0716 66.5821 54.6911 66.9942 52.7168 65.9609L50.4062 64.752C49.0412 64.0379 47.3635 64.4845 46.4902 65.8555L42.4395 72.2148C41.9152 73.0379 42.5338 74 43.2949 74H76.7051C77.4463 74 78.0612 73.0865 77.5879 72.2607L69.8848 58.8223ZM48.75 45C50.8211 45 52.5 46.6789 52.5 48.75C52.5 50.8211 50.8211 52.5 48.75 52.5C46.6789 52.5 45 50.8211 45 48.75C45 46.6789 46.6789 45 48.75 45Z"
+                                    fill="#F7F7F7" />
+                            </svg>
+                            }
+                        </div>
+                        <div>
+                            <h1 class="title">Profile Picture</h1>
+                            <h3 class="sub-title">
+                                Upload a photo to personalize and recognize the user account.
+                            </h3>
+                        </div>
+
+                        @if (!data.isView) {
+                            @if (selectedProfileImage()) {
+                            <app-button (click)="profileImageInput.click()" type="secondary" label="Replace Image" />
+                            <app-button (click)="selectedProfileImage.set(null)" type="secondary" label="Delete Image" />
+                            } @else {
+                            <app-button (click)="profileImageInput.click()" type="secondary" label="Add Image" />
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Full Name</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.name || 'N/A' }}</span>
+                        } @else {
+                        <input [useValidation]="true" type="text" class="form-control"
+                            placeholder="Enter Full Name" formControlName="name" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Contact No.</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.contact_number || 'N/A' }}</span>
+                        } @else {
+                        <input type="text" class="form-control" placeholder="Enter Contact No."
+                            formControlName="contact_number" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Role</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.role_name || 'N/A' }}</span>
+                        } @else {
+                        <ng-select [items]="roleList()" bindLabel="name" bindValue="id"
+                            placeholder="Select Role" formControlName="role_id" [useValidation]="true">
+                        </ng-select>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Gender</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.gender || 'N/A' }}</span>
+                        } @else {
+                        <div class="d-flex gap-md">
+                            <input class="form-check-input" type="radio" name="gender" value="Male"
+                                formControlName="gender" />
+                            <label class="form-check-label">Male</label>
+
+                            <input class="form-check-input" type="radio" name="gender" value="Female"
+                                formControlName="gender" />
+                            <label class="form-check-label">Female</label>
+
+                            <input class="form-check-input" type="radio" name="gender" value="Other"
+                                formControlName="gender" />
+                            <label class="form-check-label">Other</label>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Active Status</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.is_active ? 'Active' : 'Inactive' }}</span>
+                        } @else {
+                        <label class="switch">
+                            <input formControlName="is_active" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group" [class.view]="data.isView">
+                        <label>Remarks</label>
+                        @if (data.isView) {
+                        <span>{{ selectedUser()?.remarks || 'N/A' }}</span>
+                        } @else {
+                        <textarea placeholder="Enter Remarks" class="form-control" formControlName="remarks"
+                            rows="1"></textarea>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="section section-dark">
+                        <div class="section-title">Login Credentials for User</div>
+
+                        <br>
+
+                        <div class="row g-2">
+                            @if (f['account_non_locked'].value === false) {
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Login Status</label>
+                                    <div style="width: 100%;" class="d-flex align-items-center justify-content-between">
+                                        <span>Your Account has been locked.</span>
+                                        @if (!data.isView) {
+                                        <app-button (click)="showAlert()" type="secondary" label="Unlock" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            }
+
+                            <div class="col-md-12">
+                                <div class="form-group" [class.view]="data.isView">
+                                    <label>Email</label>
+                                    @if (data.isView) {
+                                    <span>{{ selectedUser()?.user_name || 'N/A' }}</span>
+                                    } @else {
+                                    <div class="input-wrapper">
+                                        <app-icon class="left-icon" name="sms" />
+                                        <input [useValidation]="true" type="email" formControlName="user_name"
+                                            class="form-control" placeholder="Enter Email" />
+                                    </div>
+                                    @if (f['user_name'].errors?.['email'] && (f['user_name'].dirty || f['user_name'].touched)) {
+                                    <div class="alert error">Email must be a valid email address</div>
+                                    }
+                                    }
+                                </div>
+                            </div>
+
+                            @if (!data.isView) {
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <div class="input-wrapper">
+                                        <app-icon class="left-icon" name="lock" />
+                                        <input [useValidation]="true" [type]="hide() ? 'password' : 'text'"
+                                            class="form-control" placeholder="Enter Password"
+                                            formControlName="password" />
+                                        <app-icon class="right-icon clickable"
+                                            (click)="hide.set(!hide())"
+                                            [name]="hide() ? 'eye-slash' : 'eye-login'" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="password-rules">
+                                    <p>Password must have :</p>
+
+                                    <div class="rule" [class.valid]="hasMinLength()">
+                                        <span></span> At least 8 characters
+                                    </div>
+                                    <div class="rule" [class.valid]="hasUpperLower()">
+                                        <span></span> Uppercase and lowercase character (A–a)
+                                    </div>
+                                    <div class="rule" [class.valid]="hasSpecialChar()">
+                                        <span></span> One Special character (!, &#64;, #, $, % ...)
+                                    </div>
+                                    <div class="rule" [class.valid]="hasNumber()">
+                                        <span></span> One number (1–9)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Confirm Password</label>
+                                    <div class="input-wrapper">
+                                        <app-icon class="left-icon" name="lock" />
+                                        <input [useValidation]="true" [type]="confirmHide() ? 'password' : 'text'"
+                                            class="form-control" placeholder="Confirm Password"
+                                            formControlName="confirmpassword" />
+                                        <app-icon class="right-icon clickable"
+                                            (click)="confirmHide.set(!confirmHide())"
+                                            [name]="confirmHide() ? 'eye-slash' : 'eye-login'" />
+                                    </div>
+
+                                    @if (modalForm.errors?.['passwordMismatch'] && (f['confirmpassword'].dirty || f['confirmpassword'].touched)) {
+                                    <div class="alert error">
+                                        Password and Confirm Password must match.
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            } @else {
+                            <div class="col-md-12">
+                                <div class="form-group view">
+                                    <label>Password</label>
+                                    <span>********</span>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (!data.isView) {
+    <div class="modal-footer">
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+        <app-button (click)="saveForm()" type="primary"
+            [label]="(modalForm.value.id ? 'Update' : 'Add') + ' User'" />
+    </div>
+    }
+</div>
+
+<ng-template #confirm>
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title-group">
+                <h1 class="modal-title">Confirmation</h1>
+            </div>
+
+            <app-button class="close-btn" (click)="closeAlert()" type="outlined" [rounded]="true" size="sm" icon="close" />
+        </div>
+
+        <div class="modal-body">
+            <p>Are you sure you want to unlock login for this user?</p>
+        </div>
+
+        <div class="modal-footer">
+            <app-button (click)="closeAlert()" type="secondary" label="Cancel" />
+            <app-button (click)="unlockUser()" type="primary" label="Unlock" />
+        </div>
+    </div>
+</ng-template>

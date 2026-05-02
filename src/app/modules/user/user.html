@@ -1,1 +1,41 @@
-<p>user works!</p>
+<div class="section main">
+    <div class="section-header">
+        <filter-section (onFilterChange)="applyFilter($event)"
+                        [filterColumns]="filterColumns()"
+                        searchBy="name">
+        </filter-section>
+
+        <div class="section-header-btn-group">
+            @if (hasPermission('ExportUser')) {
+                <app-button (click)="printPage()" type="secondary" icon="print" label="Print" />
+                <app-button (click)="getMasterList(true)" type="secondary" icon="download" label="Export" />
+            }
+
+            @if (hasPermission('CreateUser')) {
+                <app-button (click)="showForm()" type="primary" icon="add" label="Add User" />
+            }
+        </div>
+    </div>
+
+    <div class="section-content">
+        <app-table
+            [actions]="['view', 'edit', 'delete']"
+            (sortChange)="onSort($event)"
+            [tableHeaders]="tableHeaders()"
+            [hasDeletePermission]="hasPermission('DeleteUser')"
+            [hasEditPermission]="hasPermission('EditUser')"
+            [filterData]="filterForm()"
+            [tableData]="masterList()"
+            (onView)="showForm($event, true)"
+            (onEdit)="showForm($event)"
+            (onDelete)="deleteItem($event)">
+        </app-table>
+
+        <app-paginator
+            (pageChange)="onChangedPage($event)"
+            [pageSize]="filterForm().pageSize"
+            [length]="length()"
+            [pageIndex]="filterForm().pageIndex">
+        </app-paginator>
+    </div>
+</div>
