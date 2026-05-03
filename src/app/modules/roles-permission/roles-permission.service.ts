@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import { IPaginatedRequest } from '@/shared/models/paginated-request.model';
 import { IPaginatedResponse } from '@/shared/models/paginated-response.model';
-import { IRolesPermission } from './roles-permission.model';
+import { IPermissionMasterModule, IRolesPermission } from './roles-permission.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesPermissionService {
-  readonly apiUrl = environment.apiUrl + '/role';
+  readonly apiUrl = environment.apiUrl + '/roles';
   private _http = inject(HttpClient);
 
   getRolesPermissionList(filters: IPaginatedRequest): Observable<IPaginatedResponse<IRolesPermission>> {
@@ -32,5 +32,9 @@ export class RolesPermissionService {
 
   deleteRolesPermission(id: number): Observable<IApiResponse> {
     return this._http.delete<IApiResponse>(`${this.apiUrl}/${id}`);
+  }
+
+  getRoleOperations(roleId: number): Observable<IPermissionMasterModule[]> {
+    return this._http.get<IPermissionMasterModule[]>(`${this.apiUrl}/operations/${roleId}`);
   }
 }

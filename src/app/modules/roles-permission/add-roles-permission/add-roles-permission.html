@@ -53,6 +53,61 @@
                 </div>
             </div>
 
+            @if (permissions().length) {
+            <div class="permissions-section">
+                <div class="permissions-tabs">
+                    @for (master of permissions(); track master.master_module; let i = $index) {
+                    <div class="permissions-tab" [class.active]="selectedMasterIndex() === i"
+                        (click)="selectMaster(i)">
+                        <span>{{ master.master_module }}</span>
+                    </div>
+                    }
+                </div>
+
+                <div class="permissions-content">
+                    @if (selectedMaster(); as master) {
+                    <div class="permissions-header">
+                        <h3>{{ master.master_module }}</h3>
+                        <label class="permission-checkbox">
+                            <input type="checkbox"
+                                [checked]="isMasterChecked(master)"
+                                [indeterminate]="isMasterIndeterminate(master)"
+                                [disabled]="data.isView"
+                                (change)="toggleMaster(selectedMasterIndex(), $any($event.target).checked)" />
+                            <span>Select All</span>
+                        </label>
+                    </div>
+
+                    @for (mod of master.modules; track mod.module_name; let mIdx = $index) {
+                    <div class="permissions-module">
+                        <div class="permissions-module-header">
+                            <label class="permission-checkbox">
+                                <input type="checkbox"
+                                    [checked]="isModuleChecked(mod)"
+                                    [indeterminate]="isModuleIndeterminate(mod)"
+                                    [disabled]="data.isView"
+                                    (change)="toggleModule(selectedMasterIndex(), mIdx, $any($event.target).checked)" />
+                                <span>{{ mod.module_name }}</span>
+                            </label>
+                        </div>
+
+                        <div class="permissions-operations">
+                            @for (op of mod.operations; track op.id; let oIdx = $index) {
+                            <label class="permission-checkbox">
+                                <input type="checkbox"
+                                    [checked]="op.selected"
+                                    [disabled]="data.isView"
+                                    (change)="toggleOperation(selectedMasterIndex(), mIdx, oIdx, $any($event.target).checked)" />
+                                <span>{{ op.name }}</span>
+                            </label>
+                            }
+                        </div>
+                    </div>
+                    }
+                    }
+                </div>
+            </div>
+            }
 
         </form>
     </div>

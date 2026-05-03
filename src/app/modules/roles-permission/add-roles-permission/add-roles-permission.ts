@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,13 +9,18 @@ import { Button } from '@/shared/components/button/button';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { RolesPermissionService } from '@/modules/roles-permission/roles-permission.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
-import { IRolesPermission } from '@/modules/roles-permission/roles-permission.model';
+import {
+  IPermissionMasterModule,
+  IPermissionModule,
+  IRolesPermission,
+} from '@/modules/roles-permission/roles-permission.model';
 import { IDialogData } from '@/shared/models/common.model';
 
 @Component({
   selector: 'app-add-roles-permission',
   imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, Button, FormValidation],
   templateUrl: './add-roles-permission.html',
+  styleUrl: './add-roles-permission.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -30,6 +35,11 @@ export class AddRolesPermission {
   isLoading = signal(false);
   selectedRolesPermission = signal<IRolesPermission | null>(null);
 
+  permissions = signal<IPermissionMasterModule[]>([]);
+  selectedMasterIndex = signal(0);
+
+  selectedMaster = computed(() => this.permissions()[this.selectedMasterIndex()] ?? null);
+
   modalForm: FormGroup = this.fb.nonNullable.group({
     id: [],
     name: [, Validators.required],
@@ -42,6 +52,7 @@ export class AddRolesPermission {
     if (id) {
       this.loadRolesPermissionDetail(id);
     }
+    this.loadOperations(id ?? 0);
   }
 
   private loadRolesPermissionDetail(id: number) {
@@ -51,7 +62,67 @@ export class AddRolesPermission {
     });
   }
 
+  private loadOperations(roleId: number) {
+    this.rolesPermissionService.getRoleOperations(roleId).subscribe((res) => {
+      this.permissions.set(res ?? []);
+    });
+  }
+
   get f() { return this.modalForm.controls; }
+
+  selectMaster(index: number) {
+    this.selectedMasterIndex.set(index);
+  }
+
+  isMasterChecked(master: IPermissionMasterModule): boolean {
+    const ops = this.allOperationsOf(master);
+    return ops.length > 0 && ops.every((op) => op.selected);
+  }
+
+  isMasterIndeterminate(master: IPermissionMasterModule): boolean {
+    const ops = this.allOperationsOf(master);
+    const selectedCount = ops.filter((op) => op.selected).length;
+    return selectedCount > 0 && selectedCount < ops.length;
+  }
+
+  isModuleChecked(mod: IPermissionModule): boolean {
+    return mod.operations.length > 0 && mod.operations.every((op) => op.selected);
+  }
+
+  isModuleIndeterminate(mod: IPermissionModule): boolean {
+    const selectedCount = mod.operations.filter((op) => op.selected).length;
+    return selectedCount > 0 && selectedCount < mod.operations.length;
+  }
+
+  toggleMaster(masterIdx: number, checked: boolean) {
+    const list = this.permissions();
+    list[masterIdx].modules.forEach((mod) => {
+      mod.operations.forEach((op) => (op.selected = checked));
+    });
+    this.permissions.set([...list]);
+  }
+
+  toggleModule(masterIdx: number, moduleIdx: number, checked: boolean) {
+    const list = this.permissions();
+    list[masterIdx].modules[moduleIdx].operations.forEach((op) => (op.selected = checked));
+    this.permissions.set([...list]);
+  }
+
+  toggleOperation(masterIdx: number, moduleIdx: number, opIdx: number, checked: boolean) {
+    const list = this.permissions();
+    list[masterIdx].modules[moduleIdx].operations[opIdx].selected = checked;
+    this.permissions.set([...list]);
+  }
+
+  private allOperationsOf(master: IPermissionMasterModule) {
+    return master.modules.flatMap((mod) => mod.operations);
+  }
+
+  selectedOperationIds(): number[] {
+    return this.permissions().flatMap((master) =>
+      master.modules.flatMap((mod) => mod.operations.filter((op) => op.selected).map((op) => op.id)),
+    );
+  }
 
   saveForm() {
     this.modalForm.markAllAsTouched();
@@ -60,7 +131,10 @@ export class AddRolesPermission {
     }
 
     this.isLoading.set(true);
-    const formData = this.modalForm.value;
+    const formData = {
+      ...this.modalForm.value,
+      operation_ids: this.selectedOperationIds(),
+    };
 
     const request$ = formData.id
       ? this.rolesPermissionService.updateRolesPermission(formData, formData.id)
