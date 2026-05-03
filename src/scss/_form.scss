@@ -261,9 +261,8 @@ textarea {
 }
 
 .password-rules {
-  margin-top: 12px;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-quaternary);
 
   p {
     margin-bottom: 8px;
@@ -280,17 +279,18 @@ textarea {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--separator-dark);
       display: inline-block;
     }
 
     &.valid {
-      color: #16a34a;
+      color: var(--success);
 
       span {
-        background: #16a34a;
-        border: #16a34a;
+        background: var(--success);
+        border: var(--success);
       }
     }
   }
 }
+

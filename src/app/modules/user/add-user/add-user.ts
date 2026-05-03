@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '@/auth/auth.service';
 import { Button } from '@/shared/components/button/button';
 import { Icon } from '@/shared/components/icon/icon';
+import { ImageUpload } from '@/shared/components/image-upload/image-upload';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { UserService } from '@/modules/user/user.service';
 import { DropdownsService } from '@/shared/services/dropdown.service';
@@ -19,7 +20,7 @@ import { IDialogData, IFile } from '@/shared/models/common.model';
 
 @Component({
   selector: 'app-add-user',
-  imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, NgSelectModule, Button, Icon, FormValidation],
+  imports: [CommonModule, MatIconModule, MatDialogModule, ReactiveFormsModule, NgSelectModule, Button, Icon, ImageUpload, FormValidation],
   templateUrl: './add-user.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -38,7 +39,6 @@ export class AddUser {
   selectedUser = signal<IUser | null>(null);
   roleList = signal<IDropdownItem[]>([]);
   selectedProfileImage = signal<IFile | null>(null);
-  deleteImage = signal(false);
 
   hide = signal(true);
   confirmHide = signal(true);
@@ -108,42 +108,6 @@ export class AddUser {
   }
 
   get f() { return this.modalForm.controls; }
-
-  async onSelectProfileImage(event: Event): Promise<void> {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) {
-      this.selectedProfileImage.set(null);
-      return;
-    }
-
-    const file = input.files[0];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
-
-    if (!['jpg', 'jpeg', 'png'].includes(fileExtension)) {
-      this.toastr.error('Please upload only jpg, jpeg or png files', 'Error', { closeButton: true });
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      this.toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
-      this.selectedProfileImage.set(null);
-      return;
-    }
-
-    this.selectedProfileImage.set({
-      file,
-      url: URL.createObjectURL(file),
-      name: file.name,
-      size: this.formatFileSize(file.size),
-    });
-    this.deleteImage.set(true);
-  }
-
-  formatFileSize(size: number): string {
-    const kb = size / 1024;
-    if (kb < 1024) return kb.toFixed(1) + ' KB';
-    return (kb / 1024).toFixed(1) + ' MB';
-  }
 
   unlockUser() {
     const id = this.modalForm.value.id || this.selectedUser()?.id;
