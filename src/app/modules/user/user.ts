@@ -164,7 +164,7 @@ export class User implements OnInit {
 
   deleteItem(data: IUser) {
     const dialogRef = this._dialog.open(DeleteModalComponent, {
-      data: { name: data.name },
+      data: { full_name: data.full_name },
       disableClose: true
     });
 

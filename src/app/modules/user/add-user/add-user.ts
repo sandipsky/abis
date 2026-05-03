@@ -48,8 +48,8 @@ export class AddUser {
   modalForm: FormGroup = this._fb.nonNullable.group(
     {
       id: [],
-      name: [, Validators.required],
-      contact_number: [],
+      full_name: [, Validators.required],
+      contact: [],
       gender: [],
       remarks: [],
       email: [, [Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],

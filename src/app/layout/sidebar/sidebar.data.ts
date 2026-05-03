@@ -225,14 +225,14 @@ const sidebarData = [
                         label: 'Configuration',
                         tooltip: 'Configuration',
                         icon: 'configuration',
-                        permission: 'ViewConfig'
+                        permission: 'ViewConfiguration'
                     },
                     {
                         link: 'document-number-scheme',
                         label: 'Document Numbering',
                         tooltip: 'Document Numbering',
                         icon: 'document-numbering-scheme',
-                        permission: 'ViewDocumentNumberingScheme'
+                        permission: 'ViewDocumentNumbering'
                     },
                 ]
             },

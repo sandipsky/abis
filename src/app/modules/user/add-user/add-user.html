@@ -25,10 +25,10 @@
                     <div class="form-group" [class.view]="data.isView">
                         <label>Full Name</label>
                         @if (data.isView) {
-                        <span>{{ selectedUser()?.name || 'N/A' }}</span>
+                        <span>{{ selectedUser()?.full_name || 'N/A' }}</span>
                         } @else {
                         <input [useValidation]="true" type="text" class="form-control" placeholder="Enter Full Name"
-                            formControlName="name" />
+                            formControlName="full_name" />
                         }
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                         <span>{{ selectedUser()?.contact || 'N/A' }}</span>
                         } @else {
                         <input type="text" class="form-control" placeholder="Enter Contact No."
-                            formControlName="contact_number" />
+                            formControlName="contact" />
                         }
                     </div>
                 </div>
