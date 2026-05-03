@@ -20,7 +20,6 @@ import { environment } from '../../../../environments/environment';
 export class DocumentNumberScheme {
   formTitle = '';
   length: number = 0;
-  isLoading: boolean = false;
   operationList: any = [];
   documentNumberList: any[] = [
     {
@@ -388,12 +387,12 @@ export class DocumentNumberScheme {
   @ViewChild('delete', { static: true }) delete!: TemplateRef<any>;
 
   constructor(
-    private fb: FormBuilder,
-    private dialog: MatDialog,
-    @Optional() private dialogRef: MatDialogRef<any>,
+    private _fb: FormBuilder,
+    private _dialog: MatDialog,
+    @Optional() private _dialogRef: MatDialogRef<any>,
     private _http: HttpClient,
   ) {
-    this.documentNumberForm = this.fb.nonNullable.group({
+    this.documentNumberForm = this._fb.nonNullable.group({
       id: [],
       module: [, Validators.required],
       name: [, Validators.required],
@@ -442,24 +441,24 @@ export class DocumentNumberScheme {
       this.documentNumberView.current_no = res;
     });
 
-    this.dialogRef = this.dialog.open(this.modal, {
+    this._dialogRef = this._dialog.open(this.modal, {
       panelClass: 'slide-up',
       enterAnimationDuration: '0ms',
       exitAnimationDuration: '0ms',
       disableClose: true,
     });
 
-    this.dialogRef.backdropClick().subscribe(() => {
+    this._dialogRef.backdropClick().subscribe(() => {
       this.closeDialog();
     });
   }
 
   closeDialog() {
-    this.dialogRef.removePanelClass('slide-up');
-    this.dialogRef.addPanelClass('slide-up-close');
+    this._dialogRef.removePanelClass('slide-up');
+    this._dialogRef.addPanelClass('slide-up-close');
 
     setTimeout(() => {
-      this.dialogRef.close();
+      this._dialogRef.close();
     }, 400);
   }
 }

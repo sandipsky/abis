@@ -20,7 +20,7 @@ export class Menu {
 
   content = viewChild<ElementRef<HTMLElement>>('content');
 
-  private host = inject(ElementRef);
+  private _host = inject(ElementRef);
 
   toggle(): void {
     if (this.isOpen()) {
@@ -35,7 +35,7 @@ export class Menu {
   }
 
   calculatePosition(): void {
-    const hostRect = this.host.nativeElement.getBoundingClientRect();
+    const hostRect = this._host.nativeElement.getBoundingClientRect();
     const contentEl = this.content()?.nativeElement;
 
     if (!contentEl) return;
@@ -70,7 +70,7 @@ export class Menu {
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const isInside = this.host.nativeElement.contains(target);
+    const isInside = this._host.nativeElement.contains(target);
     const isDropdownPanel = target.closest('.ng-dropdown-panel');
 
     if (!isInside && !isDropdownPanel) {

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import packageJson from '../../../../package.json';
 import { AuthService } from '@/auth/auth.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { CommonModule } from '@angular/common';
 import { Button } from '@/shared/components/button/button';
 
@@ -16,17 +17,17 @@ import { Button } from '@/shared/components/button/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private toastr = inject(ToastrService);
+  private _fb = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+  private _toastr = inject(ToastrService);
+  private _spinnerService = inject(SpinnerService);
 
-  isLoading = signal(false);
   hidePassword = signal(true);
 
   public currentApplicationVersion = packageJson.version;
 
-  loginForm: FormGroup = this.fb.group({
+  loginForm: FormGroup = this._fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
@@ -47,22 +48,22 @@ export class Login {
 
   login() {
     if (this.loginForm.invalid) {
-      this.toastr.error("Please Enter both Username and Password", 'Error', { closeButton: true });
+      this._toastr.error("Please Enter both Username and Password", 'Error', { closeButton: true });
       return;
     }
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
 
-    this.authService.login(this.loginForm.value).subscribe({
+    this._authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res?.token);
-        this.isLoading.set(false);
-        this.toastr.success("Logged In Successfully.", "Success");
-        this.router.navigate(['dashboard']);
+        this._spinnerService.setSpinner(false);
+        this._toastr.success("Logged In Successfully.", "Success");
+        this._router.navigate(['dashboard']);
       },
       error: (err: any) => {
-        this.isLoading.set(false);
-        this.toastr.error(
+        this._spinnerService.setSpinner(false);
+        this._toastr.error(
           err.error.message || 'Unable to Login, Please Try Again!',
           'Error',
           { closeButton: true }
@@ -72,6 +73,6 @@ export class Login {
   }
 
   logout() {
-    this.authService.logout();
+    this._authService.logout();
   }
 }

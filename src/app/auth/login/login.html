@@ -43,8 +43,7 @@
         </div>
 
         <div style="margin: 32px 0" class="col-md-12">
-          <app-button [disabled]="isLoading()" (click)="login()" [fullWidth]="true"
-            [label]="isLoading() ? 'Logging in...' : 'Login'" type="primary" />
+          <app-button (click)="login()" [fullWidth]="true" label="Login" type="primary" />
         </div>
       </form>
     </div>

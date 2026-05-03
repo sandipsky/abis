@@ -35,9 +35,8 @@ export class Filter {
   dateType = signal<'AD' | 'BS'>('BS');
   userList = signal<any[]>([]);
   
-  private lastFilterStr = signal<string>('');
-  private repeatCount = signal<number>(0);
-  private searchTimer: any;
+  private _lastFilterStr = signal<string>('');
+  private _repeatCount = signal<number>(0);
 
   applyFilter() {
     const newFilters: any[] = [];
@@ -58,14 +57,14 @@ export class Filter {
     const currentFilterStr = JSON.stringify(newFilters);
 
     // Toggle-to-reset logic preserved from your original code
-    if (currentFilterStr === this.lastFilterStr()) {
-      this.repeatCount.update(n => n + 1);
+    if (currentFilterStr === this._lastFilterStr()) {
+      this._repeatCount.update(n => n + 1);
     } else {
-      this.repeatCount.set(1);
-      this.lastFilterStr.set(currentFilterStr);
+      this._repeatCount.set(1);
+      this._lastFilterStr.set(currentFilterStr);
     }
 
-    if (this.repeatCount() === 2) {
+    if (this._repeatCount() === 2) {
       // this.removeAllFilter();
       // this.repeatCount.set(0);
       // this.lastFilterStr.set('');

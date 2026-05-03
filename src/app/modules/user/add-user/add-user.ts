@@ -6,13 +6,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 
-import { AuthService } from '@/auth/auth.service';
 import { Button } from '@/shared/components/button/button';
 import { Icon } from '@/shared/components/icon/icon';
 import { ImageUpload } from '@/shared/components/image-upload/image-upload';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { UserService } from '@/modules/user/user.service';
 import { DropdownsService } from '@/shared/services/dropdown.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import { IDropdownItem } from '@/shared/models/dropdown.model';
 import { IUser } from '@/modules/user/user.model';
@@ -26,16 +26,15 @@ import { IDialogData, IFile } from '@/shared/models/common.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddUser {
-  private userService = inject(UserService);
-  private dropdownService = inject(DropdownsService);
-  private toastr = inject(ToastrService);
-  private dialog = inject(MatDialog);
-  private dialogRef = inject<MatDialogRef<AddUser>>(MatDialogRef);
-  private fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  private _userService = inject(UserService);
+  private _dropdownService = inject(DropdownsService);
+  private _toastr = inject(ToastrService);
+  private _dialog = inject(MatDialog);
+  private _dialogRef = inject<MatDialogRef<AddUser>>(MatDialogRef);
+  private _fb = inject(FormBuilder);
+  private _spinnerService = inject(SpinnerService);
   data = inject<IDialogData<IUser>>(MAT_DIALOG_DATA);
 
-  isLoading = signal(false);
   selectedUser = signal<IUser | null>(null);
   roleList = signal<IDropdownItem[]>([]);
   selectedProfileImage = signal<IFile | null>(null);
@@ -43,10 +42,10 @@ export class AddUser {
   hide = signal(true);
   confirmHide = signal(true);
 
-  private unlockRef!: MatDialogRef<unknown>;
+  private _unlockRef!: MatDialogRef<unknown>;
   @ViewChild('confirm', { static: true }) confirm!: TemplateRef<unknown>;
 
-  modalForm: FormGroup = this.fb.nonNullable.group(
+  modalForm: FormGroup = this._fb.nonNullable.group(
     {
       id: [],
       name: [, Validators.required],
@@ -79,7 +78,7 @@ export class AddUser {
         this.modalForm.get('confirmpassword')?.clearValidators();
         this.modalForm.get('password')?.updateValueAndValidity();
         this.modalForm.get('confirmpassword')?.updateValueAndValidity();
-        this.modalForm.addControl('delete_image', this.fb.control(false));
+        this.modalForm.addControl('delete_image', this._fb.control(false));
       }
       this.loadUserDetail(userId);
     } else {
@@ -88,19 +87,19 @@ export class AddUser {
   }
 
   private loadRoles() {
-    this.dropdownService.getMasterDropdown('roles').subscribe(roles => {
+    this._dropdownService.getMasterDropdown('roles').subscribe(roles => {
       this.roleList.set(roles || []);
     });
   }
 
   private loadUserCode() {
-    this.userService.getUserCode().subscribe(code => {
+    this._userService.getUserCode().subscribe(code => {
       this.modalForm.get('code')?.setValue(code);
     });
   }
 
   private loadUserDetail(id: number) {
-    this.userService.getUserDetail(id).subscribe((res: IUser) => {
+    this._userService.getUserDetail(id).subscribe((res: IUser) => {
       this.selectedUser.set(res);
       this.modalForm.patchValue(res);
       this.modalForm.patchValue({ password: '', confirmpassword: '' });
@@ -113,40 +112,40 @@ export class AddUser {
     const id = this.modalForm.value.id || this.selectedUser()?.id;
     if (!id) return;
 
-    this.isLoading.set(true);
-    this.userService.unlockUser(id).subscribe({
+    this._spinnerService.setSpinner(true);
+    this._userService.unlockUser(id).subscribe({
       next: (res: IApiResponse) => {
-        this.toastr.success(res.message, 'Success', { closeButton: true });
+        this._toastr.success(res.message, 'Success', { closeButton: true });
         this.modalForm.get('account_non_locked')?.setValue(true);
         this.selectedUser.update(u => u ? { ...u, account_non_locked: true } : u);
         this.closeAlert();
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
-      error: () => this.isLoading.set(false),
+      error: () => this._spinnerService.setSpinner(false),
     });
   }
 
   showAlert() {
-    this.unlockRef = this.dialog.open(this.confirm, {
+    this._unlockRef = this._dialog.open(this.confirm, {
       panelClass: 'slide-up',
       disableClose: true,
     });
 
-    this.unlockRef.backdropClick().subscribe(() => this.closeAlert());
+    this._unlockRef.backdropClick().subscribe(() => this.closeAlert());
   }
 
   closeAlert() {
-    this.unlockRef.removePanelClass('slide-up');
-    this.unlockRef.addPanelClass('slide-up-close');
+    this._unlockRef.removePanelClass('slide-up');
+    this._unlockRef.addPanelClass('slide-up-close');
 
-    setTimeout(() => this.unlockRef.close(), 400);
+    setTimeout(() => this._unlockRef.close(), 400);
   }
 
   saveForm() {
     this.modalForm.markAllAsTouched();
     if (this.modalForm.invalid) return;
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
     const formData = this.modalForm.value;
 
     const finalData = new FormData();
@@ -157,36 +156,36 @@ export class AddUser {
     finalData.append('user', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
 
     const request$ = formData.id
-      ? this.userService.updateUser(finalData, formData.id)
-      : this.userService.createUser(finalData);
+      ? this._userService.updateUser(finalData, formData.id)
+      : this._userService.createUser(finalData);
 
     request$.subscribe({
       next: (res: IApiResponse) => {
         if (res?.success == true) {
-          this.isLoading.set(false);
+          this._spinnerService.setSpinner(false);
           this.closeDialog(res);
-          this.toastr.success(res.message, 'Success', { closeButton: true });
+          this._toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          this.toastr.error(res.message, 'Error', { closeButton: true });
-          this.isLoading.set(false);
+          this._toastr.error(res.message, 'Error', { closeButton: true });
+          this._spinnerService.setSpinner(false);
         }
       },
-      error: () => this.isLoading.set(false),
+      error: () => this._spinnerService.setSpinner(false),
     });
   }
 
   closeDialog(data?: IApiResponse) {
-    this.dialogRef.removePanelClass('slide-left');
-    this.dialogRef.addPanelClass('slide-left-close');
+    this._dialogRef.removePanelClass('slide-left');
+    this._dialogRef.addPanelClass('slide-left-close');
 
     setTimeout(() => {
       if (data) {
-        this.dialogRef.close({
+        this._dialogRef.close({
           ...this.modalForm.value,
           id: data.post_data_id,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

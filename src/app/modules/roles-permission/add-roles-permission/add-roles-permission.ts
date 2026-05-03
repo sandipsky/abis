@@ -4,10 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@/auth/auth.service';
 import { Button } from '@/shared/components/button/button';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { RolesPermissionService } from '@/modules/roles-permission/roles-permission.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import {
   IPermissionMasterModule,
@@ -25,14 +25,13 @@ import { IDialogData } from '@/shared/models/common.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddRolesPermission {
-  private rolesPermissionService = inject(RolesPermissionService);
-  private toastr = inject(ToastrService);
-  private dialogRef = inject<MatDialogRef<AddRolesPermission>>(MatDialogRef);
-  private fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  private _rolesPermissionService = inject(RolesPermissionService);
+  private _toastr = inject(ToastrService);
+  private _dialogRef = inject<MatDialogRef<AddRolesPermission>>(MatDialogRef);
+  private _fb = inject(FormBuilder);
+  private _spinnerService = inject(SpinnerService);
   data = inject<IDialogData<IRolesPermission>>(MAT_DIALOG_DATA);
 
-  isLoading = signal(false);
   selectedRolesPermission = signal<IRolesPermission | null>(null);
 
   permissions = signal<IPermissionMasterModule[]>([]);
@@ -40,7 +39,7 @@ export class AddRolesPermission {
 
   selectedMaster = computed(() => this.permissions()[this.selectedMasterIndex()] ?? null);
 
-  modalForm: FormGroup = this.fb.nonNullable.group({
+  modalForm: FormGroup = this._fb.nonNullable.group({
     id: [],
     name: [, Validators.required],
     description: [],
@@ -56,14 +55,14 @@ export class AddRolesPermission {
   }
 
   private loadRolesPermissionDetail(id: number) {
-    this.rolesPermissionService.getRolesPermissionDetail(id).subscribe((res: IRolesPermission) => {
+    this._rolesPermissionService.getRolesPermissionDetail(id).subscribe((res: IRolesPermission) => {
       this.selectedRolesPermission.set(res);
       this.modalForm.patchValue(res);
     });
   }
 
   private loadOperations(roleId: number) {
-    this.rolesPermissionService.getRoleOperations(roleId).subscribe((res) => {
+    this._rolesPermissionService.getRoleOperations(roleId).subscribe((res) => {
       this.permissions.set(res ?? []);
     });
   }
@@ -130,45 +129,45 @@ export class AddRolesPermission {
       return;
     }
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
     const formData = {
       ...this.modalForm.value,
       operation_ids: this.selectedOperationIds(),
     };
 
     const request$ = formData.id
-      ? this.rolesPermissionService.updateRolesPermission(formData, formData.id)
-      : this.rolesPermissionService.createRolesPermission(formData);
+      ? this._rolesPermissionService.updateRolesPermission(formData, formData.id)
+      : this._rolesPermissionService.createRolesPermission(formData);
 
     request$.subscribe({
       next: (res: IApiResponse) => {
         if (res?.success == true) {
-          this.isLoading.set(false);
+          this._spinnerService.setSpinner(false);
           this.closeDialog(res);
-          this.toastr.success(res.message, 'Success', { closeButton: true });
+          this._toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          this.toastr.error(res.message, 'Error', { closeButton: true });
-          this.isLoading.set(false);
+          this._toastr.error(res.message, 'Error', { closeButton: true });
+          this._spinnerService.setSpinner(false);
         }
       },
       error: () => {
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
     });
   }
 
   closeDialog(data?: IApiResponse) {
-    this.dialogRef.removePanelClass('slide-up');
-    this.dialogRef.addPanelClass('slide-up-close');
+    this._dialogRef.removePanelClass('slide-up');
+    this._dialogRef.addPanelClass('slide-up-close');
 
     setTimeout(() => {
       if (data) {
-        this.dialogRef.close({
+        this._dialogRef.close({
           ...this.modalForm.value,
           id: data.post_data_id,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

@@ -22,110 +22,110 @@ import { Subject, takeUntil } from 'rxjs';
 export class FormValidation implements OnInit, OnDestroy {
   @Input({ transform: booleanAttribute }) useValidation = true;
 
-  private host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private renderer = inject(Renderer2);
-  private ngControl = inject(NgControl, { optional: true });
+  private _host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private _renderer = inject(Renderer2);
+  private _ngControl = inject(NgControl, { optional: true });
 
-  private errorEl: HTMLElement | null = null;
-  private asteriskEl: HTMLElement | null = null;
-  private destroy$ = new Subject<void>();
+  private _errorEl: HTMLElement | null = null;
+  private _asteriskEl: HTMLElement | null = null;
+  private _destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    if (!this.useValidation || !this.ngControl?.control) return;
+    if (!this.useValidation || !this._ngControl?.control) return;
 
-    this.ngControl.control.events
-      .pipe(takeUntil(this.destroy$))
+    this._ngControl.control.events
+      .pipe(takeUntil(this._destroy$))
       .subscribe(() => this.refresh());
 
     this.refresh();
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
     this.removeError();
     this.removeAsterisk();
   }
 
   private get errorTarget(): HTMLElement {
-    return (this.host.nativeElement.closest('.input-wrapper') as HTMLElement) || this.host.nativeElement;
+    return (this._host.nativeElement.closest('.input-wrapper') as HTMLElement) || this._host.nativeElement;
   }
 
   private refresh(): void {
-    const control = this.ngControl?.control;
+    const control = this._ngControl?.control;
     if (!control) return;
 
     if (this.hasRequiredValidator()) this.addAsterisk();
     else this.removeAsterisk();
 
     const target = this.errorTarget;
-    const host = this.host.nativeElement;
+    const host = this._host.nativeElement;
     const requiredFailed = !!(control.errors?.['required'] || control.errors?.['requiredTrue']);
     const showError = requiredFailed && (control.touched || control.dirty);
 
     if (showError) {
-      this.renderer.addClass(target, 'error');
-      if (target !== host) this.renderer.addClass(host, 'error');
+      this._renderer.addClass(target, 'error');
+      if (target !== host) this._renderer.addClass(host, 'error');
       this.showError();
     } else {
-      this.renderer.removeClass(target, 'error');
-      if (target !== host) this.renderer.removeClass(host, 'error');
+      this._renderer.removeClass(target, 'error');
+      if (target !== host) this._renderer.removeClass(host, 'error');
       this.removeError();
     }
   }
 
   private hasRequiredValidator(): boolean {
-    const control = this.ngControl?.control;
+    const control = this._ngControl?.control;
     if (!control?.validator) return false;
     const result = control.validator({ value: null } as AbstractControl);
     return !!(result?.['required'] || result?.['requiredTrue']);
   }
 
   private addAsterisk(): void {
-    if (this.asteriskEl) return;
+    if (this._asteriskEl) return;
 
-    const formGroup = this.host.nativeElement.closest('.form-group');
+    const formGroup = this._host.nativeElement.closest('.form-group');
     const label = formGroup?.querySelector(':scope > label') as HTMLLabelElement | null;
     if (!label) return;
 
     const existing = label.querySelector('.required-asterisk') as HTMLElement | null;
     if (existing) {
-      this.asteriskEl = existing;
+      this._asteriskEl = existing;
       return;
     }
 
-    const span = this.renderer.createElement('span');
-    this.renderer.addClass(span, 'required-asterisk');
-    this.renderer.addClass(span, 'text-danger');
-    this.renderer.appendChild(span, this.renderer.createText(' *'));
-    this.renderer.appendChild(label, span);
-    this.asteriskEl = span;
+    const span = this._renderer.createElement('span');
+    this._renderer.addClass(span, 'required-asterisk');
+    this._renderer.addClass(span, 'text-danger');
+    this._renderer.appendChild(span, this._renderer.createText(' *'));
+    this._renderer.appendChild(label, span);
+    this._asteriskEl = span;
   }
 
   private removeAsterisk(): void {
-    if (!this.asteriskEl) return;
-    this.renderer.removeChild(this.asteriskEl.parentNode, this.asteriskEl);
-    this.asteriskEl = null;
+    if (!this._asteriskEl) return;
+    this._renderer.removeChild(this._asteriskEl.parentNode, this._asteriskEl);
+    this._asteriskEl = null;
   }
 
   private showError(): void {
-    if (this.errorEl) return;
+    if (this._errorEl) return;
     const anchor = this.errorTarget;
     const parent = anchor.parentNode;
     if (!parent) return;
 
-    const div = this.renderer.createElement('div');
-    this.renderer.addClass(div, 'alert');
-    this.renderer.addClass(div, 'error');
-    this.renderer.appendChild(div, this.renderer.createText('This field is required.'));
+    const div = this._renderer.createElement('div');
+    this._renderer.addClass(div, 'alert');
+    this._renderer.addClass(div, 'error');
+    this._renderer.appendChild(div, this._renderer.createText('This field is required.'));
 
-    this.renderer.insertBefore(parent, div, anchor.nextSibling);
-    this.errorEl = div;
+    this._renderer.insertBefore(parent, div, anchor.nextSibling);
+    this._errorEl = div;
   }
 
   private removeError(): void {
-    if (!this.errorEl) return;
-    this.renderer.removeChild(this.errorEl.parentNode, this.errorEl);
-    this.errorEl = null;
+    if (!this._errorEl) return;
+    this._renderer.removeChild(this._errorEl.parentNode, this._errorEl);
+    this._errorEl = null;
   }
 }

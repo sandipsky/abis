@@ -26,9 +26,9 @@ export class Header {
 
   breadcrumbs = toSignal(this._breadcrumbService.breadcrumbs$);
 
-  private currentUser = toSignal(this._authService.currentUser$);
-  userName = computed(() => this.currentUser()?.name ?? 'Guest');
-  role = computed(() => this.currentUser()?.role_name ?? 'User');
+  private _currentUser = toSignal(this._authService.currentUser$);
+  userName = computed(() => this._currentUser()?.name ?? 'Guest');
+  role = computed(() => this._currentUser()?.role_name ?? 'User');
   notifications = signal<any[]>([]);
 
   // private _newNotification = toSignal(this._notificationService.getNotifications());

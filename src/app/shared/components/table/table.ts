@@ -49,10 +49,10 @@ export class Table {
   onHold = output<any>();
   onPending = output<any>();
 
-  private readonly chipClasses = ['info', 'warn', 'warn', 'cancel'];
+  private readonly _chipClasses = ['info', 'warn', 'warn', 'cancel'];
 
   chipClass(index: number): string {
-    return this.chipClasses[index % this.chipClasses.length];
+    return this._chipClasses[index % this._chipClasses.length];
   }
 
   onSort(event: any) {

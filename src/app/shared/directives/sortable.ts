@@ -23,7 +23,7 @@ export class SortableHeaderDirective {
   @Output() sort = new EventEmitter<SortEvent>();
   static prevSortable: SortColumn = '';
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  constructor(private _el: ElementRef, private _renderer: Renderer2) {}
 
   @HostListener('click') onClick() {
     if(SortableHeaderDirective.prevSortable == this.sortable)
@@ -41,28 +41,28 @@ export class SortableHeaderDirective {
 
   updateStatus() {
 
-    const siblings = this.el.nativeElement.parentElement.querySelectorAll('th[sortable]');
+    const siblings = this._el.nativeElement.parentElement.querySelectorAll('th[sortable]');
     siblings.forEach((sibling:any) => {
-      if (sibling !== this.el.nativeElement) {
+      if (sibling !== this._el.nativeElement) {
         const caretElement = sibling.querySelector('a');
         if (caretElement) {
           ['asc', 'desc', 'none'].forEach(className => {
-            this.renderer.removeClass(caretElement, className);
+            this._renderer.removeClass(caretElement, className);
           });
         }
       }
     });
 
-    const caretElement = this.el.nativeElement.querySelector('a');
+    const caretElement = this._el.nativeElement.querySelector('a');
 
     if (caretElement) {
       ['asc', 'desc', 'none'].forEach(className => {
-        this.renderer.removeClass(caretElement, className);
+        this._renderer.removeClass(caretElement, className);
       });
 
       const directionClass = this.direction === 'asc' ? 'asc' :
                              this.direction === 'desc' ? 'desc' : 'none';
-      this.renderer.addClass(caretElement, directionClass);
+      this._renderer.addClass(caretElement, directionClass);
     }
   }
 

@@ -4,10 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@/auth/auth.service';
 import { Button } from '@/shared/components/button/button';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { CustomerService } from '@/modules/sales/customers/customer.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import { ICustomer } from '@/modules/sales/customers/customer.model';
 import { IDialogData } from '@/shared/models/common.model';
@@ -20,17 +20,16 @@ import { IDialogData } from '@/shared/models/common.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddCustomer {
-  private customerService = inject(CustomerService);
-  private toastr = inject(ToastrService);
-  private dialogRef = inject<MatDialogRef<AddCustomer>>(MatDialogRef);
-  private fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  private _customerService = inject(CustomerService);
+  private _toastr = inject(ToastrService);
+  private _dialogRef = inject<MatDialogRef<AddCustomer>>(MatDialogRef);
+  private _fb = inject(FormBuilder);
+  private _spinnerService = inject(SpinnerService);
   data = inject<IDialogData<ICustomer>>(MAT_DIALOG_DATA);
 
-  isLoading = signal(false);
   selectedCustomer = signal<ICustomer | null>(null);
 
-  modalForm: FormGroup = this.fb.nonNullable.group({
+  modalForm: FormGroup = this._fb.nonNullable.group({
     id: [],
     name: [, Validators.required],
     registration_number: [],
@@ -49,7 +48,7 @@ export class AddCustomer {
   }
 
   private loadCustomerDetail(id: number) {
-    this.customerService.getCustomerDetail(id).subscribe((res: ICustomer) => {
+    this._customerService.getCustomerDetail(id).subscribe((res: ICustomer) => {
       this.selectedCustomer.set(res);
       this.modalForm.patchValue(res);
     });
@@ -63,42 +62,42 @@ export class AddCustomer {
       return;
     }
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
     const formData = this.modalForm.value;
 
     const request$ = formData.id
-      ? this.customerService.updateCustomer(formData, formData.id)
-      : this.customerService.createCustomer(formData);
+      ? this._customerService.updateCustomer(formData, formData.id)
+      : this._customerService.createCustomer(formData);
 
     request$.subscribe({
       next: (res: IApiResponse) => {
         if (res?.success == true) {
-          this.isLoading.set(false);
+          this._spinnerService.setSpinner(false);
           this.closeDialog(res);
-          this.toastr.success(res.message, 'Success', { closeButton: true });
+          this._toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          this.toastr.error(res.message, 'Error', { closeButton: true });
-          this.isLoading.set(false);
+          this._toastr.error(res.message, 'Error', { closeButton: true });
+          this._spinnerService.setSpinner(false);
         }
       },
       error: () => {
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
     });
   }
 
   closeDialog(data?: IApiResponse) {
-    this.dialogRef.removePanelClass('slide-up');
-    this.dialogRef.addPanelClass('slide-up-close');
+    this._dialogRef.removePanelClass('slide-up');
+    this._dialogRef.addPanelClass('slide-up-close');
 
     setTimeout(() => {
       if (data) {
-        this.dialogRef.close({
+        this._dialogRef.close({
           ...this.modalForm.value,
           id: data.post_data_id,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

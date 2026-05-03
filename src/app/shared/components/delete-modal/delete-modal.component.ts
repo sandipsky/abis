@@ -9,19 +9,19 @@ import { Button } from '@/shared/components/button/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteModalComponent {
-  private readonly dialogRef = inject(MatDialogRef<DeleteModalComponent>);
-  private readonly data = inject(MAT_DIALOG_DATA);
+  private readonly _dialogRef = inject(MatDialogRef<DeleteModalComponent>);
+  private readonly _data = inject(MAT_DIALOG_DATA);
 
   deleteItem() {
     this.closeDialog(true);
   }
 
   public closeDialog(isDeleted: boolean = false) {
-    this.dialogRef.removePanelClass('slide-up');
-    this.dialogRef.addPanelClass('slide-up-close');
+    this._dialogRef.removePanelClass('slide-up');
+    this._dialogRef.addPanelClass('slide-up-close');
 
     setTimeout(() => {
-      this.dialogRef.close(isDeleted);
+      this._dialogRef.close(isDeleted);
     }, 300);
   }
 }

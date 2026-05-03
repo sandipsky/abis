@@ -31,11 +31,11 @@ import { map, shareReplay } from 'rxjs';
   `
 })
 export class Icon {
-  private http = inject(HttpClient);
-  private sanitizer = inject(DomSanitizer);
+  private _http = inject(HttpClient);
+  private _sanitizer = inject(DomSanitizer);
 
   // ✅ cache of observables (NOT values)
-  private static cache = new Map<string, any>();
+  private static _cache = new Map<string, any>();
 
   name = input.required<string>();
   size = input<string>('20px');
@@ -51,8 +51,8 @@ export class Icon {
       if (!iconName) return;
 
       // ✅ reuse existing request or cached stream
-      if (!Icon.cache.has(iconName)) {
-        const request$ = this.http
+      if (!Icon._cache.has(iconName)) {
+        const request$ = this._http
           .get(`/svg/${iconName}.svg`, { responseType: 'text' })
           .pipe(
             map(svg => {
@@ -76,17 +76,17 @@ export class Icon {
                 }
               });
 
-              return this.sanitizer.bypassSecurityTrustHtml(svgEl.outerHTML);
+              return this._sanitizer.bypassSecurityTrustHtml(svgEl.outerHTML);
             }),
             // 🔥 THIS is the key: caches + shares request
             shareReplay(1)
           );
 
-        Icon.cache.set(iconName, request$);
+        Icon._cache.set(iconName, request$);
       }
 
       // ✅ subscribe to cached observable
-      Icon.cache.get(iconName).subscribe((res: SafeHtml) => {
+      Icon._cache.get(iconName).subscribe((res: SafeHtml) => {
         this.svgContent.set(res);
       });
     });

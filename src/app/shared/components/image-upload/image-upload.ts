@@ -12,7 +12,7 @@ import { IFile } from '@/shared/models/common.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageUpload {
-  private toastr = inject(ToastrService);
+  private _toastr = inject(ToastrService);
 
   image = input<IFile | null>(null);
   viewMode = input<boolean>(false);
@@ -33,7 +33,7 @@ export class ImageUpload {
 
     const ext = file.name.split('.').pop()?.toLowerCase() || '';
     if (!this.allowedExtensions().includes(ext)) {
-      this.toastr.error(
+      this._toastr.error(
         `Please upload only ${this.allowedExtensions().join(', ')} files`,
         'Error',
         { closeButton: true }
@@ -42,7 +42,7 @@ export class ImageUpload {
     }
 
     if (file.size > this.maxSizeMB() * 1024 * 1024) {
-      this.toastr.error(`File size exceeds ${this.maxSizeMB()}MB limit`, 'Error', {
+      this._toastr.error(`File size exceeds ${this.maxSizeMB()}MB limit`, 'Error', {
         closeButton: true,
       });
       return;

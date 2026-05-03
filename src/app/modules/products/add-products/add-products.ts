@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { DropdownsService } from '@/shared/services/dropdown.service';
 import { ConfigurationService } from '@/shared/services/configuration.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { AuthService } from '@/auth/auth.service';
 import { MastersInlineModalComponent } from '@/modules/master/general-master/add-master-modal/add-master-modal';
 import { AmountPipe } from '@/shared/pipes/amount-pipe';
@@ -26,19 +27,19 @@ import { IDialogData, IFile } from '@/shared/models/common.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProducts {
-  private productService = inject(ProductService);
-  private toastr = inject(ToastrService);
-  private dialog = inject(MatDialog);
-  private dialogRef = inject<MatDialogRef<AddProducts>>(MatDialogRef);
-  private dropdownService = inject(DropdownsService);
-  private configService = inject(ConfigurationService);
-  private fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  private _productService = inject(ProductService);
+  private _toastr = inject(ToastrService);
+  private _dialog = inject(MatDialog);
+  private _dialogRef = inject<MatDialogRef<AddProducts>>(MatDialogRef);
+  private _dropdownService = inject(DropdownsService);
+  private _configService = inject(ConfigurationService);
+  private _fb = inject(FormBuilder);
+  private _spinnerService = inject(SpinnerService);
+  private _authService = inject(AuthService);
   data = inject<IDialogData<IProduct>>(MAT_DIALOG_DATA);
 
   endPoint = 'products';
 
-  isLoading = signal(false);
   selectedProduct = signal<IProduct | null>(null);
   selectedProfileImage = signal<IFile | null>(null);
   deleteImage = signal(false);
@@ -55,7 +56,7 @@ export class AddProducts {
     { id: 'FEFO', name: 'FEFO' },
   ];
 
-  modalForm: FormGroup = this.fb.nonNullable.group({
+  modalForm: FormGroup = this._fb.nonNullable.group({
     id: [],
     name: [, Validators.required],
     code: [],
@@ -87,7 +88,7 @@ export class AddProducts {
   constructor() {}
 
   ngOnInit() {
-    this.operationList.set(this.authService.userPermissionList());
+    this.operationList.set(this._authService.userPermissionList());
 
     if (!this.data?.isView) {
       this.loadDropdowns();
@@ -104,15 +105,15 @@ export class AddProducts {
   }
 
   private loadDropdowns() {
-    this.dropdownService.getMasterDropdown('category').subscribe(res => this.categoryList.set(res));
-    this.dropdownService.getMasterDropdown('units').subscribe(res => this.unitList.set(res));
-    this.dropdownService.getMasterDropdown('taxtypes').subscribe(res => this.taxTypeList.set(res));
-    this.dropdownService.getMasterDropdown('packings').subscribe(res => this.packingList.set(res));
+    this._dropdownService.getMasterDropdown('category').subscribe(res => this.categoryList.set(res));
+    this._dropdownService.getMasterDropdown('units').subscribe(res => this.unitList.set(res));
+    this._dropdownService.getMasterDropdown('taxtypes').subscribe(res => this.taxTypeList.set(res));
+    this._dropdownService.getMasterDropdown('packings').subscribe(res => this.packingList.set(res));
   }
 
   private loadProductDetail(id: number) {
     this.bonus_infos.clear();
-    this.productService.getProductDetail(id).subscribe((res: IProduct) => {
+    this._productService.getProductDetail(id).subscribe((res: IProduct) => {
       this.selectedProduct.set(res);
 
       const bonusCount = res?.bonus_infos?.length || 1;
@@ -129,7 +130,7 @@ export class AddProducts {
   }
 
   // private loadProductImage(imageName: string) {
-  //   this.productService.getProductImage(imageName).subscribe(blob => {
+  //   this._productService.getProductImage(imageName).subscribe(blob => {
   //     this.selectedProfileImage.set({
   //       file: null,
   //       url: URL.createObjectURL(blob),
@@ -147,7 +148,7 @@ export class AddProducts {
 
   addBonus() {
     this.bonus_infos.push(
-      this.fb.group({
+      this._fb.group({
         id: [],
         min_quantity: [],
         bonus_quantity: []
@@ -169,7 +170,7 @@ export class AddProducts {
   //   const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
   //   if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
-  //     this.toastr.error(
+  //     this._toastr.error(
   //       'Please upload only jpg, jpeg, png or pdf files',
   //       'Error',
   //       { closeButton: true }
@@ -178,7 +179,7 @@ export class AddProducts {
   //   }
 
   //   if (file.size > 5 * 1024 * 1024) {
-  //     this.toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
+  //     this._toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
   //     this.selectedProfileImage.set(null);
   //     return;
   //   }
@@ -207,7 +208,7 @@ export class AddProducts {
       return;
     }
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
     const formData = this.modalForm.value;
 
     formData.bonus_infos = formData.bonus_infos?.filter((info: IProductBonusInfo) => info.min_quantity !== null)
@@ -227,38 +228,38 @@ export class AddProducts {
     // finalData.append('product', new Blob([jsonPayload], { type: 'application/json' }));
 
     const request$ = formData.id
-      ? this.productService.updateProduct(formData, formData.id)
-      : this.productService.createProduct(formData);
+      ? this._productService.updateProduct(formData, formData.id)
+      : this._productService.createProduct(formData);
 
     request$.subscribe({
       next: (res: IApiResponse) => {
         if (res?.success == true) {
-          this.isLoading.set(false);
+          this._spinnerService.setSpinner(false);
           this.closeDialog(res);
-          this.toastr.success(res.message, 'Success', { closeButton: true });
+          this._toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          this.toastr.error(res.message, 'Error', { closeButton: true });
-          this.isLoading.set(false);
+          this._toastr.error(res.message, 'Error', { closeButton: true });
+          this._spinnerService.setSpinner(false);
         }
       },
       error: () => {
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
     });
   }
 
   closeDialog(data?: IApiResponse) {
-    this.dialogRef.removePanelClass('slide-up');
-    this.dialogRef.addPanelClass('slide-up-close');
+    this._dialogRef.removePanelClass('slide-up');
+    this._dialogRef.addPanelClass('slide-up-close');
 
     setTimeout(() => {
       if (data) {
-        this.dialogRef.close({
+        this._dialogRef.close({
           ...this.modalForm.value,
           id: data.post_data_id,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

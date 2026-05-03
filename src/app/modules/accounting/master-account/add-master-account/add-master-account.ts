@@ -5,10 +5,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@/auth/auth.service';
 import { Button } from '@/shared/components/button/button';
 import { FormValidation } from '@/shared/directives/form-validation';
 import { MasterAccountService } from '@/modules/accounting/master-account/master-account.service';
+import { SpinnerService } from '@/shared/services/spinner.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import {
   IAccountTypeGroup,
@@ -28,19 +28,18 @@ const ROOT_PARENT: IParentAccount = { id: 0, name: 'Root' };
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddMasterAccount {
-  private masterAccountService = inject(MasterAccountService);
-  private toastr = inject(ToastrService);
-  private dialogRef = inject<MatDialogRef<AddMasterAccount>>(MatDialogRef);
-  private fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  private _masterAccountService = inject(MasterAccountService);
+  private _toastr = inject(ToastrService);
+  private _dialogRef = inject<MatDialogRef<AddMasterAccount>>(MatDialogRef);
+  private _fb = inject(FormBuilder);
+  private _spinnerService = inject(SpinnerService);
   data = inject<IDialogData<IMasterAccount>>(MAT_DIALOG_DATA);
 
-  isLoading = signal(false);
   selectedAccount = signal<IMasterAccount | null>(null);
   accountTypeList = signal<IAccountTypeOption[]>([]);
   parentAccountList = signal<IParentAccount[]>([ROOT_PARENT]);
 
-  modalForm: FormGroup = this.fb.nonNullable.group({
+  modalForm: FormGroup = this._fb.nonNullable.group({
     id: [],
     account_code: [],
     account_name: [, Validators.required],
@@ -67,7 +66,7 @@ export class AddMasterAccount {
   }
 
   private loadAccountTypes() {
-    this.masterAccountService.getAccountTypes().subscribe((groups: IAccountTypeGroup[]) => {
+    this._masterAccountService.getAccountTypes().subscribe((groups: IAccountTypeGroup[]) => {
       const flat: IAccountTypeOption[] = (groups || []).flatMap(g =>
         (g.types || []).map(t => ({ id: t, name: t, group: g.heading }))
       );
@@ -80,17 +79,17 @@ export class AddMasterAccount {
       this.parentAccountList.set([ROOT_PARENT]);
       return;
     }
-    this.masterAccountService.getParentAccount(accountType).subscribe((res: IParentAccount[]) => {
+    this._masterAccountService.getParentAccount(accountType).subscribe((res: IParentAccount[]) => {
       this.parentAccountList.set([ROOT_PARENT, ...(res || [])]);
     });
   }
 
   private loadMasterAccountDetail(id: number) {
-    this.masterAccountService.getMasterAccountDetail(id).subscribe((res: IMasterAccount) => {
+    this._masterAccountService.getMasterAccountDetail(id).subscribe((res: IMasterAccount) => {
       this.selectedAccount.set(res);
 
       if (!this.data?.isView && res?.account_type) {
-        this.masterAccountService.getParentAccount(res.account_type).subscribe((parents: IParentAccount[]) => {
+        this._masterAccountService.getParentAccount(res.account_type).subscribe((parents: IParentAccount[]) => {
           this.parentAccountList.set([ROOT_PARENT, ...(parents || [])]);
           this.modalForm.patchValue(res, { emitEvent: false });
         });
@@ -114,42 +113,42 @@ export class AddMasterAccount {
       return;
     }
 
-    this.isLoading.set(true);
+    this._spinnerService.setSpinner(true);
     const formData = this.modalForm.value;
 
     const request$ = formData.id
-      ? this.masterAccountService.updateMasterAccount(formData, formData.id)
-      : this.masterAccountService.createMasterAccount(formData);
+      ? this._masterAccountService.updateMasterAccount(formData, formData.id)
+      : this._masterAccountService.createMasterAccount(formData);
 
     request$.subscribe({
       next: (res: IApiResponse) => {
         if (res?.success == true) {
-          this.isLoading.set(false);
+          this._spinnerService.setSpinner(false);
           this.closeDialog(res);
-          this.toastr.success(res.message, 'Success', { closeButton: true });
+          this._toastr.success(res.message, 'Success', { closeButton: true });
         } else {
-          this.toastr.error(res.message, 'Error', { closeButton: true });
-          this.isLoading.set(false);
+          this._toastr.error(res.message, 'Error', { closeButton: true });
+          this._spinnerService.setSpinner(false);
         }
       },
       error: () => {
-        this.isLoading.set(false);
+        this._spinnerService.setSpinner(false);
       },
     });
   }
 
   closeDialog(data?: IApiResponse) {
-    this.dialogRef.removePanelClass('slide-left');
-    this.dialogRef.addPanelClass('slide-left-close');
+    this._dialogRef.removePanelClass('slide-left');
+    this._dialogRef.addPanelClass('slide-left-close');
 
     setTimeout(() => {
       if (data) {
-        this.dialogRef.close({
+        this._dialogRef.close({
           ...this.modalForm.value,
           id: data.post_data_id,
         });
       } else {
-        this.dialogRef.close();
+        this._dialogRef.close();
       }
     }, 400);
   }

@@ -64,7 +64,6 @@ export class RangePrintComponent {
   invoiceIds = signal<any[]>([]);
 
   isSearching = signal(false);
-  isLoading = signal(false);
 
   searchTerm = signal('');
   searchTimer: any;
