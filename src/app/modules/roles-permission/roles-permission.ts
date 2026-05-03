@@ -53,7 +53,6 @@ export class RolesPermission implements OnInit {
 
   readonly filterColumns = signal<IFilterColumn[]>([
     { name: 'Name', formcontrolName: 'name', type: 'text' },
-    { name: 'Description', formcontrolName: 'description', type: 'text' },
     {
       name: 'Status',
       type: 'select',
@@ -65,8 +64,8 @@ export class RolesPermission implements OnInit {
   readonly tableHeaders = signal([
     { name: 'SN', property: 'sn', sort: false },
     { name: 'Name', property: 'name', sortBy: 'name', sort: true },
-    { name: 'Description', property: 'description', sortBy: 'description', sort: true },
-    { name: 'Status', property: 'is_active', sortBy: 'isActive', sort: true, status: true, editStatus: false }
+    { name: 'Description', property: 'description', sort: false },
+    { name: 'Status', property: 'is_active', sortBy: 'isActive', sort: false, status: true }
   ]);
 
   ngOnInit(): void {

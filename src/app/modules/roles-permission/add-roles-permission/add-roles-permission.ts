@@ -152,7 +152,7 @@ export class AddRolesPermission {
           this.closeDialog(res);
           this._toastr.success(res.message, 'Success', { closeButton: true });
           if(this._currentUser()?.role_id == formData.id) {
-            this._authService.getUserRoleOperations();
+            this._authService.getUserRoleOperations().subscribe();
           }
         } else {
           this._toastr.error(res.message, 'Error', { closeButton: true });
