@@ -1,15 +1,17 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '@/auth/auth.guard';
+import { permissionGuard } from '@/auth/permission.guard';
 
 export const settingsRoutes: Routes = [
     {
         path: 'configuration',
         loadComponent: () => import('./configuration/configuration').then(m => m.Configuration),
-        canActivate: [authGuard]
+        canActivate: [permissionGuard],
+        data: { permission: 'ViewConfig' }
     },
     {
         path: 'document-number-scheme',
         loadComponent: () => import('./document-number-scheme/document-number-scheme').then(m => m.DocumentNumberScheme),
-        canActivate: [authGuard]
+        canActivate: [permissionGuard],
+        data: { permission: 'ViewDocumentNumberingScheme' }
     },
 ];

@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
 import { Header } from './header/header';
-import { AuthService } from '@/auth/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,12 +10,6 @@ import { AuthService } from '@/auth/auth.service';
   styleUrl: './layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Layout implements OnInit {
-  private _authService = inject(AuthService);
-
+export class Layout {
   isCollapsed = false;
-
-  ngOnInit(): void {
-    this._authService.getUserRoleOperations().subscribe();
-  }
 }

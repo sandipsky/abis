@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { IUserSession } from './auth.model';
+import { IUserSession, Login } from './auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,9 +25,9 @@ export class AuthService {
     return authToken !== null ? true : false;
   }
 
-  login(loginData: any): Observable<any> {
+  login(loginData: Login): Observable<Login> {
     return this._http
-      .post<any>(environment.apiUrl + '/login', loginData);
+      .post<Login>(environment.apiUrl + '/login', loginData);
   }
 
   logout() {
@@ -44,9 +44,5 @@ export class AuthService {
 
   get currentUser(): IUserSession | null {
     return this._currentUser$.value;
-  }
-
-  userPermissionList(): string[] {
-    return this._currentUser$.value?.operations ?? [];
   }
 }

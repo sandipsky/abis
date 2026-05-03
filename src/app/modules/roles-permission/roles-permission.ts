@@ -1,4 +1,5 @@
-import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,7 +40,8 @@ export class RolesPermission implements OnInit {
   // State Signals
   masterList = signal<IRolesPermission[]>([]);
   length = signal(0);
-  operationList = signal<string[]>([]);
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
   filterList = signal<IFilterItem[]>([]);
 
   filterForm = signal({
@@ -68,7 +70,6 @@ export class RolesPermission implements OnInit {
   ]);
 
   ngOnInit(): void {
-    this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();
   }
 

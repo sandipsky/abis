@@ -15,6 +15,8 @@ import {
   IRolesPermission,
 } from '@/modules/roles-permission/roles-permission.model';
 import { IDialogData } from '@/shared/models/common.model';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService } from '@/auth/auth.service';
 
 @Component({
   selector: 'app-add-roles-permission',
@@ -30,7 +32,11 @@ export class AddRolesPermission {
   private _dialogRef = inject<MatDialogRef<AddRolesPermission>>(MatDialogRef);
   private _fb = inject(FormBuilder);
   private _spinnerService = inject(SpinnerService);
+  private _authService = inject(AuthService);
   data = inject<IDialogData<IRolesPermission>>(MAT_DIALOG_DATA);
+  
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
 
   selectedRolesPermission = signal<IRolesPermission | null>(null);
 
@@ -145,6 +151,9 @@ export class AddRolesPermission {
           this._spinnerService.setSpinner(false);
           this.closeDialog(res);
           this._toastr.success(res.message, 'Success', { closeButton: true });
+          if(this._currentUser()?.role_id == formData.id) {
+            this._authService.getUserRoleOperations();
+          }
         } else {
           this._toastr.error(res.message, 'Error', { closeButton: true });
           this._spinnerService.setSpinner(false);

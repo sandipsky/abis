@@ -1,14 +1,43 @@
-import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BreadcrumbService } from '@/shared/services/breadcrumb.service';
 import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { ComponentType } from '@angular/cdk/portal';
 import { Menu } from '@/shared/components/menu/menu';
 import { Button } from '@/shared/components/button/button';
 import { Icon } from '@/shared/components/icon/icon';
 import sidebarData from './sidebar.data';
+import { AuthService } from '@/auth/auth.service';
+
+interface SidebarItem {
+  link: string;
+  label: string;
+  tooltip: string;
+  icon: string;
+  permission?: string | string[] | boolean;
+  children?: SidebarItem[];
+}
+
+interface SidebarGroup {
+  title: string;
+  items: SidebarItem[];
+}
+
+interface QuickAddSubItem {
+  name: string;
+  type?: ComponentType<unknown>;
+}
+
+interface QuickAddItem {
+  name: string;
+  color: string;
+  icon: string;
+  items: QuickAddSubItem[];
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -18,17 +47,20 @@ import sidebarData from './sidebar.data';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Sidebar {
-  sidebarData = sidebarData;
-  activeSubMenu = signal<any>(null);
+  sidebarData = sidebarData as SidebarGroup[];
+  activeSubMenu = signal<SidebarItem | null>(null);
   isCollapsed = model<boolean>(false);
+  showSubMenuAnimation = signal(false);
 
   private _router = inject(Router);
   private _breadcrumbService = inject(BreadcrumbService);
   private _dialog = inject(MatDialog);
+  private _authService = inject(AuthService);
 
-  operationList: any[] = [];
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
 
-  quickAddItems = [
+  quickAddItems: QuickAddItem[] = [
     {
       name: 'Purchase',
       color: '#AB20A9',
@@ -88,16 +120,14 @@ export class Sidebar {
     this.isCollapsed.update(val => !val);
   }
 
-  showSubMenuAnimation = signal(false);
-
-  toggleSubMenu(item: any) {
+  toggleSubMenu(item: SidebarItem) {
     this.activeSubMenu.set(item);
     setTimeout(() => {
       this.showSubMenuAnimation.set(true);
     }, 10);
 
     if (item.children && item.children.length) {
-      const firstAllowedChild = item.children.find((child: any) =>
+      const firstAllowedChild = item.children.find(child =>
         this.hasPermission(child.permission)
       );
 
@@ -121,34 +151,39 @@ export class Sidebar {
     }, 200);
   }
 
-  openQuickAdd(item: any) {
-    this._dialog.open(item.type)
+  openQuickAdd(item: QuickAddSubItem) {
+    if (item.type) {
+      this._dialog.open(item.type);
+    }
   }
 
   hasPermission(permission: string | string[] | boolean | undefined): boolean {
-
     if (permission === true) {
       return true;
     }
 
     if (Array.isArray(permission)) {
-      return permission.some(p => this.operationList.includes(p)) || true;
+      return permission.some(p => this.operationList().includes(p));
     }
 
-    return this.operationList.includes(permission) || true;
+    if (typeof permission === 'string') {
+      return this.operationList().includes(permission);
+    }
+
+    return false;
   }
 
-  hasChildPermission(children: any[]): boolean {
+  hasChildPermission(children: SidebarItem[]): boolean {
     return children?.some(child => this.hasPermission(child.permission));
   }
 
   syncMenuWithUrl() {
     const currentUrl = this._router.url;
 
-    for (const group of sidebarData) {
+    for (const group of this.sidebarData) {
       for (const item of group.items) {
         if (item.children) {
-          const activeChild = item.children.find((child: any) =>
+          const activeChild = item.children.find(child =>
             currentUrl == '/' + child.link
           );
 

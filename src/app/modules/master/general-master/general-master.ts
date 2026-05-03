@@ -1,4 +1,5 @@
-import { Component, Input, TemplateRef, ViewChild, signal, inject, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, signal, computed, inject, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
@@ -49,7 +50,8 @@ export class GeneralMaster implements OnInit {
   masterList = signal<MasterItem[]>([]);
   totalElements = signal<number>(0);
   filterList = signal<IFilterItem[]>([]);
-  operationList = signal<string[]>([]);
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
 
   filterForm = signal({
     pageIndex: 0,
@@ -59,7 +61,6 @@ export class GeneralMaster implements OnInit {
   });
 
   ngOnInit(): void {
-    this.operationList.set(this._authService.userPermissionList());
     this.getMasterList();
   }
 

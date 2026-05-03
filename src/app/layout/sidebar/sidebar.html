@@ -80,15 +80,15 @@
                 <div (click)="clearSubMenu()" class="group-title sub">
                     <app-icon class="rotate-180" size="14px" name="caret"></app-icon>
                     <span>
-                        {{activeSubMenu().label | uppercase }}
+                        {{activeSubMenu()?.label | uppercase }}
                     </span>
                 </div>
 
-                @for(item of activeSubMenu().children; track item.label) {
+                @for(item of activeSubMenu()?.children; track item.label) {
                 @if (hasPermission(item.permission)) {
                 <a [matTooltipClass]="'right'" [matTooltip]="item.label" [matTooltipPosition]="'right'"
                     [matTooltipDisabled]="!isCollapsed()"
-                    (click)="updateBreadCrumb(item.label, item.link, activeSubMenu().label)" [routerLink]="item.link"
+                    (click)="updateBreadCrumb(item.label, item.link, activeSubMenu()?.label)" [routerLink]="item.link"
                     routerLinkActive="active" #rla="routerLinkActive" class="link-item">
                     @if (item.icon) {
                     <app-icon [name]="item.icon"></app-icon>

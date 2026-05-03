@@ -180,9 +180,9 @@ const sidebarData = [
                 icon: 'master',
                 children: [
                     { link: 'units', label: 'Unit', tooltip: 'Unit', icon: 'unit', permission: 'ViewUnit' },
-                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: 'packing', permission: 'ViewPackings' },
+                    { link: 'packings', label: 'Packing', tooltip: 'Packing', icon: 'packing', permission: 'ViewPacking' },
                     { link: 'tax-types', label: 'Tax Type', tooltip: 'Tax Type', icon: 'taxtype', permission: 'ViewTaxType' },
-                    { link: 'category', label: 'Category', tooltip: 'Category', icon: 'category', permission: 'ViewProductCategories' },
+                    { link: 'category', label: 'Category', tooltip: 'Category', icon: 'category', permission: 'ViewCategory' },
                 ]
             },
             {
@@ -210,7 +210,7 @@ const sidebarData = [
                         label: 'Roles and Permission',
                         tooltip: 'Roles and Permission',
                         icon: 'roles-permission',
-                        permission: 'ViewRoles'
+                        permission: 'ViewRole'
                     },
                 ]
             },

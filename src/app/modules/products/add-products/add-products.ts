@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -44,7 +45,8 @@ export class AddProducts {
   selectedProfileImage = signal<IFile | null>(null);
   deleteImage = signal(false);
 
-  operationList = signal<string[]>([]);
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
   categoryList = signal<IDropdownItem[]>([]);
   packingList = signal<IDropdownItem[]>([]);
   taxTypeList = signal<IDropdownItem[]>([]);
@@ -88,8 +90,6 @@ export class AddProducts {
   constructor() {}
 
   ngOnInit() {
-    this.operationList.set(this._authService.userPermissionList());
-
     if (!this.data?.isView) {
       this.loadDropdowns();
     }

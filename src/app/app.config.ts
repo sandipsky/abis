@@ -6,6 +6,7 @@ import { provideToastr } from 'ngx-toastr';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './auth/auth.interceptor';
 import { errorInterceptor } from './shared/interceptors/error.interceptor';
+import { OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,10 @@ export const appConfig: ApplicationConfig = {
     provideToastr(),
     provideHttpClient(
       withInterceptors([errorInterceptor, authInterceptor])
-    )
+    ),
+    {
+      provide: OVERLAY_DEFAULT_CONFIG,
+      useValue: { usePopover: false }
+    }
   ]
 };
