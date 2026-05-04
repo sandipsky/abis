@@ -12,4 +12,5 @@ export interface IUserSession {
     master_modules: string[];
     modules: string[];
     operations: string[];
+    image_url: string;
 }

@@ -1,6 +1,5 @@
 <header class="header">
     <div class="breadcrumb-group">
-        <h1 class="breadcrumb-title">{{ breadcrumbs()?.label == 'Dashboard' ? `Welcome, ${userName()}` : breadcrumbs()?.label }}</h1>
 
         <div class="d-flex align-items-center gap-sm">
             <span (click)="returnHome()" class="breadcrumb-sub-title cursor-pointer">Home</span>
@@ -92,31 +91,30 @@
 
     <img (click)="openRangePrint()" src="../../../svg/printer.svg" alt="">
 
-    <app-menu [contentMode]="true" [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
-        <div dropdown-display class="profile">
+    <app-menu [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
+        <div dropdown-display class="profile-container">
+            @if (imageUrl()) {
+            <img class="profile-image" [src]="selectedProfileImage()?.url" alt="">
+            }
+            @else {
             <img class="profile-image" src="../../../img/profile.png" alt="">
+            }
+
+            <div class="profile-desc">
+                <h1 class="profile-name">{{userName()}}</h1>
+                <h3 class="profile-role">{{role()}}</h3>
+            </div>
         </div>
 
-        <div dropdown-content class="profile-dropdown">
-            <div class="profile-container">
-                <img class="profile-image" src="../../../img/profile.png" alt="">
-
-                <div class="profile-desc">
-                    <h1 class="profile-name">{{userName()}}</h1>
-                    <h3 class="profile-role">{{role()}}</h3>
-                </div>
+        <div dropdown-content>
+            <div dropdown-item class="dropdown-item">
+                <img src="../../../svg/lock.svg" alt="">
+                <span>Change Password</span>
             </div>
 
-            <div class="profile-content">
-                <div class="profile-item">
-                    <img src="../../../svg/lock.svg" alt="">
-                    <span>Change Password</span>
-                </div>
-
-                <div (click)="logout()" class="profile-item">
-                    <img src="../../../svg/logout.svg" alt="">
-                    <span>Logout</span>
-                </div>
+            <div dropdown-item (click)="logout()" class="dropdown-item">
+                <img src="../../../svg/logout.svg" alt="">
+                <span>Logout</span>
             </div>
         </div>
     </app-menu>

@@ -122,23 +122,8 @@ export class AddProducts {
       }
 
       this.modalForm.patchValue(res);
-
-      // if (res?.image_name) {
-      //   this.loadProductImage(res.image_name);
-      // }
     });
   }
-
-  // private loadProductImage(imageName: string) {
-  //   this._productService.getProductImage(imageName).subscribe(blob => {
-  //     this.selectedProfileImage.set({
-  //       file: null,
-  //       url: URL.createObjectURL(blob),
-  //       name: imageName,
-  //       size: this.formatFileSize(blob.size),
-  //     });
-  //   });
-  // }
 
   get f() { return this.modalForm.controls; }
 
@@ -159,48 +144,6 @@ export class AddProducts {
   removeBonus(index: number) {
     this.bonus_infos.removeAt(index);
   }
-
-  // onSelectProfileImage(event: any) {
-  //   if (!event.target.files) {
-  //     this.selectedProfileImage.set(null);
-  //     return;
-  //   }
-
-  //   const file = event.target.files[0];
-  //   const fileExtension = file.name.split('.').pop()?.toLowerCase();
-
-  //   if (!['jpg', 'jpeg', 'png', 'pdf'].includes(fileExtension)) {
-  //     this._toastr.error(
-  //       'Please upload only jpg, jpeg, png or pdf files',
-  //       'Error',
-  //       { closeButton: true }
-  //     );
-  //     return;
-  //   }
-
-  //   if (file.size > 5 * 1024 * 1024) {
-  //     this._toastr.error('File size exceeds 5MB limit', 'Error', { closeButton: true });
-  //     this.selectedProfileImage.set(null);
-  //     return;
-  //   }
-
-  //   this.selectedProfileImage.set({
-  //     file,
-  //     url: URL.createObjectURL(file),
-  //     name: file.name,
-  //     size: this.formatFileSize(file.size)
-  //   });
-  //   this.deleteImage.set(true);
-  // }
-
-  // formatFileSize(size: number): string {
-  //   const kb = size / 1024;
-  //   if (kb < 1024) {
-  //     return kb.toFixed(1) + ' KB';
-  //   }
-  //   const mb = kb / 1024;
-  //   return mb.toFixed(1) + ' MB';
-  // }
 
   saveForm() {
     this.modalForm.markAllAsTouched();

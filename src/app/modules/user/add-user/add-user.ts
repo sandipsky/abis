@@ -67,6 +67,8 @@ export class AddUser {
     },
     { validators: this.passwordMatchValidator }
   );
+  
+  get f() { return this.modalForm.controls; }
 
   ngOnInit() {
     this.loadRoles();
@@ -81,8 +83,6 @@ export class AddUser {
         this.modalForm.addControl('delete_image', this._fb.control(false));
       }
       this.loadUserDetail(userId);
-    } else {
-      this.loadUserCode();
     }
   }
 
@@ -92,21 +92,28 @@ export class AddUser {
     });
   }
 
-  private loadUserCode() {
-    this._userService.getUserCode().subscribe(code => {
-      this.modalForm.get('code')?.setValue(code);
-    });
-  }
-
   private loadUserDetail(id: number) {
     this._userService.getUserDetail(id).subscribe((res: IUser) => {
       this.selectedUser.set(res);
       this.modalForm.patchValue(res);
       this.modalForm.patchValue({ password: '', confirmpassword: '' });
+      if(res.image_url) {
+        this.loadProductImage(res.image_url);
+      }
     });
   }
 
-  get f() { return this.modalForm.controls; }
+  private loadProductImage(url: string) {
+    this._userService.getUserImageByUrl(url).subscribe(blob => {
+      this.selectedProfileImage.set({
+        file: null,
+        url: URL.createObjectURL(blob),
+        name: (blob as any).name,
+        size: blob.size.toString(),
+      });
+    });
+  }
+
 
   unlockUser() {
     const id = this.modalForm.value.id || this.selectedUser()?.id;
@@ -151,7 +158,7 @@ export class AddUser {
     const finalData = new FormData();
     const profile = this.selectedProfileImage();
     if (profile?.file) {
-      finalData.append('file', profile.file);
+      finalData.append('image', profile.file);
     }
     finalData.append('user', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
 

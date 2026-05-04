@@ -10,7 +10,7 @@ import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // Ensuring standalone mode
+  standalone: true, 
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, Button],
@@ -60,15 +60,7 @@ export class Login {
         this._spinnerService.setSpinner(false);
         this._toastr.success("Logged In Successfully.", "Success");
         this._router.navigate(['dashboard']);
-      },
-      error: (err: any) => {
-        this._spinnerService.setSpinner(false);
-        this._toastr.error(
-          err.error.message || 'Unable to Login, Please Try Again!',
-          'Error',
-          { closeButton: true }
-        );
-      },
+      }
     });
   }
 
