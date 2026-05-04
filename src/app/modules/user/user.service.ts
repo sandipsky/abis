@@ -22,8 +22,16 @@ export class UserService {
     return this._http.get<IUser>(`${this.apiUrl}/${id}`);
   }
 
-  getUserCode(): Observable<string> {
-    return this._http.get(`${this.apiUrl}/code`, { responseType: 'text' });
+  getUserImageByUrl(url: string): Observable<Blob> {
+    return this._http.get(environment.apiUrl + url, {
+      responseType: 'blob',
+    });
+  }
+
+  getUserImage(id: number): Observable<Blob> {
+    return this._http.get(`${this.apiUrl}/image/${id}`, {
+      responseType: 'blob',
+    });
   }
 
   createUser(userData: FormData): Observable<IApiResponse> {
