@@ -8,7 +8,7 @@
         <h1 class="logo">ABIS</h1>
         }
 
-        <app-button (click)="toggleSidebar()" type="outlined" icon="sidebar" iconSize="16px" size="sm" />
+        <app-button [class.rotate-180]="isCollapsed()" (click)="toggleSidebar()" type="outlined" icon="sidebar" iconSize="16px" size="sm" />
     </div>
 
     <div class="links-container">

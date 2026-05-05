@@ -3,12 +3,12 @@ import { Layout } from './layout/layout';
 import { authGuard } from './auth/auth.guard';
 import { loginGuard } from './auth/login.guard';
 import { permissionGuard } from './auth/permission.guard';
-import { masterRoutes } from './modules/master/master.routes';
-import { settingsRoutes } from './modules/settings/settings.routes';
-import { purchaseRoutes } from './modules/purchase/purchase.routes';
-import { salesRoutes } from './modules/sales/sales.routes';
-import { inventoryRoutes } from './modules/inventory/inventory.routes';
-import { accountingRoutes } from './modules/accounting/accounting.routes';
+import { masterRoutes } from './features/master/master.routes';
+import { settingsRoutes } from './features/settings/settings.routes';
+import { purchaseRoutes } from './features/purchase/purchase.routes';
+import { salesRoutes } from './features/sales/sales.routes';
+import { inventoryRoutes } from './features/inventory/inventory.routes';
+import { accountingRoutes } from './features/accounting/accounting.routes';
 
 export const routes: Routes = [
     {
@@ -23,27 +23,27 @@ export const routes: Routes = [
             },
             {
                 path: 'dashboard',
-                loadComponent: () => import('./modules/dashboard/dashboard').then(m => m.Dashboard),
+                loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard),
             },
             {
                 path: 'products',
-                loadComponent: () => import('./modules/products/products').then(m => m.Products),
+                loadComponent: () => import('./features/products/products').then(m => m.Products),
                 canActivate: [permissionGuard],
                 data: { permission: 'ViewProduct' }
             },
             {
                 path: 'reports',
-                loadComponent: () => import('./modules/reports/reports').then(m => m.Reports),
+                loadComponent: () => import('./features/reports/reports').then(m => m.Reports),
             },
             {
                 path: 'user',
-                loadComponent: () => import('./modules/user/user').then(m => m.User),
+                loadComponent: () => import('./features/user/user').then(m => m.User),
                 canActivate: [permissionGuard],
                 data: { permission: 'ViewUser' }
             },
             {
                 path: 'roles-permissions',
-                loadComponent: () => import('./modules/roles-permission/roles-permission').then(m => m.RolesPermission),
+                loadComponent: () => import('./features/roles-permission/roles-permission').then(m => m.RolesPermission),
                 canActivate: [permissionGuard],
                 data: { permission: 'ViewRole' }
             },

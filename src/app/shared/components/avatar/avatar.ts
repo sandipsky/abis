@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
 
 @Component({
   selector: 'app-avatar',
@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Avatar {
-  imageUrl = input<string | null>('');
+  imageUrl = model<string | null>('');
   name = input<string>('');
   size = input<string>('32px');
   color = input<string>('orange');

@@ -30,6 +30,10 @@
     border-top-right-radius: 8px;
     position: relative;
     flex-wrap: wrap;
+
+    .close-btn .btn {
+        color: var(--error);
+    }
 }
 
 .modal-title-group {

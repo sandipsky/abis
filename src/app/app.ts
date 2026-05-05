@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoadingSpinner } from './shared/components/loading-spinner/loading-spinner';
-import { ConfigurationService } from './modules/settings/configuration/configuration.service';
+import { ConfigurationService } from './features/settings/configuration/configuration.service';
 
 @Component({
   selector: 'app-root',

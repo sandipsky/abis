@@ -1,0 +1,64 @@
+<div class="modal">
+    <div class="modal-header">
+        <div class="modal-title-group">
+            <h1 class="modal-title">Edit Configuration</h1>
+            <h2 class="modal-sub-title">
+                Provide required information to update configuration.
+            </h2>
+        </div>
+
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
+    </div>
+
+    <div class="modal-body">
+        <form class="modal-content" [formGroup]="modalForm">
+            <div class="row g-2">
+                @for (item of configItems(); track item.name) {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>{{ item.label }}</label>
+
+                            @if (item.type === ConfigInputType.Text) {
+                                <input type="text" class="form-control"
+                                    [placeholder]="'Enter ' + item.label"
+                                    [formControlName]="item.name" />
+                            }
+
+                            @if (item.type === ConfigInputType.Select) {
+                                <ng-select [items]="item.options ?? []" bindLabel="name" bindValue="id"
+                                    [placeholder]="'Select ' + item.label"
+                                    [formControlName]="item.name">
+                                </ng-select>
+                            }
+
+                            @if (item.type === ConfigInputType.Radio) {
+                                <div class="d-flex gap-md align-items-center">
+                                    @for (option of item.options ?? []; track option.id) {
+                                        <label>
+                                            <input class="form-check-input" type="radio"
+                                                [name]="item.name" [value]="option.id"
+                                                [formControlName]="item.name" />
+                                            {{ option.name }}
+                                        </label>
+                                    }
+                                </div>
+                            }
+
+                            @if (item.type === ConfigInputType.Toggle) {
+                                <label class="switch">
+                                    <input [formControlName]="item.name" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+        <app-button (click)="saveForm()" type="primary" label="Update Configuration" />
+    </div>
+</div>

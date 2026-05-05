@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
 import { Header } from './header/header';
-import { ConfigurationService } from '@/modules/settings/configuration/configuration.service';
+import { ConfigurationService } from '@/features/settings/configuration/configuration.service';
 
 @Component({
   selector: 'app-layout',

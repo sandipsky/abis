@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RangePrintComponent } from '@/shared/components/range-print/range-print';
 import { Button } from '@/shared/components/button/button';
 import { AuthService } from '@/auth/auth.service';
-import { UserService } from '@/modules/user/user.service';
+import { UserService } from '@/features/user/user.service';
 import { IFile } from '@/shared/models/common.model';
 import { Icon } from '@/shared/components/icon/icon';
 import { Breadcrumb } from '@/shared/components/breadcrumb/breadcrumb';

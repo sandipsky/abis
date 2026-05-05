@@ -51,7 +51,7 @@ ne-datepicker {
     gap: 12px !important;
     box-shadow: 0 1px 2px 0 rgba(13, 13, 18, 0.06);
 
-    color: var(--text-primary) !important;
+    color: var(--text-accent) !important;
     font-size: var(--font-size-small) !important;
     font-weight: var(--font-weight-regular) !important;
     line-height: var(--line-height-small) !important;
@@ -71,7 +71,7 @@ ne-datepicker {
 }
 
 .nepali-date-picker .datepicker__options-container {
-  background: var(--primary) !important;
+  background: var(--accent) !important;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
@@ -96,8 +96,8 @@ ne-datepicker {
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 3px var(--primary-bg);
-    border: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+    border: var(--accent);
   }
 }
 
