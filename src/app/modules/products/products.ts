@@ -10,7 +10,7 @@ import { forkJoin } from 'rxjs';
 import { AuthService } from '@/auth/auth.service';
 import { ProductService } from './product.service';
 import { DropdownsService } from '@/shared/services/dropdown.service';
-import { ConfigurationService } from '@/shared/services/configuration.service';
+import { ConfigurationService } from '@/modules/settings/configuration/configuration.service';
 import { ExcelService } from '@/shared/services/excel.service';
 
 // Modules & Components

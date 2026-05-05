@@ -7,7 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 
 import { Button } from '@/shared/components/button/button';
-import { ConfigurationService } from '@/shared/services/configuration.service';
+import { ConfigurationService } from '@/modules/settings/configuration/configuration.service';
 import { SpinnerService } from '@/shared/services/spinner.service';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import { IDialogData } from '@/shared/models/common.model';

@@ -7,7 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { DropdownsService } from '@/shared/services/dropdown.service';
-import { ConfigurationService } from '@/shared/services/configuration.service';
+import { ConfigurationService } from '@/modules/settings/configuration/configuration.service';
 import { SpinnerService } from '@/shared/services/spinner.service';
 import { AuthService } from '@/auth/auth.service';
 import { MastersInlineModalComponent } from '@/modules/master/general-master/add-master-modal/add-master-modal';

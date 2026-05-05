@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '@/auth/auth.service';
-import { ConfigurationService } from '@/shared/services/configuration.service';
+import { ConfigurationService } from '@/modules/settings/configuration/configuration.service';
 
 import { Button } from '@/shared/components/button/button';
 import { AddConfigSetup } from './add-config-setup/add-config-setup';

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { IApiResponse } from '@/shared/models/api-response.model';
 import type { IConfigItem } from '@/modules/settings/configuration/configuration.model';
 
