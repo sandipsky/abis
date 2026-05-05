@@ -11,10 +11,11 @@ import { Button } from '@/shared/components/button/button';
 import { AuthService } from '@/auth/auth.service';
 import { UserService } from '@/modules/user/user.service';
 import { IFile } from '@/shared/models/common.model';
+import { Icon } from '@/shared/components/icon/icon';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, Menu, Button],
+  imports: [RouterModule, Menu, Button, Icon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

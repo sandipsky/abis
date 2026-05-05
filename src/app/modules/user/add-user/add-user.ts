@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -17,6 +17,8 @@ import { IApiResponse } from '@/shared/models/api-response.model';
 import { IDropdownItem } from '@/shared/models/dropdown.model';
 import { IUser } from '@/modules/user/user.model';
 import { IDialogData, IFile } from '@/shared/models/common.model';
+import { AuthService } from '@/auth/auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-user',
@@ -27,6 +29,7 @@ import { IDialogData, IFile } from '@/shared/models/common.model';
 })
 export class AddUser {
   private _userService = inject(UserService);
+  private _authService = inject(AuthService);
   private _dropdownService = inject(DropdownsService);
   private _toastr = inject(ToastrService);
   private _dialog = inject(MatDialog);
@@ -34,6 +37,9 @@ export class AddUser {
   private _fb = inject(FormBuilder);
   private _spinnerService = inject(SpinnerService);
   data = inject<IDialogData<IUser>>(MAT_DIALOG_DATA);
+
+  private _currentUser = toSignal(this._authService.currentUser$, { initialValue: null });
+  operationList = computed<string[]>(() => this._currentUser()?.operations ?? []);
 
   selectedUser = signal<IUser | null>(null);
   roleList = signal<IDropdownItem[]>([]);
@@ -67,7 +73,7 @@ export class AddUser {
     },
     { validators: this.passwordMatchValidator }
   );
-  
+
   get f() { return this.modalForm.controls; }
 
   ngOnInit() {
@@ -97,7 +103,7 @@ export class AddUser {
       this.selectedUser.set(res);
       this.modalForm.patchValue(res);
       this.modalForm.patchValue({ password: '', confirmpassword: '' });
-      if(res.image_url) {
+      if (res.image_url) {
         this.loadProductImage(res.image_url);
       }
     });
@@ -172,6 +178,9 @@ export class AddUser {
           this._spinnerService.setSpinner(false);
           this.closeDialog(res);
           this._toastr.success(res.message, 'Success', { closeButton: true });
+          if (this._currentUser()?.id == formData.id) {
+            this._authService.getUserRoleOperations().subscribe();
+          }
         } else {
           this._toastr.error(res.message, 'Error', { closeButton: true });
           this._spinnerService.setSpinner(false);
