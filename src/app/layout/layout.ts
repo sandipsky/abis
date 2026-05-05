@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
 import { Header } from './header/header';
+import { ConfigurationService } from '@/shared/services/configuration.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,6 +11,12 @@ import { Header } from './header/header';
   styleUrl: './layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Layout {
+export class Layout implements OnInit {
+  private _configurationService = inject(ConfigurationService);
+
   isCollapsed = false;
+
+  ngOnInit() {
+    this._configurationService.getConfigurations().subscribe();
+  }
 }

@@ -13,7 +13,7 @@ export class App {
   private _configurationService = inject(ConfigurationService);
 
   constructor() {
-    this._configurationService.loadSavedPreferences();
+    // this._configurationService.loadSavedPreferences();
   }
 
 }

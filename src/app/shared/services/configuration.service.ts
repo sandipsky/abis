@@ -2,53 +2,34 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { IApiResponse } from '@/shared/models/api-response.model';
+import type { IConfigItem } from '@/modules/settings/configuration/configuration.model';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigurationService {
-    applyAccent(colorValue: string) {
-        const body = document.body;
+    private _http = inject(HttpClient);
+    readonly apiUrl = environment.apiUrl + '/configurations';
 
-        // remove all accent classes first
-        body.classList.remove('accent-green', 'accent-blue', 'accent-red');
+    private _configurations$ = new BehaviorSubject<IConfigItem[]>([]);
+    readonly configurations$ = this._configurations$.asObservable();
 
-        switch (colorValue) {
-            case '1': // Green
-                body.classList.add('accent-green');
-                break;
-
-            case '0': // Blue
-                body.classList.add('accent-blue');
-                break;
-
-            default:
-                body.classList.add('accent-green');
-        }
-
-        localStorage.setItem('accent', colorValue);
+    get configurations(): IConfigItem[] {
+        return this._configurations$.value;
     }
 
-    applyTheme(themeValue: string) {
-        const body = document.body;
-
-        if (themeValue === '0') {
-            body.classList.add('dark-theme');
-        } else {
-            body.classList.remove('dark-theme');
-        }
-
-        localStorage.setItem('theme', themeValue);
+    getConfigurations(): Observable<IConfigItem[]> {
+        return this._http.get<IConfigItem[]>(this.apiUrl).pipe(
+            tap(configs => this._configurations$.next(configs ?? []))
+        );
     }
 
-    loadSavedPreferences() {
-        const savedTheme = localStorage.getItem('theme');
-        const savedAccent = localStorage.getItem('accent');
-
-        if (savedTheme) {
-            this.applyTheme(savedTheme);
-        }
-
-        if (savedAccent) {
-            this.applyAccent(savedAccent);
-        }
+    editConfigurations(data: IConfigItem[]): Observable<IApiResponse> {
+        return this._http.put<IApiResponse>(`${this.apiUrl}/edit`, data).pipe(
+            tap(res => {
+                if (res?.success) {
+                    this.getConfigurations().subscribe();
+                }
+            })
+        );
     }
 }

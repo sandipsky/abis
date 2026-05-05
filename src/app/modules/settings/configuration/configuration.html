@@ -1,0 +1,27 @@
+<div class="section main">
+    <div class="section-header">
+        <h1 class="section-title">Configuration</h1>
+
+        <div class="section-header-btn-group">
+            @if (hasPermission('EditConfig')) {
+                <app-button (click)="showForm()" type="primary" icon="edit" label="Edit Details" />
+            }
+        </div>
+    </div>
+
+    <div class="section-content">
+        <div class="config-container">
+            @for (item of configList(); track item.name) {
+                <div class="config-item">
+                    <div class="config-item-title-group">
+                        <h1 class="config-title">{{ item.label }}</h1>
+                    </div>
+
+                    <div class="btn btn-outlined no-hover">
+                        {{ getDisplayValue(item) }}
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

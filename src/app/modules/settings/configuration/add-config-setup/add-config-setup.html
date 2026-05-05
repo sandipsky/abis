@@ -1,131 +1,51 @@
 <div class="modal">
     <div class="modal-header">
-        <div class="modal-titles">
-            <h1 class="modal-title">
-                Edit behaviour
-            </h1>
+        <div class="modal-title-group">
+            <h1 class="modal-title">Edit Configuration</h1>
             <h2 class="modal-sub-title">
-                Modify as Needed
+                Provide required information to update configuration.
             </h2>
         </div>
-        <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
-            <img src="../../../../../assets/svg/close.svg" alt="">
-        </button>
+
+        <app-button class="close-btn" (click)="closeDialog()" type="outlined" [rounded]="true" size="sm" icon="close" />
     </div>
+
     <div class="modal-body">
-        @for (item of selectedData; track $index) {
+        <form class="modal-content" [formGroup]="modalForm">
+            <div class="row g-2">
+                @for (item of configItems(); track item.name) {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>{{ item.label }}</label>
 
-        @if (item.type == 'image') {
-        <input #profileImageInput type="file" id="uploadProfileImage" accept="image/*" (change)="onSelectImage($event)"
-            hidden />
+                            @if (item.type === ConfigInputType.Text) {
+                                <input type="text" class="form-control"
+                                    [placeholder]="'Enter ' + item.label"
+                                    [formControlName]="item.name" />
+                            }
 
-        <div style="position: static; width: 100%;" class="upload-section">
+                            @if (item.type === ConfigInputType.Select) {
+                                <ng-select [items]="item.options ?? []" bindLabel="name" bindValue="id"
+                                    [placeholder]="'Select ' + item.label"
+                                    [formControlName]="item.name">
+                                </ng-select>
+                            }
 
-            <div class="image-container">
-                @if (selectedImg != null) {
-                <img [src]="selectedImg.url" alt="" />
-                }
-                @else {
-
-                <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="120" height="120" rx="60" fill="#EBEDEB" />
-                    <path
-                        d="M82.5 25.25C89.2655 25.25 94.75 30.7345 94.75 37.5V82.5C94.75 89.2655 89.2655 94.75 82.5 94.75H37.5C35.1653 94.75 32.9806 94.0954 31.1221 92.96C30.2901 92.4516 29.5232 91.8475 28.8379 91.1621C26.6222 88.9464 25.25 85.8825 25.25 82.5V37.5C25.25 30.7345 30.7345 25.25 37.5 25.25H82.5ZM37.5 27.25C31.8391 27.25 27.25 31.8391 27.25 37.5V82.5C27.25 85.3307 28.396 87.8921 30.252 89.748C30.8261 90.3222 31.4679 90.8285 32.1641 91.2539C33.7176 92.2031 35.5435 92.75 37.5 92.75H82.5C88.1609 92.75 92.75 88.1609 92.75 82.5V37.5C92.75 31.8391 88.1609 27.25 82.5 27.25H37.5ZM63.6406 56.8115C65.9915 54.3509 69.929 54.878 71.6201 57.8281L79.3232 71.2666C80.4828 73.2894 79.1376 76 76.7051 76H43.2949C40.7949 76 39.4682 73.1576 40.7529 71.1406L44.8037 64.7812C46.2148 62.5658 49.0155 61.7671 51.334 62.9805L53.6445 64.1895C54.8138 64.8011 56.2301 64.5687 57.1709 63.584L63.6406 56.8115ZM69.8848 58.8223C68.8425 57.0044 66.4926 56.7221 65.0869 58.1934L58.6162 64.9658C57.0716 66.5821 54.6911 66.9942 52.7168 65.9609L50.4062 64.752C49.0412 64.0379 47.3635 64.4845 46.4902 65.8555L42.4395 72.2148C41.9152 73.0379 42.5338 74 43.2949 74H76.7051C77.4463 74 78.0612 73.0865 77.5879 72.2607L69.8848 58.8223ZM48.75 45C50.8211 45 52.5 46.6789 52.5 48.75C52.5 50.8211 50.8211 52.5 48.75 52.5C46.6789 52.5 45 50.8211 45 48.75C45 46.6789 46.6789 45 48.75 45Z"
-                        fill="#F7F7F7" />
-                </svg>
-
-                }
-            </div>
-
-            <div>
-                <h1 class="title">
-                    Company Image
-                </h1>
-                <h3 class="sub-title">
-                    Choose an image that best represents your company.
-                </h3>
-            </div>
-
-            @if (selectedImg != null) {
-            <button (click)="profileImageInput.click()" class="btn btn-secondary">
-                Replace Image
-            </button>
-            <button (click)="selectedImg=null" class="btn btn-secondary">
-                Delete Image
-            </button>
-            }
-            @else {
-            <button (click)="profileImageInput.click()" class="btn btn-secondary">
-                Add Company Image
-            </button>
-            }
-        </div>
-        }
-
-        @if (item.type == 'input') {
-        <div class="form-group">
-            <label for="">{{item.name}}</label>
-            <input class="form-control" type="text" [(ngModel)]="item.value">
-        </div>
-        }
-
-        @if (item.type == 'dropdown') {
-        <div class="form-group">
-            <label for="">{{item.name}}</label>
-            <ng-select class="form-control" type="text" bindValue="id" bindLabel="name" [items]="item.valueList"
-                [(ngModel)]="item.value"></ng-select>
-        </div>
-        }
-
-        @if (item.type == 'radio') {
-            <label>{{ item.name }}</label>
-
-            <div style="border-bottom: 1px solid var(--separator-color); padding-bottom: 24px;" class="d-flex gap-md">
-                @for (value of item.valueList; track $index) {
-                <label style="background: inherit !important; color: inherit !important;" class="btn btn-outlined">
-
-                    <input class="" type="radio" [name]="item.name" [value]="value.id"
-                        [(ngModel)]="item.value" />
-
-                    <span class="">
-                        {{ value.name }}
-                    </span>
-
-                </label>
+                            @if (item.type === ConfigInputType.Toggle) {
+                                <label class="switch">
+                                    <input [formControlName]="item.name" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            }
+                        </div>
+                    </div>
                 }
             </div>
-        }
-
-        @if (item.type == 'toggle') {
-        <div style="border-bottom: 1px solid var(--separator-color); padding-bottom: 24px;" class="d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="config-title">
-                    {{item.name}}
-                </h1>
-                <h3 class="config-sub-title">
-                    {{item.description}}
-                </h3>
-            </div>
-
-            <label class="switch">
-                <input [(ngModel)]="item.value" type="checkbox">
-                <span class="slider round"></span>
-            </label>
-        </div>
-        }
-
-        }
+        </form>
     </div>
+
     <div class="modal-footer">
-        <button (click)="closeDialog()" type="button" class="btn btn-secondary btn-outlined">
-            Cancel
-        </button>
-        <button (click)="saveConfiguration()" type="button" class="btn btn-primary">
-            Edit behaviour
-        </button>
+        <app-button (click)="closeDialog()" type="secondary" label="Cancel" />
+        <app-button (click)="saveForm()" type="primary" label="Update Configuration" />
     </div>
-</div>
-
-<div *ngIf="isLoading == true">
-    <app-loading-spinner></app-loading-spinner>
 </div>
