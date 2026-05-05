@@ -17,6 +17,10 @@
             height: calc(100vh - 225px);
         }
 
+        .section-content.scrollable {
+            max-height: calc(100vh - 150px);
+        }
+
         &:has(.filter-options) .table-responsive {
             height: calc(100vh - 300px);
         }

@@ -18,7 +18,6 @@ import {
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.html',
-  styleUrl: './configuration.scss',
   standalone: true,
   imports: [CommonModule, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
