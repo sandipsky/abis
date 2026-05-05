@@ -1,25 +1,5 @@
 <header class="header">
-    <div class="breadcrumb-group">
-
-        <h1 class="breadcrumb-title">{{ breadcrumbs()?.label == 'Dashboard' ? `Welcome, ${userName()}` : breadcrumbs()?.label }}</h1>
-
-
-        <div class="d-flex align-items-center gap-sm">
-            <span (click)="returnHome()" class="breadcrumb-sub-title cursor-pointer">Home</span>
-            <img class="caret" src="../../../svg/caret.svg" alt="">
-
-            @if(breadcrumbs()?.prefix) {
-            <span class="breadcrumb-sub-title">{{ breadcrumbs()?.prefix }}</span>
-            <img class="caret" src="../../../svg/caret.svg" alt="">
-            }
-
-            @if(breadcrumbs(); as crumbs) {
-            <a class="breadcrumb-sub-title active" [routerLink]="crumbs.link">
-                {{ crumbs.label }}
-            </a>
-            }
-        </div>
-    </div>
+    <app-breadcrumb [welcomeName]="userName()"></app-breadcrumb>
 
     <img (click)="openCalculator()" src="../../../svg/calculator.svg" alt="">
 
@@ -96,12 +76,10 @@
 
     <app-menu [closeOnItemClick]="false" [showActiveState]="false" [mode]="'right'">
         <div dropdown-display class="profile-container">
-            @if (imageUrl()) {
-            <img class="profile-image" [src]="selectedProfileImage()?.url" alt="">
-            }
-            @else {
-            <img class="profile-image" src="../../../img/profile.png" alt="">
-            }
+            <app-avatar
+                [imageUrl]="selectedProfileImage()?.url ?? ''"
+                [name]="userName()">
+            </app-avatar>
 
             <div class="profile-desc">
                 <h1 class="profile-name">{{userName()}}</h1>

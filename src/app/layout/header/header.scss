@@ -11,40 +11,6 @@
         cursor: pointer;
     }
 
-    .breadcrumb-group {
-        flex: 1;
-
-        .breadcrumb-title {
-            color: var(--text-primary);
-            font-size: 18px;
-            font-weight: 600;
-            line-height: 28px;
-        }
-
-        .breadcrumb-sub-title {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 20px;
-            text-decoration: none;
-
-            &.active {
-                cursor: pointer;
-                color: var(--accent);
-            }
-        }
-    }
-
-    .profile-image {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
     .profile-container {
         display: flex;
         align-items: center;

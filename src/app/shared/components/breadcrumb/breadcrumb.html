@@ -1,0 +1,19 @@
+<div class="breadcrumb-group">
+    <h1 class="breadcrumb-title">{{ title() }}</h1>
+
+    <div class="d-flex align-items-center gap-sm">
+        <span (click)="returnHome()" class="breadcrumb-sub-title cursor-pointer">{{ homeLabel() }}</span>
+        <img class="caret" src="../../../../svg/caret.svg" alt="">
+
+        @if (breadcrumbs()?.prefix) {
+        <span class="breadcrumb-sub-title">{{ breadcrumbs()?.prefix }}</span>
+        <img class="caret" src="../../../../svg/caret.svg" alt="">
+        }
+
+        @if (breadcrumbs(); as crumbs) {
+        <a class="breadcrumb-sub-title active" [routerLink]="crumbs.link">
+            {{ crumbs.label }}
+        </a>
+        }
+    </div>
+</div>

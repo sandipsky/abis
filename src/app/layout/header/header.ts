@@ -12,10 +12,12 @@ import { AuthService } from '@/auth/auth.service';
 import { UserService } from '@/modules/user/user.service';
 import { IFile } from '@/shared/models/common.model';
 import { Icon } from '@/shared/components/icon/icon';
+import { Breadcrumb } from '@/shared/components/breadcrumb/breadcrumb';
+import { Avatar } from '@/shared/components/avatar/avatar';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, Menu, Button, Icon],
+  imports: [RouterModule, Menu, Button, Icon, Breadcrumb, Avatar],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
