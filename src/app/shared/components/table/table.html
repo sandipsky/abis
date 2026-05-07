@@ -9,9 +9,9 @@
           <a class="sort-by">{{ item.name }}</a>
         </th>
         } @else {
-          <th>
-            {{ item.name }}
-          </th>
+        <th>
+          {{ item.name }}
+        </th>
         }
         }
 
@@ -80,6 +80,7 @@
         </td>
         }
 
+        @if (actions().length > 0) {
         <td class="print-hidden">
           <div class="actions">
             <app-menu [mode]="'right'">
@@ -111,6 +112,7 @@
             </app-menu>
           </div>
         </td>
+        }
       </tr>
       }
     </tbody>

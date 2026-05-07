@@ -1,20 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { SharedModule } from '@/shared/shared-module';
-import { DocumentNumberSchemeService } from '@/features/settings/document-number-scheme/document-number-scheme.service';
-import { IDocumentNumberScheme } from '@/features/settings/document-number-scheme/document-number-scheme.model';
+import { SpinnerService } from '@/shared/services/spinner.service';
+import { DocumentNumberSchemeService } from './document-number-scheme.service';
+import { IDocumentNumberScheme } from './document-number-scheme.model';
 
 @Component({
   selector: 'app-document-number-scheme',
@@ -25,69 +15,30 @@ import { IDocumentNumberScheme } from '@/features/settings/document-number-schem
 })
 export class DocumentNumberScheme implements OnInit {
   private _documentNumberService = inject(DocumentNumberSchemeService);
-  private _dialog = inject(MatDialog);
-  private _dialogRef: MatDialogRef<unknown> | null = null;
+  private _spinnerService = inject(SpinnerService);
 
-  formTitle = '';
-  documentNumberView = signal<IDocumentNumberScheme | null>(null);
+  documentNumberList = signal<IDocumentNumberScheme[]>([]);
 
-  private _documentNumbers = toSignal(this._documentNumberService.documentNumbers$, {
-    initialValue: [] as IDocumentNumberScheme[],
-  });
-
-  documentNumberList = computed<IDocumentNumberScheme[]>(() => {
-    const items = this._documentNumbers();
-    const fiscalYear = localStorage.getItem('fiscalYear');
-    if (!fiscalYear) return items;
-
-    const startYear = String(fiscalYear).split('-')[0];
-    const endYear = String(Number(startYear) + 1);
-    return items.map(doc => ({
-      ...doc,
-      prefix: fiscalYear + doc.prefix,
-      start_date: startYear + doc.start_date,
-      end_date: endYear + doc.end_date,
-    }));
-  });
-
-  @ViewChild('modal', { static: true }) modal!: TemplateRef<unknown>;
+  readonly tableHeaders = signal([
+    { name: 'SN', property: 'sn', sort: false },
+    { name: 'Name', property: 'name', sort: false },
+    { name: 'Prefix', property: 'prefix', sort: false },
+    { name: 'Start Number', property: 'start_no', sort: false },
+    { name: 'End Number', property: 'end_no', sort: false },
+    { name: 'Length', property: 'body_length', sort: false },
+  ]);
 
   ngOnInit(): void {
-    this._documentNumberService.getDocumentNumbers().subscribe();
+    this.getDocumentNumberList();
   }
 
-  viewBillingTerm(documentNumber: IDocumentNumberScheme): void {
-    this.formTitle = 'View';
-    this.documentNumberView.set({ ...documentNumber });
-
-    if (documentNumber.url) {
-      this._documentNumberService.getCurrentNumber(documentNumber.url).subscribe(res => {
-        const current = this.documentNumberView();
-        if (current) {
-          this.documentNumberView.set({ ...current, current_no: res });
-        }
-      });
-    }
-
-    this._dialogRef = this._dialog.open(this.modal, {
-      panelClass: 'slide-up',
-      enterAnimationDuration: '0ms',
-      exitAnimationDuration: '0ms',
-      disableClose: true,
+  getDocumentNumberList(): void {
+    this._spinnerService.setSpinner(true);
+    this._documentNumberService.getDocumentNumberList().subscribe({
+      next: (res: IDocumentNumberScheme[]) => {
+        this.documentNumberList.set(res || []);
+        this._spinnerService.setSpinner(false);
+      },
     });
-
-    this._dialogRef.backdropClick().subscribe(() => {
-      this.closeDialog();
-    });
-  }
-
-  closeDialog() {
-    if (!this._dialogRef) return;
-    this._dialogRef.removePanelClass('slide-up');
-    this._dialogRef.addPanelClass('slide-up-close');
-
-    setTimeout(() => {
-      this._dialogRef?.close();
-    }, 400);
   }
 }
