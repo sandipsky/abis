@@ -13,8 +13,8 @@
             <th></th>
           </tr>
         </thead>
-        <tbody *ngIf="documentNumberList.length > 0;">
-          <tr *ngFor="let product of documentNumberList; let i = index;">
+        <tbody *ngIf="documentNumberList().length > 0;">
+          <tr *ngFor="let product of documentNumberList(); let i = index;">
             <td>{{ i + 1 }} </td>
             <td>{{ product?.module || "-" }}</td>
             <td>{{ product?.name || "-" }}</td>
@@ -56,7 +56,7 @@
             <label>Module</label>
             <div class="chip primary">
               <div class="circle"></div>
-              {{ documentNumberView?.module || '-' }}
+              {{ documentNumberView()?.module || '-' }}
             </div>
           </div>
 
@@ -67,7 +67,7 @@
             <label>Sub Module</label>
             <div class="chip info">
               <div class="circle"></div>
-              {{ documentNumberView?.name || '-' }}
+              {{ documentNumberView()?.name || '-' }}
             </div>
           </div>
         </div>
@@ -83,14 +83,14 @@
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Start Date</label>
-                  <span>{{ documentNumberView?.start_date || '-' }}</span>
+                  <span>{{ documentNumberView()?.start_date || '-' }}</span>
                 </div>
               </div>
 
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>End Date</label>
-                  <span>{{ documentNumberView?.end_date || '-' }}</span>
+                  <span>{{ documentNumberView()?.end_date || '-' }}</span>
                 </div>
               </div>
             </div>
@@ -109,28 +109,28 @@
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Numbering Style</label>
-                  <span>{{ documentNumberView?.numbering_style || '-' }}</span>
+                  <span>{{ documentNumberView()?.numbering_style || '-' }}</span>
                 </div>
               </div>
 
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Prefix</label>
-                  <span>{{ documentNumberView?.prefix || '-' }}</span>
+                  <span>{{ documentNumberView()?.prefix || '-' }}</span>
                 </div>
               </div>
 
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Body Length</label>
-                  <span>{{ documentNumberView?.body_length || '-' }}</span>
+                  <span>{{ documentNumberView()?.body_length || '-' }}</span>
                 </div>
               </div>
 
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Total Length</label>
-                  <span>{{ documentNumberView?.total_length || '-' }}</span>
+                  <span>{{ documentNumberView()?.total_length || '-' }}</span>
                 </div>
               </div>
 
@@ -150,14 +150,14 @@
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Start No.</label>
-                  <div>{{ documentNumberView?.start_no || '-' }}</div>
+                  <div>{{ documentNumberView()?.start_no || '-' }}</div>
                 </div>
               </div>
 
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>Current No.</label>
-                  <span>{{ documentNumberView?.current_no || '-' }}</span>
+                  <span>{{ documentNumberView()?.current_no || '-' }}</span>
                 </div>
               </div>
 
@@ -165,7 +165,7 @@
               <div class="col-md-3">
                 <div class="form-group view">
                   <label>End No.</label>
-                  <span>{{ documentNumberView?.end_no || '-' }}</span>
+                  <span>{{ documentNumberView()?.end_no || '-' }}</span>
                 </div>
               </div>
 
