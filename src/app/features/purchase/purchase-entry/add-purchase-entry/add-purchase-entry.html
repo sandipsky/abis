@@ -1,0 +1,805 @@
+<div class="modal full">
+  <div class="modal-header">
+    <div class="modal-titles">
+      <h1 class="modal-title">
+        {{ data?.isView == true ? 'View' : showPage == 'edit' ? 'Update' :
+        'Add'}} Purchase Entry
+        <span>( {{isImport == true ? 'Import' : 'Local'}} )</span>
+      </h1>
+      <h2 class="modal-sub-title">
+        Provide required information for Purchase Entry.
+      </h2>
+    </div>
+
+    <div class="d-flex align-items-center gap-md">
+      @if (data.isView == true) {
+      <button appPreventDefault title="Alt+P" [accessKey]="'p'" *ngIf="operationList.includes('ExportPurchaseEntries')"
+        (click)="getPDF()" class="btn btn-secondary">
+        <img src="../../../../assets/svg/print.svg" alt="" />
+        Print
+      </button>
+      <button appPreventDefault title="Alt+E" [accessKey]="'e'" *ngIf="operationList.includes('ExportPurchaseEntries')"
+        (click)="exportExcelForView()" class="btn btn-secondary">
+        <img src="../../../../assets/svg/download.svg" alt="excel icon" />
+        Export
+      </button>
+      }
+    </div>
+
+    <button (click)="closeDialog()" type="button" class="btn btn-outlined rounded small close-btn">
+      <img src="../../../../../assets/svg/close.svg" alt="">
+    </button>
+  </div>
+  <div class="modal-body">
+    @if (data.isView != true) {
+    <form class="modal-content" [formGroup]="purchaseEntryForm">
+
+      <div  class="section section-dark">
+        <div formGroupName="purchaseInfo" class="row g-2">
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Vendor Name</label>
+              <ng-select #partyInput [addTag]="operationList.includes('CreateVendor')" style="width: 100%"
+                [items]="vendorList" bindLabel="name" bindValue="id" (change)="getVendorInformation($event)"
+                placeholder="Select Vendor" (focus)="searchTerm=''" formControlName="vendor_id" [loading]="isSearching"
+                (input)="onSearch($event,'vendor')"
+                [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'">
+                <ng-template ng-tag-tmp let-search="searchTerm">
+                  <div>+ Add "{{search}}"</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Posting Date <span class="text-danger">*</span></label>
+              <ne-datepicker [calendarView]="dateType"
+                *ngIf="operationList.includes('ModifyPostingDate') else readonlydate" [date]="fVendor['date'].value"
+                [hasMultipleCalendarView]="false" (dateInBS)="setPostingDate($event)" primaryColor="black" language="en"
+                dateFormat="yyyy-mm-dd">
+              </ne-datepicker>
+
+              <ng-template #readonlydate>
+                <input type="text" class="form-control" [readonly]="true" [class.readonly]="true" [value]="fVendor['date'].value" />
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Bill Number</label>
+              <input type="text" class="form-control" placeholder="Enter Bill Number" formControlName="bill_no" />
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Bill Date <span class="text-danger"> *</span></label>
+              <ne-datepicker [calendarView]="dateType" [date]="fVendor['bill_date'].value"
+                [hasMultipleCalendarView]="false" (dateInBS)="setBillDate($event)" primaryColor="black" language="en"
+                dateFormat="yyyy-mm-dd">
+              </ne-datepicker>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Division
+                <span *ngIf="requiredDivision" class="text-danger">*</span></label>
+              <ng-select [readonly]="productInfo.controls.length > 1 || showPage == 'edit'" [items]="divisionList"
+                bindLabel="name" bindValue="id" placeholder="Select Division" formControlName="division_id"
+                (change)="onChangeDivision($event); clearProductList();">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Purchase Order No.</label>
+              <ng-select [multiple]="true" (change)="getPurchaseOrderDetail($event)" [items]="purchaseOrderList"
+                placeholder="Select Purchase Order No." formControlName="master_purchase_order_ids" bindValue="id"
+                bindLabel="name" name="select">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Transaction Type</label>
+              <ng-select placeholder="Select Transaction Type" formControlName="transaction_type" name="select"
+                required>
+                <ng-option *ngFor="let transType of transctionTypes" [value]="transType">
+                  {{ transType }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group">
+              <label>Rounding</label>
+              <label class="switch">
+                <input (change)="calculateRound()" formControlName="rounded" type="checkbox" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="section party">
+              <h1 class="section-title">Vendor Details</h1>
+              <div class="row">
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Registration Number</label>
+                    <span>{{vendorDetail?.registration_no || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Address</label>
+                    <span>{{vendorDetail?.address || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Contact</label>
+                    <span>{{vendorDetail?.contact_no || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Purchase Entry No.</label>
+                    <div class="chip info">
+                      <div class="circle"></div>
+                      {{fVendor['system_pe_no'].value || '-'}}
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="section party product">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1 class="section-title">
+            Product Details
+          </h1>
+
+          <div (click)="addProductInfo()" class="btn btn-outlined-primary">
+            + Add Product
+          </div>
+        </div>
+
+        <div style="height: auto" class="table-responsive">
+          <table class="table product-table">
+            <thead class="sticky-top">
+              <tr>
+                <th>SN</th>
+                <th>Product Name</th>
+                <th>Code</th>
+                <th>Unit</th>
+                <th>Batch</th>
+                <th>Expiry Date</th>
+                <th *ngIf="companyDetails?.company_reg_type != 'PAN'">Tax</th>
+                <th class="text-end">Qty</th>
+                <th *ngIf="companyDetails?.is_free_sample == '1'" class="text-end">
+                  Free
+                </th>
+                <th class="text-end">Rate</th>
+                <th class="text-end">MRP</th>
+                <th class="text-end">SP</th>
+                <th *ngIf="companyDetails?.mfg_date== '1'">Mfg. Date</th>
+                <th *ngIf="companyDetails?.trade_price == '1'" class="text-end">
+                  TP
+                </th>
+                <th class="text-end">Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody formArrayName="productInfo">
+              <tr *ngFor="let product of productInfo.controls; index as i"
+                [ngClass]="{'focused-row': focusedRowIndex === i}">
+                <ng-container [formGroupName]="i">
+                  <td style="width: 50px">{{ i+1 || '-'}}</td>
+
+                  <td>
+                    <div class="form-group mb-0">
+                      <ng-select [appendTo]="'body'" #productInput [addTag]="operationList.includes('CreateProduct')"
+                        style="min-width: 50px" [items]="productList" bindLabel="name" bindValue="id"
+                        (change)="getProductDetail($event,i)" placeholder="Enter Product Name"
+                        formControlName="product_id" [loading]="isSearching" (input)="onSearch($event,'product')"
+                        [notFoundText]="searchTerm == '' ? 'Please Type to Search' : 'Not Found'"
+                        (focus)="searchTerm=''; onFocus(i)" (blur)="onBlur()">
+                        <ng-template ng-tag-tmp let-search="searchTerm">
+                          <div>+ Add "{{search}}"</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </td>
+
+                  <td style="width: 50px">
+                    {{product.get('product_code')?.value || '-'}}
+                  </td>
+
+                  <td>
+                    <div style="width: 100px" class="form-group mb-0">
+                      <ng-select [appendTo]="'body'" #unitInput
+                        [items]="productInfo?.controls[i]?.get('unitList')?.value"
+                        (keyup.enter)="productInfo?.controls[i].get('allow_batch').value == true ? focusIn('batch',i) : productInfo.controls[i].get('allow_expiry').value == true ? focusIn('expiry',i) : focusIn('qty',i)"
+                        bindLabel="name" bindValue="id" (change)="onChangeUnit($event,i)" placeholder="Select Unit"
+                        formControlName="unit_id" (focus)="onFocus(i)" (blur)="onBlur()">
+                      </ng-select>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div style="width: 110px" class="form-group mb-0">
+                      <input #batchInput [readonly]="productInfo?.controls[i]?.get('allow_batch')?.value == false"
+                        [class.readonly]="productInfo?.controls[i]?.get('allow_batch')?.value == false"
+                        (keyup.enter)="productInfo?.controls[i]?.get('allow_expiry')?.value == false ? focusIn('qty', i) : focusIn('expiry',i)"
+                        (focus)="onFocus(i)" (blur)="onBlur();" class="form-control" placeholder="Batch No."
+                        (keyup)="getTotalCalculated(i);" formControlName="batch" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #expiryInput [readonly]="productInfo?.controls[i]?.get('allow_expiry')?.value == false"
+                        [class.readonly]="productInfo?.controls[i]?.get('allow_expiry')?.value == false"
+                        (focus)="onFocus(i)" (blur)="onBlur()" (keyup.enter)="focusIn('qty',i)" type="text"
+                        appDateInput="dd/mm/yyyy"
+                        (change)="getTotalCalculated(i)" class="form-control"
+                        [placeholder]="companyDetails?.allow_day_in_expiry == '1' ? 'dd/mm/yyyy' : 'mm/yyyy'"
+                        formControlName="expiry_date" />
+                    </div>
+                  </td>
+
+                  <td style="width: 80px" *ngIf="companyDetails?.company_reg_type != 'PAN'">
+                    {{productInfo?.controls[i]?.get('tax')?.value || '-'}}
+                  </td>
+
+                  <td class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #qtyInput appPositiveNumbers
+                        *ngIf="productInfo?.controls[i]?.get('is_primary').value == true" (focus)="onFocus(i)"
+                        (blur)="onBlur()"
+                        (keyup.enter)="companyDetails?.is_free_sample == '1' ? focusIn('free',i): focusIn('rate',i)"
+                        type="number" class="form-control text-end" placeholder="Qty"
+                        (keyup)="convertTo('quantity', 'quantity_secondary', 'Secondary', i); calculateBonusQty(i)"
+                        formControlName="quantity" />
+
+                      <input #qtyInput appPositiveNumbers
+                        *ngIf="productInfo?.controls[i]?.get('is_primary').value == false" type="number"
+                        class="form-control text-end" placeholder="Qty" (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="companyDetails?.is_free_sample == '1' ? focusIn('free',i): focusIn('rate',i)"
+                        (keyup)="convertTo('quantity_secondary', 'quantity','Primary', i); calculateBonusQty(i)"
+                        formControlName="quantity_secondary" />
+                    </div>
+                  </td>
+
+                  <td *ngIf="companyDetails?.is_free_sample == '1'" class="text-end">
+                    <div style="width: 70px" class="form-group mb-0">
+                      <input #freeInput appPositiveNumbers
+                        *ngIf="productInfo.controls[i].get('is_primary').value == true" (focus)="onFocus(i)"
+                        (blur)="onBlur()" (keyup.enter)="focusIn('rate',i)" type="number" class="form-control text-end"
+                        placeholder="Free"
+                        (keyup)="convertTo('free_quantity', 'free_quantity_secondary', 'Secondary', i)"
+                        formControlName="free_quantity" />
+
+                      <input #freeInput appPositiveNumbers
+                        *ngIf="productInfo.controls[i].get('is_primary').value == false" type="number"
+                        class="form-control text-end" placeholder="Free" (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="focusIn('rate',i)"
+                        (keyup)="convertTo('free_quantity_secondary', 'free_quantity','Primary', i);"
+                        formControlName="free_quantity_secondary" />
+                    </div>
+                  </td>
+
+                  <td class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #rateInput appPositiveNumbers
+                        *ngIf="productInfo.controls[i].get('is_primary').value == true" (focus)="onFocus(i)"
+                        (blur)="onBlur()" (keyup.enter)="focusIn('mrp',i)" type="number" class="form-control text-end"
+                        placeholder="Rate" (keyup)="convertTo('rate', 'rate_secondary','Secondary', i);"
+                        formControlName="rate" />
+
+                      <input #rateInput appPositiveNumbers
+                        *ngIf="productInfo.controls[i].get('is_primary').value == false" type="number"
+                        (focus)="onFocus(i)" (blur)="onBlur()" (keyup.enter)="focusIn('mrp',i)"
+                        class="form-control text-end" placeholder="Rate"
+                        (keyup)="convertTo('rate_secondary', 'rate','Primary', i);" formControlName="rate_secondary" />
+                    </div>
+                  </td>
+
+                  <td class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #mrpInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="focusIn('sp',i)" (keyup)="getTotalCalculated(i)" type="number"
+                        class="form-control text-end" placeholder="MRP" formControlName="mrp" />
+                    </div>
+                  </td>
+
+                  <td class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #spInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="companyDetails?.mfg_date == '1' && productInfo.controls[i].get('allow_mfg').value == true ? focusIn('mfg',i): companyDetails?.trade_price == '1' ? focusIn('tp',i): editAmount ? focusIn('rowamount', i) : focusIn('product',i)"
+                        *ngIf="productInfo.controls[i].get('is_primary').value == true" type="number"
+                        class="form-control text-end" placeholder="SP" formControlName="selling_price"
+                        (keyup)="convertTo('selling_price', 'selling_price_secondary','Secondary',i);" />
+
+                      <input #spInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="companyDetails?.mfg_date == '1' && productInfo.controls[i].get('allow_mfg').value == true ? focusIn('mfg',i): companyDetails?.trade_price == '1' ? focusIn('tp',i): editAmount ? focusIn('rowamount', i) : focusIn('product',i)"
+                        *ngIf="productInfo.controls[i].get('is_primary').value == false" type="number"
+                        class="form-control text-end" placeholder="SP" formControlName="selling_price_secondary"
+                        (keyup)="convertTo('selling_price_secondary', 'selling_price','Primary', i);" />
+                    </div>
+                  </td>
+
+                  <td *ngIf="companyDetails?.mfg_date == '1'" class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #mfgInput [readonly]="productInfo.controls[i].get('allow_mfg')?.value == false"
+                        [class.readonly]="productInfo.controls[i].get('allow_mfg')?.value == false" (focus)="onFocus(i)"
+                        (blur)="onBlur()"
+                        (keyup.enter)="companyDetails?.trade_price == '1' ? focusIn('tp',i): editAmount ? focusIn('rowamount', i) : focusIn('product',i)"
+                        style="width: 110px" type="text" appDateInput="dd/mm/yyyy"
+                         (change)="getTotalCalculated(i)"
+                        class="form-control"
+                        [placeholder]="companyDetails?.allow_day_in_expiry == '1' ? 'dd/mm/yyyy' : 'mm/yyyy'"
+                        formControlName="mfg_date" />
+                    </div>
+                  </td>
+
+                  <td *ngIf="companyDetails?.trade_price == '1'" class="text-end">
+                    <div style="width: 90px" class="form-group mb-0">
+                      <input #tpInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="editAmount ? focusIn('rowamount', i) : focusIn('product',i)"
+                        *ngIf="productInfo.controls[i].get('is_primary').value == true" type="number"
+                        class="form-control text-end" placeholder="TP" formControlName="trade_price"
+                        (keyup)="convertTo('trade_price', 'trade_price_secondary', 'Secondary', i);" />
+
+                      <input #tpInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="editAmount ? focusIn('rowamount', i) : focusIn('product',i)"
+                        *ngIf="productInfo.controls[i].get('is_primary').value == false" type="number"
+                        class="form-control text-end" placeholder="TP" formControlName="trade_price_secondary"
+                        (keyup)="convertTo('trade_price_secondary','trade_price', 'Primary', i);" />
+                    </div>
+                  </td>
+
+                  <td class="text-end">
+                    <div class="form-group mb-0">
+                      <input #rowAmountInput appPositiveNumbers (focus)="onFocus(i)" (blur)="onBlur()"
+                        (keyup.enter)="focusIn('product',i)" type="number" class="form-control text-end"
+                        placeholder="0.00" formControlName="total_amount" (keyup)="onChangeRowTotal(i)" />
+                    </div>
+                  </td>
+
+                  <td class="extra-small deletable-cell">
+                    <img appPreventDefault [accessKey]="i === focusedRowIndex ? 'd' : ''" title="Alt+D"
+                      style="width: 20px; height: 20px; cursor: pointer" (click)="onDeleteRow(i)"
+                      src="../../../../assets/svg/trash.svg" alt="" />
+                  </td>
+                </ng-container>
+              </tr>
+              <ng-template #nodata>
+                <tr>
+                  <td colspan="13">
+                    No Data
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div formGroupName="tableInfo" class="section party">
+        <h1 class="section-title">Summary</h1>
+
+        <div style="width: 100%" class="row g-2">
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Gross Amount</label>
+              <input class="form-control text-end readonly" [readOnly]="true" type="text"
+                [value]="purchaseEntryForm.get('tableInfo')?.value.sub_total">
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Discount Type</label>
+              <div class="d-flex gap-md">
+                <select class="form-control" (change)="calculateDiscount()" formControlName="discount_type" required>
+                  <option *ngFor="let type of discountTypes" [ngValue]="type">
+                    {{ type }}
+                  </option>
+                </select>
+                <input style="width: 90%;" appPositiveNumbers type="text" class="form-control"
+                  (keyup)="calculateDiscount()" formControlName="discount_value" placeholder="0.00" />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Discount</label>
+              <input class="form-control text-end readonly" [readOnly]="true" type="text" [value]="discountAmount">
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Non Taxable Amount</label>
+              <input class="form-control text-end readonly" [readOnly]="true" type="text"
+                [value]="purchaseEntryForm.get('tableInfo')?.value.non_taxable_amount">
+            </div>
+          </div>
+
+          <ng-container *ngIf="companyDetails?.company_reg_type !== 'PAN'">
+            <div class="col-md-1-5">
+              <div class="form-group view">
+                <label>Taxable Amount</label>
+                <input class="form-control text-end readonly" [readOnly]="true" type="text"
+                  [value]="purchaseEntryForm.get('tableInfo')?.value.taxable_amount">
+              </div>
+            </div>
+
+            <div class="col-md-1-5">
+              <div class="form-group view">
+                <label>Tax</label>
+                <input class="form-control text-end readonly" [readOnly]="true" type="text"
+                  [value]="purchaseEntryForm.get('tableInfo')?.value.total_tax">
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Rounding</label>
+              <input class="form-control text-end readonly" [readOnly]="true" type="text"
+                [value]="purchaseEntryForm.get('tableInfo')?.value.rounding">
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Net Amount</label>
+              <input [readOnly]="!allowNetAmountRounding" [class.readonly]="!allowNetAmountRounding" appPositiveNumbers
+                type="number" class="form-control text-end" (keyup)="onChangeGrandTotal()" formControlName="grand_total"
+                placeholder="00.00" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div formGroupName="tableInfo" class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Remarks</label>
+            <textarea class="form-control remarks" formControlName="remarks"
+              placeholder="Enter remarks here..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    }
+    @else {
+    <div class="modal-content">
+
+      <!-- 🔹 Purchase Info Section -->
+      <div class="section section-dark">
+        <div class="row g-2">
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Vendor Name</label>
+              <span>{{selectedPurchaseEntry?.vendor_name || '-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Posting Date</label>
+              <span>
+                {{ selectedPurchaseEntry?.date }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Bill Number</label>
+              <span>{{selectedPurchaseEntry?.bill_no || '-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Bill Date</label>
+              <span>
+                {{ selectedPurchaseEntry?.bill_date }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Division</label>
+              <span>{{selectedPurchaseEntry?.division_name || '-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Purchase Order No.</label>
+              <span>{{selectedPurchaseEntry?.master_purchase_orders || '-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Transaction Type</label>
+              <span>{{selectedPurchaseEntry?.transaction_type || '-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Rounding</label>
+              <span>{{selectedPurchaseEntry?.rounded ? 'On' : 'Off'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="section party">
+              <h1 class="section-title">Vendor Details</h1>
+
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Registration Number</label>
+                    <span>{{vendorDetail?.registration_no || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Address</label>
+                    <span>{{vendorDetail?.address || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Contact</label>
+                    <span>{{vendorDetail?.contact_no || '-'}}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group view">
+                    <label>Purchase Entry No.</label>
+                    <div class="chip info">
+                      <div class="circle"></div>
+                      {{selectedPurchaseEntry?.system_pe_no || '-'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 🔹 Product Section -->
+      <div class="section party">
+        <h1 class="section-title">Product Details</h1>
+
+        <div class="table-responsive">
+          <table class="table product-table">
+            <thead class="sticky-top">
+              <tr>
+                <th>SN</th>
+                <th>Product Name</th>
+                <th>Code</th>
+                <th>Unit</th>
+                <th>Batch</th>
+                <th>Expiry Date</th>
+                <th *ngIf="companyDetails?.company_reg_type != 'PAN'">Tax</th>
+                <th class="text-end">Qty</th>
+                <th *ngIf="companyDetails?.is_free_sample == '1'" class="text-end">Free</th>
+                <th class="text-end">Rate</th>
+                <th class="text-end">MRP</th>
+                <th class="text-end">SP</th>
+                <th *ngIf="companyDetails?.mfg_date == '1'">Mfg. Date</th>
+                <th *ngIf="companyDetails?.trade_price == '1'" class="text-end">TP</th>
+                <th class="text-end">Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let product of selectedPurchaseEntry?.purchaseEntries; index as i">
+                <td>{{i+1}}</td>
+                <td>{{product?.product_name || '-'}}</td>
+                <td>{{product?.product_code || '-'}}</td>
+                <td>{{product?.selected_unit_name || '-'}}</td>
+                <td>{{product?.batch || '-'}}</td>
+                <td>{{product?.expiry_date}}</td>
+
+                <td *ngIf="companyDetails?.company_reg_type != 'PAN'">
+                  {{product?.tax || '-'}}
+                </td>
+
+                <td class="text-end">
+                  {{product?.is_primary ? (product?.quantity | amount) : (product?.quantity_secondary | amount)}}
+                </td>
+
+                <td *ngIf="companyDetails?.is_free_sample == '1'" class="text-end">
+                  {{product?.is_primary ? (product?.free_quantity | amount) : (product?.free_quantity_secondary |
+                  amount)}}
+                </td>
+
+                <td class="text-end">
+                  {{product?.is_primary ? (product?.rate | amount) : (product?.rate_secondary | amount)}}
+                </td>
+
+                <td class="text-end">{{product?.mrp | amount}}</td>
+
+                <td class="text-end">
+                  {{product?.is_primary ? (product?.selling_price | amount) : (product?.selling_price_secondary |
+                  amount)}}
+                </td>
+
+                <td *ngIf="companyDetails?.mfg_date == '1'">
+                  {{product?.mfg_date}}
+                </td>
+
+                <td *ngIf="companyDetails?.trade_price == '1'" class="text-end">
+                  {{product?.is_primary ? (product?.trade_price | amount) : (product?.trade_price_secondary | amount)}}
+                </td>
+
+                <td class="text-end">
+                  {{product?.amount | amount}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- 🔹 Summary Section -->
+      <div class="section section-dark">
+        <h1 class="section-title">Product Summary</h1>
+
+        <div class="row">
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Gross Amount</label>
+              <span>{{selectedPurchaseEntry?.sub_total | amount}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Discount Type</label>
+              <span>{{selectedPurchaseEntry?.discount_type}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Discount</label>
+              <span>{{selectedPurchaseEntry?.discount | amount}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Non Taxable Amount</label>
+              <span>{{selectedPurchaseEntry?.non_taxable_amount | amount}}</span>
+            </div>
+          </div>
+
+          <ng-container *ngIf="companyDetails?.company_reg_type !== 'PAN'">
+            <div class="col-md-1-5">
+              <div class="form-group view">
+                <label>Taxable Amount</label>
+                <span>{{selectedPurchaseEntry?.taxable_amount | amount}}</span>
+              </div>
+            </div>
+
+            <div class="col-md-1-5">
+              <div class="form-group view">
+                <label>Tax</label>
+                <span>{{selectedPurchaseEntry?.total_tax | amount}}</span>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Rounding</label>
+              <span>{{selectedPurchaseEntry?.rounding | amount}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-1-5">
+            <div class="form-group view">
+              <label>Net Amount</label>
+              <span>{{selectedPurchaseEntry?.grand_total | amount}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 🔹 Remarks -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group view">
+            <label>Remarks</label>
+            <span>{{selectedPurchaseEntry?.remarks || '-'}}</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- <app-activity-log [activityLog]="selectedPurchaseEntry?.purchaseEntryActivityLogs">
+    </app-activity-log> -->
+    }
+  </div>
+
+  <div *ngIf="data.isView != true" class="modal-footer">
+    <div class="button-group">
+      <button (click)="closeDialog()" type="button" class="btn btn-secondary btn-outlined">
+        Cancel
+      </button>
+
+      <button (click)="saveForm()" type="button" class="btn btn-primary">
+        {{ showPage == 'edit' ? 'Update': 'Add'}} Purchase Entry
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #confirm>
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-titles">
+        <h1 class="modal-title">Confirmation Purchase Order</h1>
+      </div>
+      <button (click)="closeConfirmDialog()" type="button" class="btn-close modal-title">
+        <img src="../../../../../assets/svg/close.svg" alt="" />
+      </button>
+    </div>
+    <div class="modal-body">
+      Only authorized user can change Purchase Order once you Save it. <br />
+      Are you sure you want to Save it?
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeConfirmDialog()" type="button" class="btn btn-secondary btn-outlined">
+        Cancel
+      </button>
+      <button (click)="confirmDialogRef.close(true)" type="button" class="btn btn-primary">
+        Save
+      </button>
+    </div>
+  </div>
+</ng-template>

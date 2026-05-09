@@ -1,1 +1,35 @@
-<p>purchase-entry works!</p>
+<div class="section main">
+    <div class="section-header">
+        <filter-section (onFilterChange)="applyFilter($event)"
+                        [filterColumns]="filterColumns()"
+                        searchBy="purchaseNo">
+        </filter-section>
+
+        <div class="section-header-btn-group">
+            @if (hasPermission('ExportPurchaseEntries')) {
+                <app-button (click)="printPage()" type="secondary" icon="print" label="Print" />
+                <app-button (click)="getMasterList(true)" type="secondary" icon="download" label="Export" />
+            }
+
+            @if (hasPermission('CreatePurchaseEntries')) {
+                <app-button (click)="showForm()" type="primary" icon="add" label="Add Purchase Entry" />
+            }
+        </div>
+    </div>
+
+    <div class="section-content">
+        <app-table
+            (sortChange)="onSort($event)"
+            [tableHeaders]="tableHeaders()"
+            [filterData]="filterForm()"
+            [tableData]="masterList()">
+        </app-table>
+
+        <app-paginator
+            (pageChange)="onChangedPage($event)"
+            [pageSize]="filterForm().pageSize"
+            [length]="length()"
+            [pageIndex]="filterForm().pageIndex">
+        </app-paginator>
+    </div>
+</div>

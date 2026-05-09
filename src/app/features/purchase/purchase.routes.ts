@@ -12,13 +12,13 @@ export const purchaseRoutes: Routes = [
         path: 'purchase-entry',
         loadComponent: () => import('./purchase-entry/purchase-entry').then(m => m.PurchaseEntry),
         canActivate: [permissionGuard],
-        data: { permission: 'ViewPurchaseEntries' }
+        data: { permission: 'ViewPurchaseEntry' }
     },
     {
         path: 'purchase-return',
         loadComponent: () => import('./purchase-return/purchase-return').then(m => m.PurchaseReturn),
         canActivate: [permissionGuard],
-        data: { permission: 'ViewPurchaseReturns' }
+        data: { permission: 'ViewPurchaseReturn' }
     },
     {
         path: 'vendors',

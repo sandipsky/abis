@@ -28,14 +28,14 @@ const sidebarData = [
                         label: 'Purchase Entry',
                         tooltip: 'Purchase Entry',
                         icon: 'purchase-entry',
-                        permission: 'ViewPurchaseEntries'
+                        permission: 'ViewPurchaseEntry'
                     },
                     {
                         link: 'purchase-return',
                         label: 'Purchase Return',
                         tooltip: 'Purchase Return',
                         icon: 'purchase-return',
-                        permission: 'ViewPurchaseReturns'
+                        permission: 'ViewPurchaseReturn'
                     },
                     {
                         link: 'vendors',
